@@ -1,0 +1,20 @@
+Tex是一种语言类型。
+
+语言格式.tex ->  编译程序tex/etex -> .dvi -> 排版程序pdfTex/PdfLatex -> Pdf
+
+
+
+Plain Tex是一种语言格式。
+LaTeX也是一种语言格式。
+分别由Tex语言中不同的宏包定义的语言格式
+
+tex命令是用来编译Plain Tex书写的.tex文件生成.dvi文件程序。
+etex命令是用来编译Plain Tex书写的.tex文件生成.dvi文件程序。
+tex -latex命令用来编译使用LaTeX语言写的.tex文件生成为.dvi文件程序。
+
+
+xetex命令用来编译Plain TeX格式写的.tex文件。使用操作系统字符集，支持Unicode字符集。
+xeLatex命令用来编译LaTeX格式写的.tex文件。使用操作系统字符集，支持Unicode字符集。
+PdfTex是用来排版Plain Tex语言格式的.tex文件，生成PDF文档。
+PdfLaTeX是用来排版LaTeX语言格式的.tex文件，生成PDF文档。
+
