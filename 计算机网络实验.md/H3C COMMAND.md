@@ -231,6 +231,7 @@ display ip routing-table
 ```
 ## 4 OSPF协议实验
 
+### OSPF基本配置
 ```
 # display ospf命令的说明，下面是三个不同的表格。
 display ospf peer //显示的是邻居信息，有几个邻居路由器
@@ -269,8 +270,78 @@ display adjacent-table //显示邻接信息。
 ```
 
 
-## 4 交换机系统视图
+## 5 BGP实验
+### BGP 基本分析
+```
+# 启动BGP进程
+bgp 100 //启动bgp指定as号
+router-id 1.1.1.1 //配置BGP的router-id
+
+# 配置BGP对等体：配置BGP对等体时，如果指定对等体所属的AS编号与本地AS编号相同，表示配置IBGP对等体。如果指定对等体所属的AS编号与本地AS编号不同，表示配置EBGP对等体。为了增强BGP连接的稳定性，推荐使用路由可达的Loopback接口地址建立BGP连接。
+[BGP]peer 12.1.1.1 as-number 100 //创建BGP对等体
+[BGP]peer 12.1.1.1 connet-interface lookback 0 //指定发送BGP报文的源接口，并可指定发起连接时使用的源地址。缺省情况下，BGP使用报文的出接口作为BGP报文的源接口。
+[BGP]peer 12.1.1.1 ebgp-max-hop 2 //指定建立EBGP连接允许的最大跳数。 缺省情况下，EBGP连接允许的最大跳数为1，即只能在物理直连链路上建立EBGP连接。 
+[BGP]peer peer 3.1.1.2 next-hop-local //强制下一跳地址为自身。用来配置IBGP。
+
+# 配置BGP对等体组：（只能用来配置EBGP）
+group 1  [ external | internal ]//创建对等体组。
+peer 1 as-number 100//配置EBGP对等体组的AS号。 
+peer 12.1.1.2 group 1//向对等体组中加入对等体
+
+# 配置BGP引入路由：BGP协议本身不发现路由，因此需要将其他路由（如IGP路由等）引入到BGP路由表中，从而将这些路由在AS之内和AS之间传播。BGP协议支持通过以下两种方式引入路由：
+
+Import方式：按协议类型，将RIP路由、OSPF路由、ISIS路由等协议的路由引入到BGP路由表中。为了保证引入的IGP路由的有效性，Import方式还可以引入静态路由和直连路由。
+
+Network方式：逐条将IP路由表中已经存在的路由引入到BGP路由表中，比Import方式更精确。
+
+import-router protocol //引入路由
+default-route imported//允许BGP引入本地IP路由表中已经存在的缺省路由。 
+network 1.1.1.1 mask //配置BGP逐条引入IPv4路由表或IPv6路由表中的路由。
+```
+
+### BGP状态转换分析
+```
+[user]debugging bgp event
+[user]terminal debugging
+[user]reset bgp all
+
+[user]display bgp peer //可以显示bgp邻居信息，用来查看对等体是否已经建立。
+[user]display bgp routing-table peer ip-address advertised-routes/received-routes //用来检查bgp通告的路由信息
+[user]display bgp routing-table
+```
+
+### BGP路由聚合
 
 ```
+[R]bgp 100
+[R-bgp]aggregate 192.168.0.0 255.255.240.0 [detail-suppressed]//同网段路由聚合。当有detail-suppressed的时候只通告聚合路由。
+[R-bgp]undo aggregate 192.168.0.0 255.255.240.0
 ```
+### BGP路由属性
 
+```
+# 路由引入
+import-route direct
+
+```
+### BGP的路由策略
+```
+# 访问控制列表
+[R]acl number acl-number
+[R-acl-number]rule rule-number permit|deny source-addr source-addr-mask | any//定义acl过滤规则
+[R]peer 10.0.0.1 filter-policy acl-number {export|import}//应用acl访问控制列表
+
+# 自制系统路径信息访问列表
+ip as-path-acl as-path-acl-number {permit|deny} as-regular-expression//定义AS-path过滤规则
+peer peer-address as-path-acl as-path-acl-number {import|export}//应用对等体的AS路径过滤器。
+
+# 路由策略
+route-policy policy-name {permit|deny}node node-number//定义route-policy路由策略过滤规则
+peer peer-address route-policy policy-name {import|export}//应用对等体路由策略
+
+if-match
+apply//使用对等体路由策略
+
+# 复位BGP
+reset bgp all|peer-id
+```
