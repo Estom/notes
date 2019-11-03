@@ -228,18 +228,29 @@ display ip routing-table
 # 开启VLAN的三成转发
 [S]inter vlan 2
 [S-vlan-interface2]ip address 192.168.2.1 255.255.255.0
+
+
+# 重置
+[user]reset ospf all process
+# 显示
+[user]display ospf peer/brief/error/routing
+# 调试
+[user]debugging ospf event/lsa/packet/spf
 ```
 ## 4 OSPF协议实验
 
-### OSPF基本配置
+### OSPF状态显示
 ```
 # display ospf命令的说明，下面是三个不同的表格。
-display ospf peer //显示的是邻居信息，有几个邻居路由器
-display ospf routing //是路由信息，具体用来决定从哪个接口，寻找下一跳。通过lsdb与ospf算法计算而来。
-display ospf lsdb //是整个区域的链路拓扑结构，即通过lsa链路状态通告而来。
-display adjacent-table //显示邻接信息。
-
-# router id相关命令
+[user]display ospf brief //显示基本配置信息
+[user]display ospf peer //显示的是邻居信息，有几个邻居路由器
+[user]display ospf routing //是路由信息，具体用来决定从哪个接口，寻找下一跳。通过lsdb与ospf算法计算而来。
+[user]display ospf lsdb //是整个区域的链路拓扑结构，即通过lsa链路状态通告而来。
+[user]display adjacent-table //显示邻接信息。
+```
+### OSPF基本配置
+```
+# ospf启动相关命令
 [system]router id router-id //设置router id
 [system]undo router id //删除router id
 
@@ -251,25 +262,30 @@ display adjacent-table //显示邻接信息。
 
 [area]network ip-address wildcard-mask //指定网段运行OSPF协议
 [area]undo network ip-address wildcard-mask //取消网段运行OSPF协议
+```
+### ospf路由引入
 
-# 重置
-[user]reset ospf all process
-# 显示
-[user]display ospf peer/brief/error/routing
-# 调试
-[user]debugging ospf event/lsa/packet/spf
+* 直连路由：直连路由就是路由器直接连接的网段信息的路由，是链路层直接发现的路由，又不需要写网络号，掩码什么的信息，就是条死命令。import route direct引入
+```
+# ospf引入命令。import-route命令用来配置引入外部路由信息。undo import-route命令用来取消引入外部路由信息。
+[ospf]import-route direct/static
 
-# 用来显示ospf的lsdb（链路状态数据库）自组织成第一类router-lsa的内容。
-[R]dis ospf 1 lsdb router self-originate  
+[ospf]import-route protocol [ process-id | all-processes | allow-ibgp ] [ cost cost | type type | tag tag | route-policy route-policy-name ] *
+
+[ospf]undo import-route protocol [ process-id | all-processes ]
+```
+
+### ospf自组织LSA
+```
+# 显示ospf的lsdb自组织成第一类router-lsa的内容。
+[R]dis ospf lsdb router 
 # ospf的lsdb自组织第二类network-lsa
-[R]dis ospf 1 lsdb network self-originate 
+[R]dis ospf lsdb network 
 # ospf的lsdb自组织第三类第四类summary lsa
-[R]dis ospf 1 lsdb summary self-originate 
+[R]dis ospf lsdb summary
 # ospf的lsdb自组织第五类lsa
 [R]dis ospf lsdb ase 
 ```
-
-
 ## 5 BGP实验
 ### BGP 基本分析
 ```
@@ -284,19 +300,19 @@ router-id 1.1.1.1 //配置BGP的router-id
 [BGP]peer peer 3.1.1.2 next-hop-local //强制下一跳地址为自身。用来配置IBGP。
 
 # 配置BGP对等体组：（只能用来配置EBGP）
-group 1  [ external | internal ]//创建对等体组。
-peer 1 as-number 100//配置EBGP对等体组的AS号。 
-peer 12.1.1.2 group 1//向对等体组中加入对等体
+[BGP]group 1  [ external | internal ]//创建对等体组。
+[BGP]peer 1 as-number 100//配置EBGP对等体组的AS号。 
+[BGP]peer 12.1.1.2 group 1//向对等体组中加入对等体
 
 # 配置BGP引入路由：BGP协议本身不发现路由，因此需要将其他路由（如IGP路由等）引入到BGP路由表中，从而将这些路由在AS之内和AS之间传播。BGP协议支持通过以下两种方式引入路由：
 
-Import方式：按协议类型，将RIP路由、OSPF路由、ISIS路由等协议的路由引入到BGP路由表中。为了保证引入的IGP路由的有效性，Import方式还可以引入静态路由和直连路由。
+# Import方式：按协议类型，将RIP路由、OSPF路由、ISIS路由等协议的路由引入到BGP路由表中。为了保证引入的IGP路由的有效性，Import方式还可以引入静态路由和直连路由。
 
-Network方式：逐条将IP路由表中已经存在的路由引入到BGP路由表中，比Import方式更精确。
+# Network方式：逐条将IP路由表中已经存在的路由引入到BGP路由表中，比Import方式更精确。
 
-import-router protocol //引入路由
-default-route imported//允许BGP引入本地IP路由表中已经存在的缺省路由。 
-network 1.1.1.1 mask //配置BGP逐条引入IPv4路由表或IPv6路由表中的路由。
+[BGP]import-router protocol //引入路由
+[BGP]default-route imported//允许BGP引入本地IP路由表中已经存在的缺省路由。 
+[BGP]network 1.1.1.1 mask //配置BGP逐条引入IPv4路由表或IPv6路由表中的路由。
 ```
 
 ### BGP状态转换分析
