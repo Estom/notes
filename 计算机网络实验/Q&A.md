@@ -27,12 +27,12 @@ import static 引入静态路由。将路由器中手动添加的静态路由直
 
 ### 路由来源说明
 
-* 直连路由：当路由设备配置连接完成之后，会根据所有的接口IP地址生成直连路由。
+* 直连路由：当路由设备配置连接完成之后，会根据所有的接口IP地址生成直连路由。Proto表示direct。
   * 到每个接口的直接路由地址，NextHop为自身路由器的回环IP地址，接口是InLoop表示会将数据包直接交付给自身。
   * 到每个接口的直连的网段的地址，NextHop为自身路由器连接该网段的IP地址，接口是自身路由器连接该网段的接口。
   ![](image/ip&#32;routing&#32;table.png)
 * 动态路由：根据OSPF、RIP、BGP生成的路由。Proto表示是dynamic。
-* 静态路由：通过ip-route static 配置的路由，手动导入的路由。
+* 静态路由：通过ip-route static 配置的路由，手动导入的路由。Proto表示static。
 
 ### 路由转发算法说明
 
@@ -59,5 +59,8 @@ display ospf routing
 
 display ip routing
 ![](image/ip&#32;routing&#32;table.png)
+
+
+## OSPF生成带权有向图，如果某个路径双向COST值不同，是否会因此导致A-B和B-A的路由不同？如果真的如此，会出现什么问题，应该怎么避免？如果存在不同那么RPF路径回溯检查会不会出问题。
 
 

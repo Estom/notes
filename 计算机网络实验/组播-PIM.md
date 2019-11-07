@@ -69,9 +69,10 @@ PIM-DM的关键工作机制包括**邻居发现、扩散、剪枝、嫁接、断
 |报文类型	|类型ID	|报文作用|
 |-|-|-|
 |hello|	0	|发现，协商参数。维护邻居关系|
-|register||组播源注册，单播发送|
-|register stop||组播源注册停止，单播发送|
+|register|1|组播源注册，单播发送|
+|register stop|2|组播源注册停止，单播发送|
 |jion/prune|	3	|加入/剪枝，J置位为1，表明为jion报文，p置位为1，表明为prune报文|
+|bootstrap|4|BSR RP报文
 |assert|	5	|断言|
 |graft|	6	|剪枝，单播发送|
 |graft ack|	7	|剪枝确认，单播发送|
