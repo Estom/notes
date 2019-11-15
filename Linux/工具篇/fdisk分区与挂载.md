@@ -44,13 +44,35 @@ IDE 、 STATA 、M2、NVME，IDE一般都是机械硬盘使用的，STATA、M2�
 * virtio（虚拟机）：vda,vda1,vda2
 
 
-## 分区配置
 
-### 查看系统分区
+## 3 分区配置
+
+### 查看分区
 
 查看系统分区
 ```
 lsblk -f    # 查看系统分区情况
+
+type:disk 表示硬盘
+type:part 表示硬盘分区
+fstype:表示文件系统格式。
+size:表示分区大小
+name: 分区的名字（由系统生成的物理名称）
+label:分区标识符
+mountpoint:表示挂载点。ubuntu至少有两个挂载点
+    boot/efi:启动分区
+    /:主目录分区。
+```
+使用如下命令查看硬盘信息：
+
+```
+ll /dev |grep nvme*
 ```
 
+### 设置分区
 
+使用如下命令进行分区设置：
+```
+sudo fdisk /dev/nvme0n1    # nvme0n1为相应的磁盘名称 
+```
+可以通过交互式命令
