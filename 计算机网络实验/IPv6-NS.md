@@ -89,7 +89,7 @@ Advertisement）。
 * NA报文：Type字段值为136，Code字段值为0，在地址解析中的作用类似于IPv4中的ARP应答报文。
 
 ### IPv6地址解析过程
-
+![](image/ipv6地址解析2.png)
 
 ![IPv6地址解析过程](image/IPv6地址解析过程.png)
 
