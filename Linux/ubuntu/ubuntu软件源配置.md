@@ -1,8 +1,8 @@
 ## 配置位置
 
+ubuntu软件源
 /etc/apt/sources.list
 
-
-## 界面配置
+pip软件源
 
 软件更新，源。
