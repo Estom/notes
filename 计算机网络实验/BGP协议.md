@@ -219,7 +219,7 @@ BGP对等体间通过以下5种报文进行交互，其中Keepalive报文为周�
 
 * Notification实例
 
-！[](image/Notification报文实例.png)
+![](image/Notification报文实例.png)
 
 ### Keepalive报文
 如果BGP报文头中的TYPE为4，则该报文为KEEPALIVE报文。KEEPALIVE报文用于保持BGP连接。
