@@ -1,0 +1,29 @@
+# 简单的Legend01
+
+![简单的Legend01示例](https://matplotlib.org/_images/sphx_glr_simple_legend01_001.png)
+
+```python
+import matplotlib.pyplot as plt
+
+
+plt.subplot(211)
+plt.plot([1, 2, 3], label="test1")
+plt.plot([3, 2, 1], label="test2")
+# Place a legend above this subplot, expanding itself to
+# fully use the given bounding box.
+plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
+           ncol=2, mode="expand", borderaxespad=0.)
+
+plt.subplot(223)
+plt.plot([1, 2, 3], label="test1")
+plt.plot([3, 2, 1], label="test2")
+# Place a legend to the right of this smaller subplot.
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+
+plt.show()
+```
+
+## 下载这个示例
+            
+- [下载python源码: simple_legend01.py](https://matplotlib.org/_downloads/simple_legend01.py)
+- [下载Jupyter notebook: simple_legend01.ipynb](https://matplotlib.org/_downloads/simple_legend01.ipynb)

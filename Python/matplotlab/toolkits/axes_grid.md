@@ -1,0 +1,497 @@
+---
+sidebarDepth: 3
+sidebar: auto
+---
+
+# Overview of axes_grid1 toolkit
+
+Controlling the layout of plots with the axes_grid toolkit.
+
+## What is axes_grid1 toolkit?
+
+*axes_grid1* is a collection of helper classes to ease displaying
+(multiple) images with matplotlib. In matplotlib, the axes location
+(and size) is specified in the normalized figure coordinates, which
+may not be ideal for displaying images that needs to have a given
+aspect ratio. For example, it helps if you have a colorbar whose
+height always matches that of the image. [ImageGrid](#imagegrid), [RGB Axes](#rgb-axes) and
+[AxesDivider](#axesdivider) are helper classes that deals with adjusting the
+location of (multiple) Axes. They provides a framework to adjust the
+position of multiple axes at the drawing time. [ParasiteAxes](#parasiteaxes)
+provides twinx(or twiny)-like features so that you can plot different
+data (e.g., different y-scale) in a same Axes. [AnchoredArtists](#anchoredartists)
+includes custom artists which are placed at some anchored position,
+like the legend.
+
+Demo Axes Grid
+
+## axes_grid1
+
+### ImageGrid
+
+A class that creates a grid of Axes. In matplotlib, the axes location
+(and size) is specified in the normalized figure coordinates. This may
+not be ideal for images that needs to be displayed with a given aspect
+ratio. For example, displaying images of a same size with some fixed
+padding between them cannot be easily done in matplotlib. ImageGrid is
+used in such case.
+
+Simple Axesgrid
+
+- The position of each axes is determined at the drawing time (see
+[AxesDivider](#axesdivider)), so that the size of the entire grid fits in the
+given rectangle (like the aspect of axes). Note that in this example,
+the paddings between axes are fixed even if you changes the figure
+size.
+- axes in the same column has a same axes width (in figure
+coordinate), and similarly, axes in the same row has a same
+height. The widths (height) of the axes in the same row (column) are
+scaled according to their view limits (xlim or ylim).
+
+Simple Axes Grid
+- xaxis are shared among axes in a same column. Similarly, yaxis are
+shared among axes in a same row. Therefore, changing axis properties
+(view limits, tick location, etc. either by plot commands or using
+your mouse in interactive backends) of one axes will affect all
+other shared axes.
+
+When initialized, ImageGrid creates given number (*ngrids* or *ncols* *
+*nrows* if *ngrids* is None) of Axes instances. A sequence-like
+interface is provided to access the individual Axes instances (e.g.,
+grid[0] is the first Axes in the grid. See below for the order of
+axes).
+
+ImageGrid takes following arguments,
+
+
+---
+
+
+
+
+
+
+Name
+Default
+Description
+
+
+
+fig
+ 
+ 
+
+rect
+ 
+ 
+
+nrows_ncols
+ 
+number of rows and cols. e.g., (2,2)
+
+ngrids
+None
+number of grids. nrows x ncols if None
+
+direction
+"row"
+increasing direction of axes number. [row|column]
+
+axes_pad
+0.02
+pad between axes in inches
+
+add_all
+True
+Add axes to figures if True
+
+share_all
+False
+xaxis & yaxis of all axes are shared if True
+
+aspect
+True
+aspect of axes
+
+label_mode
+"L"
+location of tick labels thaw will be displayed.
+"1" (only the lower left axes),
+"L" (left most and bottom most axes),
+or "all".
+
+cbar_mode
+None
+[None|single|each]
+
+cbar_location
+"right"
+[right|top]
+
+cbar_pad
+None
+pad between image axes and colorbar axes
+
+cbar_size
+"5%"
+size of the colorbar
+
+axes_class
+None
+ 
+
+
+
+
+*rect*
+
+*direction*
+
+*aspect*
+
+*share_all*
+
+*direction*
+
+direction of increasing axes number. For "row",
+
+
+---
+
+
+
+
+
+grid[0]
+grid[1]
+
+grid[2]
+grid[3]
+
+
+
+
+For "column",
+
+
+---
+
+
+
+
+
+grid[0]
+grid[2]
+
+grid[1]
+grid[3]
+
+
+
+
+You can also create a colorbar (or colorbars). You can have colorbar
+for each axes (cbar_mode="each"), or you can have a single colorbar
+for the grid (cbar_mode="single"). The colorbar can be placed on your
+right, or top. The axes for each colorbar is stored as a *cbar_axes*
+attribute.
+
+The examples below show what you can do with ImageGrid.
+
+Demo Axes Grid
+
+### AxesDivider Class
+
+Behind the scene, the ImageGrid class and the RGBAxes class utilize the
+AxesDivider class, whose role is to calculate the location of the axes
+at drawing time. While a more about the AxesDivider is (will be)
+explained in (yet to be written) AxesDividerGuide, direct use of the
+AxesDivider class will not be necessary for most users. The
+axes_divider module provides a helper function make_axes_locatable,
+which can be useful. It takes a existing axes instance and create a
+divider for it.
+
+``` python
+ax = subplot(1,1,1)
+divider = make_axes_locatable(ax)
+```
+
+*make_axes_locatable* returns an instance of the AxesLocator class,
+derived from the Locator. It provides *append_axes* method that
+creates a new axes on the given side of ("top", "right", "bottom" and
+"left") of the original axes.
+
+### colorbar whose height (or width) in sync with the master axes
+
+Simple Colorbar
+
+#### scatter_hist.py with AxesDivider
+
+The "scatter_hist.py" example in mpl can be rewritten using
+*make_axes_locatable*.
+
+``` python
+axScatter = subplot(111)
+axScatter.scatter(x, y)
+axScatter.set_aspect(1.)
+
+# create new axes on the right and on the top of the current axes.
+divider = make_axes_locatable(axScatter)
+axHistx = divider.append_axes("top", size=1.2, pad=0.1, sharex=axScatter)
+axHisty = divider.append_axes("right", size=1.2, pad=0.1, sharey=axScatter)
+
+# the scatter plot:
+# histograms
+bins = np.arange(-lim, lim + binwidth, binwidth)
+axHistx.hist(x, bins=bins)
+axHisty.hist(y, bins=bins, orientation='horizontal')
+```
+
+See the full source code below.
+
+Scatter Hist
+
+The scatter_hist using the AxesDivider has some advantage over the
+original scatter_hist.py in mpl. For example, you can set the aspect
+ratio of the scatter plot, even with the x-axis or y-axis is shared
+accordingly.
+
+### ParasiteAxes
+
+The ParasiteAxes is an axes whose location is identical to its host
+axes. The location is adjusted in the drawing time, thus it works even
+if the host change its location (e.g., images).
+
+In most cases, you first create a host axes, which provides a few
+method that can be used to create parasite axes. They are *twinx*,
+*twiny* (which are similar to twinx and twiny in the matplotlib) and
+*twin*. *twin* takes an arbitrary transformation that maps between the
+data coordinates of the host axes and the parasite axes. *draw*
+method of the parasite axes are never called. Instead, host axes
+collects artists in parasite axes and draw them as if they belong to
+the host axes, i.e., artists in parasite axes are merged to those of
+the host axes and then drawn according to their zorder. The host and
+parasite axes modifies some of the axes behavior. For example, color
+cycle for plot lines are shared between host and parasites. Also, the
+legend command in host, creates a legend that includes lines in the
+parasite axes. To create a host axes, you may use *host_subplot* or
+*host_axes* command.
+
+#### Example 1. twinx
+
+Parasite Simple
+
+#### Example 2. twin
+
+*twin* without a transform argument assumes that the parasite axes has the
+same data transform as the host. This can be useful when you want the
+top(or right)-axis to have different tick-locations, tick-labels, or
+tick-formatter for bottom(or left)-axis.
+
+``` python
+ax2 = ax.twin() # now, ax2 is responsible for "top" axis and "right" axis
+ax2.set_xticks([0., .5*np.pi, np.pi, 1.5*np.pi, 2*np.pi])
+ax2.set_xticklabels(["0", r"$\frac{1}{2}\pi$",
+                     r"$\pi$", r"$\frac{3}{2}\pi$", r"$2\pi$"])
+```
+
+Simple Axisline4
+
+A more sophisticated example using twin. Note that if you change the
+x-limit in the host axes, the x-limit of the parasite axes will change
+accordingly.
+
+Parasite Simple2
+
+### AnchoredArtists
+
+It's a collection of artists whose location is anchored to the (axes)
+bbox, like the legend. It is derived from *OffsetBox* in mpl, and
+artist need to be drawn in the canvas coordinate. But, there is a
+limited support for an arbitrary transform. For example, the ellipse
+in the example below will have width and height in the data
+coordinate.
+
+Simple Anchored Artists
+
+### InsetLocator
+
+[``mpl_toolkits.axes_grid1.inset_locator``](https://matplotlib.orgapi/_as_gen/mpl_toolkits.axes_grid1.inset_locator.html#module-mpl_toolkits.axes_grid1.inset_locator) provides helper classes
+and functions to place your (inset) axes at the anchored position of
+the parent axes, similarly to AnchoredArtist.
+
+Using [``mpl_toolkits.axes_grid1.inset_locator.inset_axes()``](https://matplotlib.orgapi/_as_gen/mpl_toolkits.axes_grid1.inset_locator.inset_axes.html#mpl_toolkits.axes_grid1.inset_locator.inset_axes), you
+can have inset axes whose size is either fixed, or a fixed proportion
+of the parent axes. For example,:
+
+``` python
+inset_axes = inset_axes(parent_axes,
+                        width="30%", # width = 30% of parent_bbox
+                        height=1., # height : 1 inch
+                        loc='lower left')
+```
+
+creates an inset axes whose width is 30% of the parent axes and whose
+height is fixed at 1 inch.
+
+You may creates your inset whose size is determined so that the data
+scale of the inset axes to be that of the parent axes multiplied by
+some factor. For example,
+
+``` python
+inset_axes = zoomed_inset_axes(ax,
+                               0.5, # zoom = 0.5
+                               loc='upper right')
+```
+
+creates an inset axes whose data scale is half of the parent axes.
+Here is complete examples.
+
+Inset Locator Demo
+
+For example, ``zoomed_inset_axes()`` can be used when you want the
+inset represents the zoom-up of the small portion in the parent axes.
+And ``mpl_toolkits/axes_grid/inset_locator`` provides a helper
+function ``mark_inset()`` to mark the location of the area
+represented by the inset axes.
+
+Inset Locator Demo2
+
+#### RGB Axes
+
+RGBAxes is a helper class to conveniently show RGB composite
+images. Like ImageGrid, the location of axes are adjusted so that the
+area occupied by them fits in a given rectangle. Also, the xaxis and
+yaxis of each axes are shared.
+
+``` python
+from mpl_toolkits.axes_grid1.axes_rgb import RGBAxes
+
+fig = plt.figure()
+ax = RGBAxes(fig, [0.1, 0.1, 0.8, 0.8])
+
+r, g, b = get_rgb() # r,g,b are 2-d images
+ax.imshow_rgb(r, g, b,
+              origin="lower", interpolation="nearest")
+```
+
+Simple Rgb
+
+## AxesDivider
+
+The axes_divider module provides helper classes to adjust the axes
+positions of a set of images at drawing time.
+
+- [``axes_size``](https://matplotlib.orgapi/_as_gen/mpl_toolkits.axes_grid1.axes_size.html#module-mpl_toolkits.axes_grid1.axes_size) provides a class of
+units that are used to determine the size of each axes. For example,
+you can specify a fixed size.
+- ``Divider`` is the class
+that calculates the axes position. It divides the given
+rectangular area into several areas. The divider is initialized by
+setting the lists of horizontal and vertical sizes on which the division
+will be based. Then use
+``new_locator()``,
+which returns a callable object that can be used to set the
+axes_locator of the axes.
+
+First, initialize the divider by specifying its grids, i.e.,
+horizontal and vertical.
+
+for example,:
+
+``` python
+rect = [0.2, 0.2, 0.6, 0.6]
+horiz=[h0, h1, h2, h3]
+vert=[v0, v1, v2]
+divider = Divider(fig, rect, horiz, vert)
+```
+
+where, rect is a bounds of the box that will be divided and h0,..h3,
+v0,..v2 need to be an instance of classes in the
+[``axes_size``](https://matplotlib.orgapi/_as_gen/mpl_toolkits.axes_grid1.axes_size.html#module-mpl_toolkits.axes_grid1.axes_size). They have *get_size* method
+that returns a tuple of two floats. The first float is the relative
+size, and the second float is the absolute size. Consider a following
+grid.
+
+
+---
+
+
+
+
+
+
+
+v0
+ 
+ 
+ 
+
+v1
+ 
+ 
+ 
+
+h0,v2
+h1
+h2
+h3
+
+
+
+
+- v0 => 0, 2
+- v1 => 2, 0
+- v2 => 3, 0
+
+The height of the bottom row is always 2 (axes_divider internally
+assumes that the unit is inches). The first and the second rows have a
+height ratio of 2:3. For example, if the total height of the grid is 6,
+then the first and second row will each occupy 2/(2+3) and 3/(2+3) of
+(6-1) inches. The widths of the horizontal columns will be similarly
+determined. When the aspect ratio is set, the total height (or width) will
+be adjusted accordingly.
+
+The [``mpl_toolkits.axes_grid1.axes_size``](https://matplotlib.orgapi/_as_gen/mpl_toolkits.axes_grid1.axes_size.html#module-mpl_toolkits.axes_grid1.axes_size) contains several classes
+that can be used to set the horizontal and vertical configurations. For
+example, for vertical configuration one could use:
+
+``` python
+from mpl_toolkits.axes_grid1.axes_size import Fixed, Scaled
+vert = [Fixed(2), Scaled(2), Scaled(3)]
+```
+
+After you set up the divider object, then you create a locator
+instance that will be given to the axes object.:
+
+``` python
+locator = divider.new_locator(nx=0, ny=1)
+ax.set_axes_locator(locator)
+```
+
+The return value of the new_locator method is an instance of the
+AxesLocator class. It is a callable object that returns the
+location and size of the cell at the first column and the second row.
+You may create a locator that spans over multiple cells.:
+
+``` python
+locator = divider.new_locator(nx=0, nx=2, ny=1)
+```
+
+The above locator, when called, will return the position and size of
+the cells spanning the first and second column and the first row. In
+this example, it will return [0:2, 1].
+
+See the example,
+
+Simple Axes Divider2
+
+You can adjust the size of each axes according to its x or y
+data limits (AxesX and AxesY).
+
+Simple Axes Divider3
+
+## Download
+
+- [Download Python source code: axes_grid.py](https://matplotlib.org/_downloads/cc46224ebb7a7afda7d8b6f3a1e58c06/axes_grid.py)
+- [Download Jupyter notebook: axes_grid.ipynb](https://matplotlib.org/_downloads/c0b6a1c863337a7a54913ff3820e598b/axes_grid.ipynb)
+        

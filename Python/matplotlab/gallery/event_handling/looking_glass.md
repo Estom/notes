@@ -1,0 +1,65 @@
+# 镜子
+
+例如，使用鼠标事件模拟用于检查数据的镜子。
+
+![镜子示例](https://matplotlib.org/_images/sphx_glr_looking_glass_001.png)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+# Fixing random state for reproducibility
+np.random.seed(19680801)
+
+x, y = np.random.rand(2, 200)
+
+fig, ax = plt.subplots()
+circ = patches.Circle((0.5, 0.5), 0.25, alpha=0.8, fc='yellow')
+ax.add_patch(circ)
+
+
+ax.plot(x, y, alpha=0.2)
+line, = ax.plot(x, y, alpha=1.0, clip_path=circ)
+ax.set_title("Left click and drag to move looking glass")
+
+
+class EventHandler(object):
+    def __init__(self):
+        fig.canvas.mpl_connect('button_press_event', self.onpress)
+        fig.canvas.mpl_connect('button_release_event', self.onrelease)
+        fig.canvas.mpl_connect('motion_notify_event', self.onmove)
+        self.x0, self.y0 = circ.center
+        self.pressevent = None
+
+    def onpress(self, event):
+        if event.inaxes != ax:
+            return
+
+        if not circ.contains(event)[0]:
+            return
+
+        self.pressevent = event
+
+    def onrelease(self, event):
+        self.pressevent = None
+        self.x0, self.y0 = circ.center
+
+    def onmove(self, event):
+        if self.pressevent is None or event.inaxes != self.pressevent.inaxes:
+            return
+
+        dx = event.xdata - self.pressevent.xdata
+        dy = event.ydata - self.pressevent.ydata
+        circ.center = self.x0 + dx, self.y0 + dy
+        line.set_clip_path(circ)
+        fig.canvas.draw()
+
+handler = EventHandler()
+plt.show()
+```
+
+## 下载这个示例
+            
+- [下载python源码: looking_glass.py](https://matplotlib.org/_downloads/looking_glass.py)
+- [下载Jupyter notebook: looking_glass.ipynb](https://matplotlib.org/_downloads/looking_glass.ipynb)

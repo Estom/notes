@@ -1,0 +1,57 @@
+# 1.0版本新特性：3d子图
+
+在同一图中创建两个三维图。
+
+```python
+# This import registers the 3D projection, but is otherwise unused.
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
+
+from matplotlib import cm
+#from matplotlib.ticker import LinearLocator, FixedLocator, FormatStrFormatter
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig = plt.figure()
+
+ax = fig.add_subplot(1, 2, 1, projection='3d')
+X = np.arange(-5, 5, 0.25)
+Y = np.arange(-5, 5, 0.25)
+X, Y = np.meshgrid(X, Y)
+R = np.sqrt(X**2 + Y**2)
+Z = np.sin(R)
+surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet,
+        linewidth=0, antialiased=False)
+ax.set_zlim3d(-1.01, 1.01)
+
+#ax.w_zaxis.set_major_locator(LinearLocator(10))
+#ax.w_zaxis.set_major_formatter(FormatStrFormatter('%.03f'))
+
+fig.colorbar(surf, shrink=0.5, aspect=5)
+
+from mpl_toolkits.mplot3d.axes3d import get_test_data
+ax = fig.add_subplot(1, 2, 2, projection='3d')
+X, Y, Z = get_test_data(0.05)
+ax.plot_wireframe(X, Y, Z, rstride=10, cstride=10)
+
+plt.show()
+```
+
+![3d子图示例](https://matplotlib.org/_images/sphx_glr_whats_new_1_subplot3d_001.png)
+
+## 参考
+
+此示例中显示了以下函数，方法，类和模块的使用：
+
+```python
+import matplotlib
+import mpl_toolkits
+matplotlib.figure.Figure.add_subplot
+mpl_toolkits.mplot3d.axes3d.Axes3D.plot_surface
+mpl_toolkits.mplot3d.axes3d.Axes3D.plot_wireframe
+mpl_toolkits.mplot3d.axes3d.Axes3D.set_zlim3d
+```
+
+## 下载这个示例
+            
+- [下载python源码: whats_new_1_subplot3d.py](https://matplotlib.org/_downloads/whats_new_1_subplot3d.py)
+- [下载Jupyter notebook: whats_new_1_subplot3d.ipynb](https://matplotlib.org/_downloads/whats_new_1_subplot3d.ipynb)

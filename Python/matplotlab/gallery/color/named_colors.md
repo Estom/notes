@@ -1,0 +1,106 @@
+# 可视化命名颜色
+
+这绘制了matplotlib中支持的命名颜色列表。 请注意，也支持[xkcd颜色](https://matplotlib.org/tutorials/colors/colors.html#xkcd-colors)，但为简洁起见，此处未列出。
+
+有关matplotlib中颜色的更多信息，请参阅：
+
+- [指定颜色](https://matplotlib.org/tutorials/colors/colors.html)教程;
+- [matplotlib.colors](https://matplotlib.org/api/colors_api.html#module-matplotlib.colors) API;
+- [颜色演示](https://matplotlib.org/gallery/color/color_demo.html)。
+
+```python
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+
+
+def plot_colortable(colors, title, sort_colors=True, emptycols=0):
+
+    cell_width = 212
+    cell_height = 22
+    swatch_width = 48
+    margin = 12
+    topmargin = 40
+
+    # Sort colors by hue, saturation, value and name.
+    by_hsv = ((tuple(mcolors.rgb_to_hsv(mcolors.to_rgba(color)[:3])), name)
+                    for name, color in colors.items())
+    if sort_colors is True:
+        by_hsv = sorted(by_hsv)
+    names = [name for hsv, name in by_hsv]
+
+    n = len(names)
+    ncols = 4 - emptycols
+    nrows = n // ncols + int(n % ncols > 0)
+
+    width = cell_width * 4 + 2 * margin
+    height = cell_height * nrows + margin + topmargin
+    dpi = 72
+
+    fig, ax = plt.subplots(figsize=(width / dpi, height / dpi), dpi=dpi)
+    fig.subplots_adjust(margin/width, margin/height,
+                        (width-margin)/width, (height-topmargin)/height)
+    ax.set_xlim(0, cell_width * 4)
+    ax.set_ylim(cell_height * (nrows-0.5), -cell_height/2.)
+    ax.yaxis.set_visible(False)
+    ax.xaxis.set_visible(False)
+    ax.set_axis_off()
+    ax.set_title(title, fontsize=24, loc="left", pad=10)
+
+    for i, name in enumerate(names):
+        row = i % nrows
+        col = i // nrows
+        y = row * cell_height
+
+        swatch_start_x = cell_width * col
+        swatch_end_x = cell_width * col + swatch_width
+        text_pos_x = cell_width * col + swatch_width + 7
+
+        ax.text(text_pos_x, y, name, fontsize=14,
+                horizontalalignment='left',
+                verticalalignment='center')
+
+        ax.hlines(y, swatch_start_x, swatch_end_x,
+                  color=colors[name], linewidth=18)
+
+    return fig
+
+plot_colortable(mcolors.BASE_COLORS, "Base Colors",
+                sort_colors=False, emptycols=1)
+plot_colortable(mcolors.TABLEAU_COLORS, "Tableau Palette",
+                sort_colors=False, emptycols=2)
+
+#sphinx_gallery_thumbnail_number = 3
+plot_colortable(mcolors.CSS4_COLORS, "CSS Colors")
+
+# Optionally plot the XKCD colors (Caution: will produce large figure)
+#xkcd_fig = plot_colortable(mcolors.XKCD_COLORS, "XKCD Colors")
+#xkcd_fig.savefig("XKCD_Colors.png")
+
+plt.show()
+```
+
+![可视化命名颜色示例](https://matplotlib.org/_images/sphx_glr_named_colors_001.png)
+
+![可视化命名颜色示例2](https://matplotlib.org/_images/sphx_glr_named_colors_002.png)
+
+![可视化命名颜色示例3](https://matplotlib.org/_images/sphx_glr_named_colors_003.png)
+
+## 参考
+
+此示例中显示了以下函数，方法，类和模块的使用：
+
+```python
+import matplotlib
+matplotlib.colors
+matplotlib.colors.rgb_to_hsv
+matplotlib.colors.to_rgba
+matplotlib.figure.Figure.get_size_inches
+matplotlib.figure.Figure.subplots_adjust
+matplotlib.axes.Axes.text
+matplotlib.axes.Axes.hlines
+```
+
+## 下载这个示例
+            
+- [下载python源码: named_colors.py](https://matplotlib.org/_downloads/named_colors.py)
+- [下载Jupyter notebook: named_colors.ipynb](https://matplotlib.org/_downloads/named_colors.ipynb)

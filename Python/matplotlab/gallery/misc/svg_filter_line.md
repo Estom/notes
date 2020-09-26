@@ -1,0 +1,95 @@
+# SVG过滤线
+
+演示可能与mpl一起使用的SVG过滤效果。
+
+请注意，过滤效果仅在您的svg渲染器支持时才有效。
+
+![SVG过滤线示例](https://matplotlib.org/_images/sphx_glr_svg_filter_line_001.png)
+
+输出：
+
+```python
+Saving 'svg_filter_line.svg'
+```
+
+```python
+import matplotlib.pyplot as plt
+import matplotlib.transforms as mtransforms
+
+fig1 = plt.figure()
+ax = fig1.add_axes([0.1, 0.1, 0.8, 0.8])
+
+# draw lines
+l1, = ax.plot([0.1, 0.5, 0.9], [0.1, 0.9, 0.5], "bo-",
+              mec="b", lw=5, ms=10, label="Line 1")
+l2, = ax.plot([0.1, 0.5, 0.9], [0.5, 0.2, 0.7], "rs-",
+              mec="r", lw=5, ms=10, color="r", label="Line 2")
+
+
+for l in [l1, l2]:
+
+    # draw shadows with same lines with slight offset and gray colors.
+
+    xx = l.get_xdata()
+    yy = l.get_ydata()
+    shadow, = ax.plot(xx, yy)
+    shadow.update_from(l)
+
+    # adjust color
+    shadow.set_color("0.2")
+    # adjust zorder of the shadow lines so that it is drawn below the
+    # original lines
+    shadow.set_zorder(l.get_zorder() - 0.5)
+
+    # offset transform
+    ot = mtransforms.offset_copy(l.get_transform(), fig1,
+                                 x=4.0, y=-6.0, units='points')
+
+    shadow.set_transform(ot)
+
+    # set the id for a later use
+    shadow.set_gid(l.get_label() + "_shadow")
+
+
+ax.set_xlim(0., 1.)
+ax.set_ylim(0., 1.)
+
+# save the figure as a bytes string in the svg format.
+from io import BytesIO
+f = BytesIO()
+plt.savefig(f, format="svg")
+
+
+import xml.etree.cElementTree as ET
+
+# filter definition for a gaussian blur
+filter_def = """
+  <defs xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+    <filter id='dropshadow' height='1.2' width='1.2'>
+      <feGaussianBlur result='blur' stdDeviation='3'/>
+    </filter>
+  </defs>
+"""
+
+
+# read in the saved svg
+tree, xmlid = ET.XMLID(f.getvalue())
+
+# insert the filter definition in the svg dom tree.
+tree.insert(0, ET.XML(filter_def))
+
+for l in [l1, l2]:
+    # pick up the svg element with given id
+    shadow = xmlid[l.get_label() + "_shadow"]
+    # apply shadow filter
+    shadow.set("filter", 'url(#dropshadow)')
+
+fn = "svg_filter_line.svg"
+print("Saving '%s'" % fn)
+ET.ElementTree(tree).write(fn)
+```
+
+## 下载这个示例
+            
+- [下载python源码: svg_filter_line.py](https://matplotlib.org/_downloads/svg_filter_line.py)
+- [下载Jupyter notebook: svg_filter_line.ipynb](https://matplotlib.org/_downloads/svg_filter_line.ipynb)
