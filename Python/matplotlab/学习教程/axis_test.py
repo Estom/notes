@@ -29,5 +29,11 @@ plt.yticks([-2,-1.8,-1,1.22,3],[r'$really\ bad$', r'$bad$', r'$normal$', r'$good
 ax = plt.gca()
 ax.spines['right'].set_color('none')
 ax.spines['top'].set_color('none')
+
+# 调整刻度及边框位置
+ax.xaxis.set_ticks_position('top')
+ax.spines['bottom'].set_position(('data',10))
+ax.yaxis.set_ticks_position('left')
+ax.spines['left'].set_position(('data',0))
 # 展示图像
 plt.show()
