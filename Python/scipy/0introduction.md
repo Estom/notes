@@ -3,7 +3,7 @@ SciPy is a collection of mathematical algorithms and convenience functions built
 
 Scipy是一个高级的科学计算库，建立在低一级的numpy的多维数组之上。Scipy有很多子模块可以完成不同的操作，如傅里叶变换、插值运算、优化算法和数学统计等。Scipy的常用的子模块如下：
 ```py
-scipy.cluster	        向量量化
+scipy.cluster	        向量量化k-means
 scipy.constants	        数学常量
 scipy.fftpack	        快速傅里叶变换
 scipy.integrate	        积分
