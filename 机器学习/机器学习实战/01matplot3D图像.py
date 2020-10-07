@@ -11,6 +11,7 @@ x_2= np.arange(0,10,0.1)
 x_2 = np.expand_dims(x_2,1)
 x_2 = np.repeat(x_2,100,axis=1)
 
+y = np.repe
 y = ((x_1+x_2-10)**2)
 
 print(x_1.flatten())

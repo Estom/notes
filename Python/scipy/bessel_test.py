@@ -1,13 +1,5 @@
-
-
-## Bessel functions of real order
-> bassel函数
-
-$$
-x^2\frac{d^2y}{dx^2}+x\frac{dy}{dx}+(x^2-\alpha^2)y=0
-$$
-```py
 from scipy import special
+import numpy as np
 def drumhead_height(n, k, distance, angle, t):
    kth_zero = special.jn_zeros(n, k)[-1]
    return np.cos(t) * np.cos(n*angle) * special.jn(n, distance*kth_zero)
@@ -27,8 +19,3 @@ ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 plt.show()
-```
-
-## Cython Bindings for Special Functions 
-> scipy.special.cython_special
-
