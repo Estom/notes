@@ -1,22 +1,34 @@
 # AndroidStudio使用教程
 
-## 开发体系说明
+## 1 开发体系
 
+### 开发体系
+* Android Studio编辑器（是一个编辑编译调试发布的图形界面工具，相当于前端）
+* SDK集成开发环境。提供了编译调试发布的环境和命令行脚本。（没有界面的集成环境，相当于后端）
+* gradle编译工具。使用SDK完成编译工作。编译脚本。可以与SDK命令行工具结合，在命令行中使用。也可以与Android Studio结合，在界面工具中使用。
+* 各种其他的插件、工具。包括
+  * SDK插件（cmake、ndk）
+  * Androidstudio插件。
 
+### SDK工具
 
-## AndroidStudio工具教程
+* SDK命令行工具
+  * apkanalyzer
+  * avdmanager
+  * lint
+  * retrace
+  * sdkmanager
+* SDK构建工具
+  * aapt2
+  * apksigner
+  * zipalign
+* SDK平台工具
+  * adb
+  * etc1tool
+  * fastboot
+  * logcat
 
-
-### 新学到的快捷键
-
-ctrl+q，显示快捷文档
-ctrl+shift+v,多次黏贴
-ctrl+shift+space，智能匹配、补全
-双击shift，搜索菜单
-alt+enter,智能修改错误
-
-
-## gradle使用教程
+## 2 gradle使用教程
 
 ### gradle项目结构（Android studio 项目结构）
 * MyApplictaion项目根节点
@@ -40,8 +52,15 @@ alt+enter,智能修改错误
 * gradle用来配置、编译Android项目，下载dependency
 * gradle for Android studio 用来配置gradle的Android编译环境。
 
-## 界面教程
+## 3 Android studio 界面工具
 
+### 新学到的快捷键
+
+* ctrl+q，显示快捷文档
+* ctrl+shift+v,多次黏贴
+* ctrl+shift+space，智能匹配、补全
+* 双击shift，搜索菜单
+* alt+enter,智能修改错误
 ### File（工程项目操作）
 * setting软件配置
 * project setting工程配置
