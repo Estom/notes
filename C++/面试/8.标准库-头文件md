@@ -1,0 +1,785 @@
+## 1 C 标准库
+
+其中包含的引用头文件如下：
+
+```C
+#include <assert.h> //设定插入点
+#include <ctype.h> //字符处理
+#include <errno.h> //定义错误码
+#include <float.h> //浮点数处理
+#include <fstream.h> //文件输入/输出
+#include <iomanip.h> //参数化输入/输出
+#include <iostream.h> //数据流输入/输出
+#include <limits.h> //定义各种数据类型最值常量
+#include <locale.h> //定义本地化函数
+#include <math.h> //定义数学函数
+#include <stdio.h> //定义输入/输出函数
+#include <stdlib.h> //定义杂项函数及内存分配函数
+#include <string.h> //字符串处理
+#include <strstrea.h> //基于数组的输入/输出
+#include <time.h> //定义关于时间的函数
+#include <wchar.h> //宽字符处理及输入/输出
+#include <wctype.h> //宽字符分类
+```
+
+## 2 C++标准库
+
+### 分类
+
+C++标准库由三组库构成：
+
+- C 库：由 C 标准库扩展而来，强调结构、函数和过程，不支持面向对象技术。
+
+- C++库：增加了面向对象的库，包含了既有关键功能的类
+
+- 标准模板库（STL）：高效的 C++程序库。该库包含了诸多在计算机科学领域里所常用的基本数据结构和基本算法。
+
+以上库文件都被定义在 namespace std 中。C++库可以不规定头文件的扩展名。
+
+
+
+### C1. 标准库中与语言支持功能相关的头文件
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <p>&lt;cstddef&gt;</p>
+            </td>
+            <td>
+                <p>定义宏NULL和offsetof，以及其他标准类型size_t和ptrdiff_t。与对应的标准C头文件的区别是，NULL是C++空指针常量的补充定义，宏offsetof接受结构或者联合类型参数，只要他们没有成员指针类型的非静态成员即可。
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;limits&gt;</p>
+            </td>
+            <td>
+                <p>提供与基本数据类型相关的定义。例如，对于每个数值数据类型，它定义了可以表示出来的最大值和最小值以及二进制数字的位数。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;climits&gt;</p>
+            </td>
+            <td>
+                <p>提供与基本整数数据类型相关的C样式定义。这些信息的C++样式定义在&lt;limits&gt;中</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cfloat&gt;</p>
+            </td>
+            <td>
+                <p>提供与基本浮点型数据类型相关的C样式定义。这些信息的C++样式定义在&lt;limits&gt;中</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cstdlib&gt;</p>
+            </td>
+            <td>
+                <p>提供支持程序启动和终止的宏和函数。这个头文件还声明了许多其他杂项函数，例如搜索和排序函数，从字符串转换为数值等函数。它与对应的标准C头文件stdlib.h不同，定义了abort(void)。abort()函数还有额外的功能，它不为静态或自动对象调用析构函数，也不调用传给atexit()函数的函数。它还定义了exit()函数的额外功能，可以释放静态对象，以注册的逆序调用用atexit()注册的函数。清除并关闭所有打开的C流，把控制权返回给主机环境。
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;new&gt;</p>
+            </td>
+            <td>
+                <p>支持动态内存分配</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;typeinfo&gt;</p>
+            </td>
+            <td>
+                <p>支持变量在运行期间的类型标识</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;exception&gt;</p>
+            </td>
+            <td>
+                <p>支持异常处理，这是处理程序中可能发生的错误的一种方式</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cstdarg&gt;</p>
+            </td>
+            <td>
+                <p>支持接受数量可变的参数的函数。即在调用函数时，可以给函数传送数量不等的数据项。它定义了宏va_arg、va_end、va_start以及va_list类型</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;csetjmp&gt;</p>
+            </td>
+            <td>
+                <p>为C样式的非本地跳跃提供函数。这些函数在C++中不常用</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;csignal&gt;</p>
+            </td>
+            <td>
+                <p>为中断处理提供C样式支持</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+### C2. 支持流输入/输出的头文件
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;iostream&gt;</p>
+            </td>
+            <td>
+                <p>支持标准流cin、cout、cerr和clog的输入和输出，它还支持多字节字符标准流wcin、wcout、wcerr和wclog。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;iomanip&gt;</p>
+            </td>
+            <td>
+                <p>提供操纵程序，允许改变流的状态，从而改变输出的格式。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;ios&gt;</p>
+            </td>
+            <td>
+                <p>定义iostream的基类</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;istream&gt;</p>
+            </td>
+            <td>
+                <p>为管理输出流缓存区的输入定义模板类</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;ostream&gt;</p>
+            </td>
+            <td>
+                <p>为管理输出流缓存区的输出定义模板类</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;sstream&gt;</p>
+            </td>
+            <td>
+                <p>支持字符串的流输入输出</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;fstream&gt;</p>
+            </td>
+            <td>
+                <p>支持文件的流输入输出</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;iosfwd&gt;</p>
+            </td>
+            <td>
+                <p>为输入输出对象提供向前的声明</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;streambuf&gt;</p>
+            </td>
+            <td>
+                <p>支持流输入和输出的缓存</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cstdio&gt;</p>
+            </td>
+            <td>
+                <p>为标准流提供C样式的输入和输出</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cwchar&gt;</p>
+            </td>
+            <td>
+                <p>支持多字节字符的C样式输入输出</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+### C3. 与诊断功能相关的头文件
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;stdexcept&gt;</p>
+            </td>
+            <td>
+                <p>定义标准异常。异常是处理错误的方式</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cassert&gt;</p>
+            </td>
+            <td>
+                <p>定义断言宏，用于检查运行期间的情形</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cerrno&gt;</p>
+            </td>
+            <td>
+                <p>支持C样式的错误信息</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+### C4. 定义工具函数的头文件
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;utility&gt;</p>
+            </td>
+            <td>
+                <p>定义重载的关系运算符，简化关系运算符的写入，它还定义了pair类型，该类型是一种模板类型，可以存储一对值。这些功能在库的其他地方使用</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;functional&gt;</p>
+            </td>
+            <td>
+                <p>定义了许多函数对象类型和支持函数对象的功能，函数对象是支持operator()()函数调用运算符的任意对象</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;memory&gt;</p>
+            </td>
+            <td>
+                <p>给容器、管理内存的函数和auto_ptr模板类定义标准内存分配器</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;ctime&gt;</p>
+            </td>
+            <td>
+                <p>支持系统时钟函数</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+### C5. 支持字符串处理的头文件
+<table width="669" border="1" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <p>&lt;string&gt;</p>
+            </td>
+            <td>
+                <p>为字符串类型提供支持和定义，包括单字节字符串(由char组成)的string和多字节字符串(由wchar_t组成)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cctype&gt;</p>
+            </td>
+            <td>
+                <p>单字节字符类别</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cwctype&gt;</p>
+            </td>
+            <td>
+                <p>多字节字符类别</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cstring&gt;</p>
+            </td>
+            <td>
+                <p>为处理非空字节序列和内存块提供函数。这不同于对应的标准C库头文件，几个C样式字符串的一般C库函数被返回值为const和非const的函数对替代了</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cwchar&gt;</p>
+            </td>
+            <td>
+                <p>为处理、执行I/O和转换多字节字符序列提供函数，这不同于对应的标准C库头文件，几个多字节C样式字符串操作的一般C库函数被返回值为const和非const的函数对替代了。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cstdlib&gt;</p>
+            </td>
+            <td>
+                <p>为把单字节字符串转换为数值、在多字节字符和多字节字符串之间转换提供函数</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+### C6. 定义容器类的模板的头文件
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;vector&gt;</p>
+            </td>
+            <td>
+                <p>定义vector序列模板，这是一个大小可以重新设置的数组类型，比普通数组更安全、更灵活</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;list&gt;</p>
+            </td>
+            <td>
+                <p>定义list序列模板，这是一个序列的链表，常常在任意位置插入和删除元素</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;deque&gt;</p>
+            </td>
+            <td>
+                <p>定义deque序列模板，支持在开始和结尾的高效插入和删除操作</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;queue&gt;</p>
+            </td>
+            <td>
+                <p>为队列(先进先出)数据结构定义序列适配器queue和priority_queue</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;stack&gt;</p>
+            </td>
+            <td>
+                <p>为堆栈(后进先出)数据结构定义序列适配器stack</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;map&gt;</p>
+            </td>
+            <td>
+                <p>map是一个关联容器类型，允许根据键值是唯一的，且按照升序存储。multimap类似于map，但键不是唯一的。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;set&gt;</p>
+            </td>
+            <td>
+                <p>set是一个关联容器类型，用于以升序方式存储唯一值。multiset类似于set，但是值不必是唯一的。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;bitset&gt;</p>
+            </td>
+            <td>
+                <p>为固定长度的位序列定义bitset模板，它可以看作固定长度的紧凑型bool数组</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+### C7. 支持迭代器的头文件
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;iterator&gt;</p>
+            </td>
+            <td>
+                <p>给迭代器提供定义和支持</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+### C8. 有关算法的头文件
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;algorithm&gt;</p>
+            </td>
+            <td>
+                <p>提供一组基于算法的函数，包括置换、排序、合并和搜索</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cstdlib&gt;</p>
+            </td>
+            <td>
+                <p>声明C标准库函数bsearch()和qsort()，进行搜索和排序</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;ciso646&gt;</p>
+            </td>
+            <td>
+                <p>允许在代码中使用and代替&amp;&amp;</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+### C9. 有关数值操作的头文件
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;complex&gt;</p>
+            </td>
+            <td>
+                <p>支持复杂数值的定义和操作</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;valarray&gt;</p>
+            </td>
+            <td>
+                <p>支持数值矢量的操作</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;numeric&gt;</p>
+            </td>
+            <td>
+                <p>在数值序列上定义一组一般数学操作，例如accumulate和inner_product</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cmath&gt;</p>
+            </td>
+            <td>
+                <p>这是C数学库，其中还附加了重载函数，以支持C++约定</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;cstdlib&gt;</p>
+            </td>
+            <td>
+                <p>提供的函数可以提取整数的绝对值，对整数进行取余数操作</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+### C10. 有关本地化的头文件
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center">头文件</p>
+            </td>
+            <td>
+                <p align="center">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;locale&gt;</p>
+            </td>
+            <td>
+                <p>提供的本地化包括字符类别、排序序列以及货币和日期表示。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&lt;clocale&gt;</p>
+            </td>
+            <td>
+                <p>对本地化提供C样式支持</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+## 3 C++标准模板库
+
+STL（Standard Template Library，标准模板库)是惠普实验室开发的一系列软件的统称。现然主要出现在 C++中，但在被引入 C++之前该技术就已经存在了很长的一段时间。
+
+STL 的代码从广义上讲分为三类：algorithm（算法）、container（容器）和 iterator（迭代器），几乎所有的代码都采 用了模板类和模版函数的方式，这相比于传统的由函数和类组成的库来说提供了更好的代码重用机会。在 C++标准中，STL 被组织为下面的 13 个头文 件：`<algorithm>、<deque>、<functional>、<iterator>、<vector>、<list>、<map>、<memory>、<numeric>、<queue>、<set>、<stack> 和<utility>`。
+
+1、算法
+
+函数库对数据类型的选择对其可重用性起着至关重要的作用。举例来说，一个求方根的函数，在使用浮点数作为其参数类型的情况下的可重用性肯定比使 用整型作为它的参数类性要高。而 C++通过模板的机制允许推迟对某些类型的选择，直到真正想使用模板或者说对模板进行特化的时候，STL 就利用了这一点提 供了相当多的有用算法。它是在一个有效的框架中完成这些算法的——可以将所有的类型划分为少数的几类，然后就可以在模版的参数中使用一种类型替换掉同一种 类中的其他类型。
+
+STL 提供了大约 100 个实现算法的模版函数，比如算法 for_each 将为指定序列中的每一个元素调用指定的函数，stable_sort 以 你所指定的规则对序列进行稳定性排序等等。这样一来，只要熟悉了 STL 之后，许多代码可以被大大的化简，只需要通过调用一两个算法模板，就可以完成所需要 的功能并大大地提升效率。
+
+算法部分主要由头文件<algorithm>，<numeric>和<functional>组 成。<algorithm>是所有 STL 头文件中最大的一个（尽管它很好理解），它是由一大堆模版函数组成的，可以认为每个函数在很大程度上 都是独立的，其中常用到的功能范围涉及到比较、交换、查找、遍历操作、复制、修改、移除、反转、排序、合并等等。<numeric>体积很 小，只包括几个在序列上面进行简单数学运算的模板函数，包括加法和乘法在序列上的一些操作。<functional>中则定义了一些模板类， 用以声明函数对象。
+
+2、容器
+
+在实际的开发过程中，数据结构本身的重要性不会逊于操作于数据结构的算法的重要性，当程序中存在着对时间要求很高的部分时，数据结构的选择就显得更加重要。
+
+经典的数据结构数量有限，但是我们常常重复着一些为了实现向量、链表等结构而编写的代码，这些代码都十分相似，只是为了适应不同数据的变化而在 细节上有所出入。STL 容器就为我们提供了这样的方便，它允许我们重复利用已有的实现构造自己的特定类型下的数据结构，通过设置一些模版类，STL 容器对 最常用的数据结构提供了支持，这些模板的参数允许我们指定容器中元素的数据类型，可以将我们许多重复而乏味的工作简化。
+
+容器部分主要由头文件`<vector>,<list>,<deque>,<set>,<map>,<stack> 和<queue>`组成。对于常用的一些容器和容器适配器（可以看作由其它容器实现的容器），可以通过下表总结一下它们和相应头文件的对应关 系。
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <td>
+                <p align="center"><span style="color:black">数据结构</span></p>
+            </td>
+            <td>
+                <p align="center"><span style="color:black">描述</span></p>
+            </td>
+            <td>
+                <p align="center"><span style="color:black">实现头文件</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">向量</span><span style="color:black">(vector)</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">连续存储的元素</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;vector&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">列表</span><span style="color:black">(list)</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">由节点组成的双向链表，每个结点包含着一个元素</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;list&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">双队列</span><span style="color:black">(deque)</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">连续存储的指向不同元素的指针所组成的数组</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;deque&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">集合</span><span style="color:black">(set)</span></p>
+            </td>
+            <td>
+                <p align="left"><span
+                        style="color:black">由节点组成的红黑树，每个节点都包含着一个元素，节点之间以某种作用于元素对的谓词排列，没有两个不同的元素能够拥有相同的次序</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;set&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">多重集合</span><span style="color:black">(multiset)</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">允许存在两个次序相等的元素的集合</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;set&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">栈</span><span style="color:black">(stack)</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">后进先出的值的排列</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;stack&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">队列</span><span style="color:black">(queue)</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">先进先出的执的排列</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;queue&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">优先队列</span><span style="color:black">(priority_queue)</span>
+                </p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">元素的次序是由作用于所存储的值对上的某种谓词决定的的一种队列</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;queue&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">映射</span><span style="color:black">(map)</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">由</span><span style="color:black">{
+                        <!-- -->
+                    </span><span style="color:black">键，值</span><span style="color:black">}</span><span
+                        style="color:black">对组成的集合，以某种作用于键对上的谓词排列</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;map&gt;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p align="left"><span style="color:black">多重映射</span><span style="color:black">(multimap)</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">允许键对有相等的次序的映射</span></p>
+            </td>
+            <td>
+                <p align="left"><span style="color:black">&lt;map&gt;</span></p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+3、迭代器
+
+迭代器从作用上来说是最基本的部分，可是理解起来比前两者都要费力一些。软件设计有一个基本原则，所有的问题都可以通过引进一个间接层来简化， 这种简化在 STL 中就是用迭代器来完成的。概括来说，迭代器在 STL 中用来将算法和容器联系起来，起着一种黏和剂的作用。几乎 STL 提供的所有算法都是通 过迭代器存取元素序列进行工作的，每一个容器都定义了其本身所专有的迭代器，用以存取容器中的元素。
+
+迭代器部分主要由头文件<utility>,<iterator>和<memory>组 成。<utility>是一个很小的头文件，它包括了贯穿使用在 STL 中的几个模板的声明，<iterator>中提供了迭代器 使用的许多方法，而对于<memory>的描述则十分的困难，它以不同寻常的方式为容器中的元素分配存储空间，同时也为某些算法执行期间产生 的临时对象提供机制,<memory>中的主要部分是模板类 allocator，它负责产生所有容器中的默认分配器。
