@@ -8,3 +8,6 @@ int hello(){
     cout<<a+100<<endl;
     return 0;
 }
+int N::world(){
+    return 111;
+}

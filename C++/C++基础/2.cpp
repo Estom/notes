@@ -73,17 +73,38 @@ int main()
     //     int n;
     // };
     // helo a[10];
-    
+
+    //数组的容器遍历
     // int k[] = {1,2,3};
     // for (auto l:k){
     //     cout<<l<<endl;
     // }
     // cout<<*(k+1)<<endl;
 
-    int ia[2][3]={1,2,3,4,5,6};
-    for(auto &row:ia){
-        for(auto col:row){
-            cout<<col<<endl;
+    //数组的迭代器遍历,通过指针的方法进行遍历
+    // int m[5]={1,2,3,4,5};
+    // int* beg =begin(m);
+    // int* last = end(m);
+    // while(beg!=last){
+    //     cout<<*beg<<endl;
+    //     beg++;
+    // }
+
+    // for(int i=0;i<5;i++){
+    //     cout<<m[i]<<endl;
+    // }
+
+    int ia[2][3] = {1, 2, 3, 4, 5, 6};
+    //这里使用引用的原因是，数组在传递时候不能直接赋值！！！！
+    //如果不加引用将会出现以下情况
+    //auto row = ia[0]。但是数组没办法赋值。所以生成数组的一个引用
+    //auto &row =ia[0]。相当于生成ia[0]指针的一个别名。
+    //书上这么说，外层引用添加的原因，是防止第二层数组被当做指针使用。
+    for (auto &row : ia)
+    {
+        for (auto col : row)
+        {
+            cout << col << endl;
         }
     }
     return 0;
