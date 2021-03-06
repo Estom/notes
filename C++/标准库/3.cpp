@@ -34,5 +34,8 @@ int main(){
     str_it++;
     cout<<*str_it<<endl;
 
+    ostream_iterator<int> out_iter(cout,"\n");
+    *out_iter =10;
+    *out_iter = 100;
     return 0;
 }
