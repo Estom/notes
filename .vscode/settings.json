@@ -3,6 +3,11 @@
     "python.linting.enabled": true,
     "python.pythonPath": "C:\\Python\\python.exe",
     "files.associations": {
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "deque": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "vector": "cpp",
+        "xutility": "cpp"
     }
 }
