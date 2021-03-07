@@ -8,6 +8,7 @@
         "initializer_list": "cpp",
         "list": "cpp",
         "vector": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "regex": "cpp"
     }
 }
