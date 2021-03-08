@@ -12,6 +12,7 @@
         "regex": "cpp",
         "chrono": "cpp",
         "iostream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iomanip": "cpp"
     }
 }
