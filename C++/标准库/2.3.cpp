@@ -8,6 +8,7 @@ int main(){
 
     //stack test
     deque<int> deq{2,3,4,5};
+    
     stack<int> stk{deq};
     int m = stk.top();
     stk.pop();
@@ -17,6 +18,6 @@ int main(){
         cout<<n<<endl;
     }
 
-    
+    vector<int> vec;
     return 0;
 }
