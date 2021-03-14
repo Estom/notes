@@ -1,3 +1,4 @@
+//数组的创建、遍历、插入、删除
 #include<iostream>
 using namespace std;
 
