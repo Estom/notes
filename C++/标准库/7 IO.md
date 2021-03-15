@@ -13,11 +13,11 @@
 
 ## 0 stream基础知识
 
-> IO对象没有拷贝或赋值
+*  IO对象没有拷贝或赋值
 
 ### 管理IO的状态
 
-> 继承自`basic_ios`和`basic_ios_base`基类
+* 继承自`basic_ios`和`basic_ios_base`基类
 * 用来记录stream可能出现的状态。
 
 ![](image/2021-03-05-19-15-08.png)
@@ -52,13 +52,12 @@ int main(){
 
 ### 管理输出缓冲区
 
-导致缓冲区刷新的方法
-
-* 程序正常结束，main函数return之后，缓冲区刷新
-* 缓冲区满时，缓冲区刷新。
-* 流操纵符endl、flush、ends，刷新缓冲区
-* 每个输出操作后，使用流操纵符unitbuf设置流的内部状态，来清空缓冲区。unitbuf是流的属性。
-* 一个输出流可能被关联到另一个流。关联到流的缓冲区会被刷新。cin、cerr、cout相互关联。
+* 导致缓冲区刷新的方法
+  * 程序正常结束，main函数return之后，缓冲区刷新
+  * 缓冲区满时，缓冲区刷新。
+  * 流操纵符endl、flush、ends，刷新缓冲区
+  * 每个输出操作后，使用流操纵符unitbuf设置流的内部状态，来清空缓冲区。unitbuf是流的属性。
+  * 一个输出流可能被关联到另一个流。关联到流的缓冲区会被刷新。cin、cerr、cout相互关联。
 
 ```
 cout<<""<<endl;
@@ -71,11 +70,6 @@ cout<<nounitbuf;//回到正常的刷新方式
 
 ### 字符类型的IO预定义
 
-* IO 类本质上都是模板。可以针对任何类型IO。
-
-```
-steam<type,traits>
-```
 * 针对常用的字符提供了以下IO方式。也可以自己根据定义实现二进制IO的过程。
 ```
 typedef basic_ios<char>                ios;
@@ -124,41 +118,43 @@ typedef basic_osyncstream<wchar_t> wosyncstream;
 * cerr\wcerr写入到标准 C 错误流 stderr， 无缓冲(全局对象)
 * clog\wclog写入到标准 C 错误流 stderr
 
-### 常用的istream方法
+## 2 stream的通用方法
+
+### istream方法
 
 | 有格式输入 ||
 |---|---|
-| operator>> | 提取带格式数据  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
+| **operator>>** | 提取带格式数据|
 | 无格式输入 |
-| get | 从流中读并取走（移除类似指针向下一个元素移动）一个字符  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| peek | 仅读出但不取走（不移除类似指针并未移动）一个字符  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| unget | 撤销流中刚取走（移除，类似指针向后退回一个位置）的字符  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| putback | 往输入流中退回一个字符  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| getline | 一直读并取走字符，直至找到给定字符  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| ignore | 读且取走并舍弃字符，直至发现给定字符  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| read | 读并取走一块字符  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| readsome | 读并取走已经可用的字符块  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| gcount | 返回上次无格式输出操作所取走的字符数量  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
+| **get(void)** | 从流中读并取走（移除类似指针向下一个元素移动）一个字符,关键是这几个函数他妈的参数是什么。真让人头大。以后要是再写文档。请把参数写明白。！！！！！！|
+| peek | 仅读出但不取走（不移除类似指针并未移动）一个字符 |
+| unget | 撤销流中刚取走（移除，类似指针向后退回一个位置）的字符  |
+| putback | 往输入流中退回一个字符 |
+| getline | 一直读并取走字符，直至找到给定字符。这函数有毒，不能使用  |
+| ignore | 读且取走并舍弃字符，直至发现给定字符  |
+| **read(char*,int)** | 读并取走一块字符   |
+| readsome | 读并取走已经可用的字符块   |
+| gcount | 返回上次无格式输出操作所取走的字符数量 |
 | 寻位 |
-| tellg | 返回输入位置指示器  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
-| seekg | 设置输入位置指示器   (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
+| tellg | 返回输入位置指示器  |
+| seekg | 设置输入位置指示器 |
 | 杂项 |
-| sync | 与底层存储设备同步  (std::basic_istream<CharT,Traits> 的公开成员函数) [编辑] |
+| sync | 与底层存储设备同步|
 
 
-### 常用的ostream方法
+### ostream方法
 
 | 有格式输出 ||
 |---|---|
-| operator<< | 插入带格式数据  (std::basic_ostream<CharT,Traits> 的公开成员函数) [编辑] |
+| **operator<<** | 插入带格式数据  |
 | 无格式输出 |
-| put | 插入字符  (std::basic_ostream<CharT,Traits> 的公开成员函数) [编辑] |
-| write | 插入字符块  (std::basic_ostream<CharT,Traits> 的公开成员函数) [编辑] |
+| **put(char)** | 插入字符   |
+| **write(char*,int)** | 插入字符块  |
 | 寻位 |
-| tellp | 返回输出位置指示器  (std::basic_ostream<CharT,Traits> 的公开成员函数) [编辑] |
-| seekp | 设置输出位置指示器  (std::basic_ostream<CharT,Traits> 的公开成员函数) [编辑] |
+| tellp | 返回输出位置指示器  |
+| seekp | 设置输出位置指示器  |
 | 杂项 |
-| flush | 与底层存储设备同步  (std::basic_ostream<CharT,Traits> 的公开成员函数) [编辑] |
+| flush | 与底层存储设备同步 |
 
 
 ### 输入方法
@@ -179,7 +175,17 @@ gets(m); //不能写成m=gets();
 char ch;
 ch=getchar(); //不能写成getchar(ch);
 ```
+### 输出方法
 
+### 总结
+
+> 很关键。
+> * 关于输入输出流的方法。有很多很迷的地方，他们的版本、参数都有很大的区别。从现在开始，必须严格限制，只用一下方法。优先级如下
+> 1. 流运算法>><<这两个优先级最高。凡是能用则必然使用。
+> 2. 模板函数方法getline(stream,string,delim)。这是一个通用的非绑定方法。而且可以设置字符的截止运算符。
+> 3. 流对象的字符操作函数。istream.get()和ostream.put()都是针对单个字符的操作。可以使用。
+> 4. 涉及到缓冲区的时候。使用刘对象的istream.read()和ostream.write()方法。能读取固定大小的数据。
+> * 除此之外的其他方法，肯定都是多余的。其他的方法都不必使用。
 ## 1 iostream
 
 ### 头文件
