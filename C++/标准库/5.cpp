@@ -9,11 +9,16 @@ int main(){
     // s>>a;
     // cout<<a<<endl;
 
-    string str="12345678";
-    cout<<str.erase(3,1)<<endl;
-    cout<<str<<endl;
+    // string str="12345678";
+    // cout<<str.erase(3,1)<<endl;
+    // cout<<str<<endl;
     
     // char* helo;
     // s.getline(helo,10,',');
+    size_t m;
+    string s="123avicfee";
+    int a = stoi(s,&m,10);
+    cout<<a<<endl;
+    cout<<m<<endl;
     return 0;
 }
