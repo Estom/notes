@@ -8,7 +8,11 @@
 using namespace std;
 
 int main(){
+    return 0;
+    
+}
 
+void test_map(){
     map<string,int> word_count;//空容器
     set<string> ex{"the","to"};//初始化set
     map<string,int> wc{
@@ -25,23 +29,7 @@ int main(){
         cout<<"w.first"<<w.second<<endl;
     }
 
-
-    //set
-    set<string> ss{"yin","kang","long","hello","world"};
-    for (auto s : ss)
-    {
-        cout<<s<<endl;
-    }
-    
-    //可以使用顺序容器初始化关联容器multiset初始化
-    vector<int> vec{1,2,3,4,5,5,4,3,2,1};
-    set<int> iset(vec.begin(),vec.end());
-    multiset<int> mset(vec.begin(),vec.end());
-    cout<<iset.size()<<endl;
-    cout<<mset.size()<<endl;
-    
     //使用迭代器遍历关联容器
-
     auto map_it = word_count.cbegin();
     while(map_it != word_count.cend()){
         cout<<map_it->first<<map_it->second<<endl;
@@ -57,6 +45,22 @@ int main(){
     cout<<people["yin"]<<endl;
 
     
-    return 0;
+}
+
+void test_set(){
+
+    //set
+    set<string> ss{"yin","kang","long","hello","world"};
+    for (auto s : ss)
+    {
+        cout<<s<<endl;
+    }
+    
+    //可以使用顺序容器初始化关联容器multiset初始化
+    vector<int> vec{1,2,3,4,5,5,4,3,2,1};
+    set<int> iset(vec.begin(),vec.end());
+    multiset<int> mset(vec.begin(),vec.end());
+    cout<<iset.size()<<endl;
+    cout<<mset.size()<<endl;
     
 }
