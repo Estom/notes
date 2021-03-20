@@ -74,5 +74,6 @@
         "xstddef": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp"
-    }
+    },
+    "git.ignoreLimitWarning": true
 }
