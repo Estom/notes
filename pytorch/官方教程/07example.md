@@ -17,9 +17,7 @@ PyTorch 的核心是提供两个主要功能：
 
 您可以在[本页](#examples-download)浏览各个示例。
 
-## 张量
-
-### 预热：NumPy
+## 1 预热：NumPy
 
 在介绍 PyTorch 之前，我们将首先使用 numpy 实现网络。
 
@@ -68,7 +66,7 @@ print(f'Result: y = {a} + {b} x + {c} x^2 + {d} x^3')
 
 ```
 
-### PyTorch：张量
+## 2 PyTorch：张量
 
 Numpy 是一个很棒的框架，但是它不能利用 GPU 来加速其数值计算。 对于现代深度神经网络，GPU 通常会提供 [50 倍或更高](https://github.com/jcjohnson/cnn-benchmarks)的加速，因此遗憾的是，numpy 不足以实现现代深度学习。
 
@@ -125,9 +123,9 @@ print(f'Result: y = {a.item()} + {b.item()} x + {c.item()} x^2 + {d.item()} x^3'
 
 ```
 
-## Autograd
+## 3 Autograd
 
-### PyTorch：张量和 Autograd
+## 3.1 PyTorch：张量和 Autograd
 
 在上述示例中，我们必须手动实现神经网络的前向和后向传递。 对于小型的两层网络，手动实现反向传递并不是什么大问题，但是对于大型的复杂网络来说，可以很快变得非常麻烦。
 
@@ -198,7 +196,7 @@ print(f'Result: y = {a.item()} + {b.item()} x + {c.item()} x^2 + {d.item()} x^3'
 
 ```
 
-### PyTorch：定义新的 Autograd 函数
+## 3.2 PyTorch：定义新的 Autograd 函数
 
 在幕后，每个原始的 Autograd 运算符实际上都是在张量上运行的两个函数。 **正向**函数从输入张量计算输出张量。 **反向**函数接收相对于某个标量值的输出张量的梯度，并计算相对于相同标量值的输入张量的梯度。
 
@@ -293,9 +291,9 @@ print(f'Result: y = {a.item()} + {b.item()} * P3({c.item()} + {d.item()} x)')
 
 ```
 
-## `nn`模块
+## 4 `nn`模块
 
-### PyTorch：`nn`
+## 4.1 PyTorch：`nn`
 
 计算图和 Autograd 是定义复杂运算符并自动采用导数的非常强大的范例。 但是对于大型神经网络，原始的 Autograd 可能会太低级。
 
@@ -380,7 +378,7 @@ print(f'Result: y = {linear_layer.bias.item()} + {linear_layer.weight[:, 0].item
 
 ```
 
-### PyTorch：`optim`
+## 4.2 PyTorch：`optim`
 
 到目前为止，我们已经通过使用`torch.no_grad()`手动更改持有可学习参数的张量来更新模型的权重。 对于像随机梯度下降这样的简单优化算法来说，这并不是一个巨大的负担，但是在实践中，我们经常使用更复杂的优化器（例如 AdaGrad，RMSProp，Adam 等）来训练神经网络。
 
@@ -443,7 +441,7 @@ print(f'Result: y = {linear_layer.bias.item()} + {linear_layer.weight[:, 0].item
 
 ```
 
-### PyTorch：自定义`nn`模块
+## 4.3 PyTorch：自定义`nn`模块
 
 有时，您将需要指定比一系列现有模块更复杂的模型。 对于这些情况，您可以通过子类化`nn.Module`并定义一个`forward`来定义自己的模块，该模块使用其他模块或在 Tensors 上的其他自动转换操作来接收输入 Tensors 并生成输出 Tensors。
 
@@ -510,7 +508,7 @@ print(f'Result: {model.string()}')
 
 ```
 
-### PyTorch：控制流 + 权重共享
+## 4.4 PyTorch：控制流 + 权重共享
 
 作为动态图和权重共享的示例，我们实现了一个非常奇怪的模型：一个三阶多项式，在每个正向传播中选择 3 到 5 之间的一个随机数，并使用该阶数，多次使用相同的权重重复计算四和五阶。
 
@@ -587,45 +585,3 @@ for t in range(30000):
 print(f'Result: {model.string()}')
 
 ```
-
-## 示例
-
-您可以在此处浏览以上示例。
-
-### 张量
-
-![../_img/sphx_glr_polynomial_numpy_thumb.png](img/ea0bddb69dfbd67215b823007544ab8f.png)
-
-[热身：NumPy](examples_tensor/polynomial_numpy.html#sphx-glr-beginner-examples-tensor-polynomial-numpy-py)
-
-![../_img/sphx_glr_polynomial_tensor_thumb.png](img/04ee335faf821b337dba0c4d7ccb0b67.png)
-
-[PyTorch：张量](examples_tensor/polynomial_tensor.html#sphx-glr-beginner-examples-tensor-polynomial-tensor-py)
-
-### Autograd
-
-![../_img/sphx_glr_polynomial_autograd_thumb.png](img/ffad28c33f8a48d06521421f1aa441ed.png)
-
-[PyTorch：张量和 Autograd](examples_autograd/polynomial_autograd.html#sphx-glr-beginner-examples-autograd-polynomial-autograd-py)
-
-![../_img/sphx_glr_polynomial_custom_function_thumb.png](img/a5c5d931ed12e34bf68476f4f157b780.png)
-
-[PyTorch：定义新的 Autograd 函数](examples_autograd/polynomial_custom_function.html#sphx-glr-beginner-examples-autograd-polynomial-custom-function-py)
-
-### `nn`模块
-
-![../_img/sphx_glr_polynomial_nn_thumb.png](img/335fb81e535f98bfda7cbdb3e50d8832.png)
-
-[PyTorch：`nn`](examples_nn/polynomial_nn.html#sphx-glr-beginner-examples-nn-polynomial-nn-py)
-
-![../_img/sphx_glr_polynomial_optim_thumb.png](img/87aa5017f5f0ba9a29d66e74ac6b3d1a.png)
-
-[PyTorch：`optim`](examples_nn/polynomial_optim.html#sphx-glr-beginner-examples-nn-polynomial-optim-py)
-
-![../_img/sphx_glr_polynomial_module_thumb.png](img/b3f0b96ed8ba751fee4a5fc7ca878eb1.png)
-
-[PyTorch：自定义`nn`模块](examples_nn/polynomial_module.html#sphx-glr-beginner-examples-nn-polynomial-module-py)
-
-![../_img/sphx_glr_dynamic_net_thumb.png](img/bf0b252ce2d39ba6da26c16bee984d39.png)
-
-[PyTorch：控制流 + 权重共享](examples_nn/dynamic_net.html#sphx-glr-beginner-examples-nn-dynamic-net-py)
