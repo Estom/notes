@@ -1,7 +1,7 @@
 {
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "python.pythonPath": "D:\\anaconda3\\python.exe",
+    "python.pythonPath": "D:\\anaconda\\envs\\ml\\python.exe",
     "files.associations": {
         "xstring": "cpp",
         "deque": "cpp",
