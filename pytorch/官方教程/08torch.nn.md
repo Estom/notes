@@ -9,7 +9,7 @@ PyTorch 提供设计精美的模块和类[`torch.nn`](https://pytorch.org/docs/s
 
 **本教程假定您已经安装了 PyTorch，并且熟悉张量操作的基础知识。** （如果您熟悉 Numpy 数组操作，将会发现此处使用的 PyTorch 张量操作几乎相同）。
 
-## MNIST 数据集
+## 0 MNIST 数据集
 
 我们将使用经典的 [MNIST](http://deeplearning.net/data/mnist/) 数据集，该数据集由手绘数字的黑白图像组成（0 到 9 之间）。
 
@@ -95,7 +95,7 @@ tensor(0) tensor(9)
 
 ```
 
-## 从零开始的神经网络（没有`torch.nn`）
+## 1 从零开始的神经网络（没有`torch.nn`）
 
 首先，我们仅使用 PyTorch 张量操作创建模型。 我们假设您已经熟悉神经网络的基础知识。 （如果不是，则可以在 [course.fast.ai](https://course.fast.ai) 中学习它们）。
 
@@ -253,7 +253,7 @@ tensor(0.0811, grad_fn=<NegBackward>) tensor(1.)
 
 ```
 
-## 使用`torch.nn.functional`
+## 2 使用`torch.nn.functional`
 
 现在，我们将重构代码，使其执行与以前相同的操作，只是我们将开始利用 PyTorch 的`nn`类使其更加简洁和灵活。 从这里开始的每一步，我们都应该使代码中的一个或多个：更短，更易理解和/或更灵活。
 
@@ -285,7 +285,7 @@ tensor(0.0811, grad_fn=<NllLossBackward>) tensor(1.)
 
 ```
 
-## 使用`nn.Module`重构
+## 3 使用`nn.Module`重构
 
 接下来，我们将使用`nn.Module`和`nn.Parameter`进行更清晰，更简洁的训练循环。 我们将`nn.Module`子类化（它本身是一个类并且能够跟踪状态）。 在这种情况下，我们要创建一个类，该类包含前进步骤的权重，偏置和方法。 `nn.Module`具有许多我们将要使用的属性和方法（例如`.parameters()`和`.zero_grad()`）。
 
@@ -385,7 +385,7 @@ tensor(0.0808, grad_fn=<NllLossBackward>)
 
 ```
 
-## 使用`nn.Linear`重构
+## 4 使用`nn.Linear`重构
 
 我们继续重构我们的代码。 代替手动定义和初始化`self.weights`和`self.bias`并计算`xb  @ self.weights + self.bias`，我们将对线性层使用 Pytorch 类[`nn.Linear`](https://pytorch.org/docs/stable/nn.html#linear-layers)，这将为我们完成所有工作。 Pytorch 具有许多类型的预定义层，可以大大简化我们的代码，并且通常也可以使其速度更快。
 
@@ -431,7 +431,7 @@ tensor(0.0824, grad_fn=<NllLossBackward>)
 
 ```
 
-## 使用`optim`重构
+## 5 使用`optim`重构
 
 Pytorch 还提供了一个包含各种优化算法的包`torch.optim`。 我们可以使用优化器中的`step`方法采取向前的步骤，而不是手动更新每个参数。
 
@@ -494,7 +494,7 @@ tensor(0.0823, grad_fn=<NllLossBackward>)
 
 ```
 
-## 使用`Dataset`重构
+## 6 使用`Dataset`重构
 
 PyTorch 有一个抽象的`Dataset`类。 数据集可以是具有`__len__`函数（由 Python 的标准`len`函数调用）和具有`__getitem__`函数作为对其进行索引的一种方法。 [本教程](https://pytorch.org/tutorials/beginner/data_loading_tutorial.html)演示了一个不错的示例，该示例创建一个自定义`FacialLandmarkDataset`类作为`Dataset`的子类。
 
@@ -551,7 +551,7 @@ tensor(0.0819, grad_fn=<NllLossBackward>)
 
 ```
 
-## 使用`DataLoader`重构
+## 7 使用`DataLoader`重构
 
 Pytorch 的`DataLoader`负责批量管理。 您可以从任何`Dataset`创建一个`DataLoader`。 `DataLoader`使迭代迭代变得更加容易。 不必使用`train_ds[i*bs : i*bs+bs]`，`DataLoader`会自动为我们提供每个小批量。
 
@@ -605,7 +605,7 @@ tensor(0.0821, grad_fn=<NllLossBackward>)
 
 得益于 Pytorch 的`nn.Module`，`nn.Parameter`，`Dataset`和`DataLoader`，我们的训练循环现在变得更小，更容易理解。 现在，让我们尝试添加在实践中创建有效模型所需的基本功能。
 
-## 添加验证
+## 8 添加验证
 
 在第 1 节中，我们只是试图建立一个合理的训练循环以用于我们的训练数据。 实际上，您也应该**始终**具有[验证集](https://www.fast.ai/2017/11/13/validation-sets/)，以便识别您是否过拟合。
 
@@ -655,7 +655,7 @@ for epoch in range(epochs):
 
 ```
 
-## 创建`fit()`和`get_data()`
+## 8 创建`fit()`和`get_data()`
 
 现在，我们将自己进行一些重构。 由于我们经历了两次相似的过程来计算训练集和验证集的损失，因此我们将其设为自己的函数`loss_batch`，该函数可计算一批损失。
 
@@ -726,7 +726,7 @@ fit(epochs, model, loss_func, opt, train_dl, valid_dl)
 
 您可以使用这些基本的 3 行代码来训练各种各样的模型。 让我们看看是否可以使用它们来训练卷积神经网络（CNN）！
 
-## 切换到 CNN
+## 9 切换到 CNN
 
 现在，我们将构建具有三个卷积层的神经网络。 由于上一节中的任何功能都不假设任何有关模型形式的信息，因此我们将能够使用它们来训练 CNN，而无需进行任何修改。
 
@@ -819,7 +819,7 @@ fit(epochs, model, loss_func, opt, train_dl, valid_dl)
 
 ```
 
-## 包装`DataLoader`
+## 9 包装`DataLoader`
 
 Our CNN is fairly concise, but it only works with MNIST, because:
 
@@ -886,7 +886,7 @@ fit(epochs, model, loss_func, opt, train_dl, valid_dl)
 
 ```
 
-## 使用您的 GPU
+## 10 使用您的 GPU
 
 如果您足够幸运地能够使用具有 CUDA 功能的 GPU（可以从大多数云提供商处以每小时 0.50 美元的价格租用一个），则可以使用它来加速代码。 首先检查您的 GPU 是否在 Pytorch 中正常工作：
 
@@ -960,11 +960,3 @@ fit(epochs, model, loss_func, opt, train_dl, valid_dl)
 > *   `torch.optim`：包含诸如 `SGD` 的优化程序，这些优化程序在后退步骤
 > *   `Dataset` 中更新 `Parameter` 的权重。 具有 `__len__` 和 `__getitem__` 的对象，包括 Pytorch 提供的类，例如 `TensorDataset`
 > *   `DataLoader`：获取任何 `Dataset` 并创建一个迭代器，该迭代器返回批量数据。
-
-**脚本的总运行时间**：（0 分钟 57.062 秒）
-
-[下载 Python 源码：`nn_tutorial.py`](../_downloads/a6246751179fbfb7cad9222ef1c16617/nn_tutorial.py)
-
-[下载 Jupyter 笔记本：`nn_tutorial.ipynb`](../_downloads/5ddab57bb7482fbcc76722617dd47324/nn_tutorial.ipynb)
-
-[由 Sphinx 画廊](https://sphinx-gallery.readthedocs.io)生成的画廊

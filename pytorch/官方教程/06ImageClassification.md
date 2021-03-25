@@ -400,22 +400,3 @@ inputs, labels = data[0].to(device), data[1].to(device)
 ## 在多个 GPU 上进行训练
 
 如果您想使用所有 GPU 来获得更大的大规模加速，请查看[可选：数据并行](data_parallel_tutorial.html)。
-
-## 我下一步要去哪里？
-
-*   [训练神经网络玩视频游戏](../../intermediate/reinforcement_q_learning.html)
-*   [在 imagenet 上训练最先进的 ResNet 网络](https://github.com/pytorch/examples/tree/master/imagenet) 
-*   [使用生成对抗网络训练人脸生成器](https://github.com/pytorch/examples/tree/master/dcgan)
-*   [使用递归 LSTM 网络训练单词级语言模型](https://github.com/pytorch/examples/tree/master/word_language_model)
-*   [更多示例](https://github.com/pytorch/examples)
-*   [更多教程](https://github.com/pytorch/tutorials)
-*   [在论坛上讨论 PyTorch](https://discuss.pytorch.org/)
-*   [在 Slack 上与其他用户聊天](https://pytorch.slack.com/messages/beginner/) 
-
-**脚本的总运行时间**：（2 分钟 39.965 秒）
-
-[下载 Python 源码：`cifar10_tutorial.py`](https://pytorch.org/tutorials/_downloads/ba100c1433c3c42a16709bb6a2ed0f85/cifar10_tutorial.py)
-
-[下载 Jupyter 笔记本：`cifar10_tutorial.ipynb`](https://pytorch.org/tutorials/_downloads/17a7c7cb80916fcdf921097825a0f562/cifar10_tutorial.ipynb)
-
-[由 Sphinx 画廊](https://sphinx-gallery.readthedocs.io)生成的画廊
