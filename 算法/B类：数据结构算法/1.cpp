@@ -1,30 +1,10 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<algorithm>
 using namespace std;
 
-// 构造边的对象
-struct Edge
-{
-    int start;
-    int end;
-    int weight;
-    Edge(int s,int e,int w){
-        start=s;
-        end=e;
-        weight=w;
-    }
-    // 重写<运算符
-    bool operator<(const Edge& a)const{
-        return a.weight < weight;
-    }
-};
-// struct cmp{
-//     bool operator()(Edge a,Edge b){
-//         return b.weight > a.weight;
-//     }
-// };
-
+// 一下算法可以借助一些东西进行改进。
 class Graph{
 private:
     int vertex_num;   //图的顶点个数
@@ -43,7 +23,7 @@ public:
     //求最短路径
     void Dijkstra(int begin);//单源最短路
     void Floyd();//多源最短路
-    void Prim();//最小生成树
+    void Prim(int begin);//最小生成树
     void Kruskal();//最小生成树
 };
 
@@ -153,7 +133,7 @@ void Graph::Dijkstra(int begin){
     }
 
 }
-
+// 三层for循环。中间节点、起始点、终止点。不断更新表格。
 void Graph::Floyd(){
     // 初始化结果集合，一个用来记录最短距离，一个用来记录最短路径。
     vector<vector<int>> distance(arc);
@@ -188,38 +168,46 @@ void Graph::Floyd(){
 // 经过分析不需要使用优先队列。与dijkstra算法一样。可以使用向量来表示是否选中。
 // 与dijkstra算法十分相似。唯一的区别是距离更新的方式不同。dijkstra更新使用新的点做为中间节点，计算起始点到该节点的距离，更新最小距离。结果集中保存的是到某个点的最小距离。
 // 而Prim算法是直接使用新的点和新添加到集合中的点进行更新。如果新添加到结果集合中的点周围有更短的距离，则进行更新。而不是作为转接点。结果集中保存的是某个节点的前一个节点。构成一条边。
-void Graph::Prim(){
+// 为了跟Dijkstra统一，这里改成相同的添加方式。
+void Graph::Prim(int begin){
     // 最小生成树开始的顶点。表示顶点是否被选中过.-1表示没有被选中。其他值表示它的上一个节点。
     vector<int> result(vertex_num,-1);
-    // 用来记录到某个节点的距离的向量
+    result[begin]=begin;//表示从当前节点开始.前一个节点时自己。
+
+    // 用来记录到某个节点的距离的向量。使用0表示节点已经计算过，添加到结果当中了。
     vector<int> distance(vertex_num,INT_MAX);
     // 用来记录到某个节点的前一个节点向量。dijsktra也可以添加一个前置节点向量，用来保存路径。
     vector<int> pre_point(vertex_num,-1);
 
-    // 首先选择第一个节点
-    int min_index=2;
-    int min_distance=INT_MAX;
-    result[min_index]=min_index;//表示从当前节点开始.前一个节点时自己。
+    // 初始化刚开始的边集合。从当前点出发的边集合
+    for(int i=0;i<vertex_num;i++){
+        distance[i]=arc[begin][i];
+        pre_point[i]=begin;
+    }
 
     for(int k=0;k<vertex_num-1;k++){
-        // 以当前节点更新距离结合
-        for(int i=0;i<vertex_num;i++){
-            if(result[i]<0 && arc[min_index][i]<distance[i]){
-                distance[i]=arc[min_index][i];
-                pre_point[i]=min_index;
-            }
-        }
-        min_distance=INT_MAX;
+        int min_index =0;
+        int min_distance=INT_MAX;
         // 挑选距离最小的节点
         for(int i=0;i<vertex_num;i++){
-            if(result[i]<0 && distance[i]<min_distance){
+            if(distance[i]!=0 && distance[i]<min_distance){
                 min_distance=distance[i];
                 min_index=i;
             }
         }
-        cout<<min_index<<"\t"<<pre_point[min_index]<<endl;
+        // cout<<min_index<<"\t"<<pre_point[min_index]<<endl;
         // 更新结果集合
         result[min_index]=pre_point[min_index];
+        distance[min_index]=0;
+
+        // 以当前节点更新距离结合
+        for(int i=0;i<vertex_num;i++){
+            if(distance[i]!=0 && arc[min_index][i]<distance[i]){
+                distance[i]=arc[min_index][i];
+                pre_point[i]=min_index;
+            }
+        }
+
     }
 
     // 输出结果集合
@@ -229,14 +217,94 @@ void Graph::Prim(){
 
 }
 
+// 并查集的设计实现，用来检验是否连通
+class SetUnion{
+public:
+    vector<int> vec;
+    // 初始化并查集
+    SetUnion(int n){
+        vec=vector<int>(n);
+        for(int i=0;i<n;i++){
+            vec[i]=i;
+        }
+    }
+    // 没有路径压缩的递归查找
+    int find_r(int x){
+        if(x==vec[x])return x;
+        else{
+            return find_r(vec[x]);
+        }
+    }
+    // 合并两个非连通图。
+    void merge(int i,int j){
+        vec[find(i)]=find(j);
+    }
+    // 有路径压缩的递归查找
+    int find(int x){
+        if(x==vec[x]){
+            return x;
+        }
+        else{
+            vec[x]=find(vec[x]);
+            return vec[x];
+        }
+    }
+
+};
+// 构造边的对象
+struct Edge
+{
+    int start;
+    int end;
+    int weight;
+    Edge(int s,int e,int w){
+        start=s;
+        end=e;
+        weight=w;
+    }
+    // 重写<运算符
+    bool operator<(const Edge& a)const{
+        return a.weight > weight;
+    }
+};
+// 贪心选择最小的边。且使他们不连通。
 void Graph::Kruskal(){
-    
+    // 构建结果集合
+    vector<Edge> result;
+    // 对边初始化并进行排序
+    vector<Edge> vec;
+    for(int i=0;i<vertex_num;i++){
+        for(int j=i+1;j<vertex_num;j++){
+            if(arc[i][j]<INT_MAX){
+                vec.push_back(Edge(i,j,arc[i][j]));
+            }
+            
+        }
+    }
+    sort(vec.begin(),vec.end());
+
+    // 创建点的并查集
+    SetUnion su(vertex_num);
+    int k=0;
+    for(int i=0;i<vec.size();i++){
+        Edge e = vec[i];
+        if(su.find(e.start)!=su.find(e.end)){
+            result.push_back(e);
+            su.merge(e.start,e.end);
+        }
+    }
+
+    // 显示结果
+    for(int i=0;i<result.size();i++){
+        cout<<result[i].start<<"\t"<<result[i].end<<"\t"<<result[i].weight<<endl;
+    }
 }
 int main(){
     Graph g;
     // g.print();
     // g.Dijkstra(3);
     // g.Floyd();
-    // g.Prim();
+    // g.Prim(2);
+    // g.Kruskal();
     return 0;
 }
