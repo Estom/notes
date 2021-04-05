@@ -12,13 +12,18 @@ struct Edge
     Edge(int s,int e,int w){
         start=s;
         end=e;
-        weight=2;
+        weight=w;
     }
     // 重写<运算符
     bool operator<(const Edge& a)const{
         return a.weight < weight;
     }
 };
+// struct cmp{
+//     bool operator()(Edge a,Edge b){
+//         return b.weight > a.weight;
+//     }
+// };
 
 class Graph{
 private:
@@ -111,7 +116,7 @@ void Graph::print_arc(){
     }
 }
 void Graph::Dijkstra(int begin){
-    // 初始化结果集,到自己是0
+    // 初始化结果集,到自己是0。
     vector<int> result(vertex_num,INT_MAX);
     result[begin]=0;
     // 初始化距离集合，每次从中挑选
@@ -180,45 +185,58 @@ void Graph::Floyd(){
         cout<<endl;
     }
 }
-// 使用优先队列，挑选结果集合
+// 经过分析不需要使用优先队列。与dijkstra算法一样。可以使用向量来表示是否选中。
+// 与dijkstra算法十分相似。唯一的区别是距离更新的方式不同。dijkstra更新使用新的点做为中间节点，计算起始点到该节点的距离，更新最小距离。结果集中保存的是到某个点的最小距离。
+// 而Prim算法是直接使用新的点和新添加到集合中的点进行更新。如果新添加到结果集合中的点周围有更短的距离，则进行更新。而不是作为转接点。结果集中保存的是某个节点的前一个节点。构成一条边。
 void Graph::Prim(){
-    // 最小生成树开始的顶点。
-    int start = 2;
-    // 初始化结果集合,边的集合。
-    vector<Edge> result; 
-    // 初始化优先队列，用来挑选满足要求的最小的边
-    priority_queue<Edge,vector<Edge>> pri_edge;
+    // 最小生成树开始的顶点。表示顶点是否被选中过.-1表示没有被选中。其他值表示它的上一个节点。
+    vector<int> result(vertex_num,-1);
+    // 用来记录到某个节点的距离的向量
+    vector<int> distance(vertex_num,INT_MAX);
+    // 用来记录到某个节点的前一个节点向量。dijsktra也可以添加一个前置节点向量，用来保存路径。
+    vector<int> pre_point(vertex_num,-1);
 
-    for(int k=0;k<vertex_num;k++){
-        // 添加边
+    // 首先选择第一个节点
+    int min_index=2;
+    int min_distance=INT_MAX;
+    result[min_index]=min_index;//表示从当前节点开始.前一个节点时自己。
+
+    for(int k=0;k<vertex_num-1;k++){
+        // 以当前节点更新距离结合
         for(int i=0;i<vertex_num;i++){
-            // 检查i是不是已经被选中
-            for(auto e:result){
-                if(i==e.start || i==e.end){
-                    continue;
-                }
-            }
-            if(i!=start && arc[start][i]<INT_MAX){
-                pri_edge.push(Edge(start,i,arc[start][i]));
+            if(result[i]<0 && arc[min_index][i]<distance[i]){
+                distance[i]=arc[min_index][i];
+                pre_point[i]=min_index;
             }
         }
-        // 挑选边.并将end点作为下一个边的扩展。继续添加边
-        Edge e = pri_edge.top();
-        pri_edge.pop();
-        result.push_back(e);
-        start = e.end;
+        min_distance=INT_MAX;
+        // 挑选距离最小的节点
+        for(int i=0;i<vertex_num;i++){
+            if(result[i]<0 && distance[i]<min_distance){
+                min_distance=distance[i];
+                min_index=i;
+            }
+        }
+        cout<<min_index<<"\t"<<pre_point[min_index]<<endl;
+        // 更新结果集合
+        result[min_index]=pre_point[min_index];
     }
 
-    // 显示结果
-    for(auto e:result){
-        cout<<e.start<<"\t"<<e.end<<"\t"<<e.weight<<endl;
+    // 输出结果集合
+    for(int i=0;i<vertex_num;i++){
+        cout<<i<<"\t"<<result[i]<<"\t"<<arc[result[i]][i]<<endl;
     }
+
+}
+
+void Graph::Kruskal(){
+    
 }
 int main(){
     Graph g;
     // g.print();
     // g.Dijkstra(3);
     // g.Floyd();
-    g.Prim();
+    // g.Prim();
     return 0;
 }
