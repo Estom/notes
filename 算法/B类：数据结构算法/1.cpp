@@ -1,83 +1,22 @@
-
-# 图算法-Floyd算法
-
-> 目录
->* 图算法-Dijkstra算法
->* 图算法-Floyd算法
->* 图算法-Bellman-Ford算法
->* 图算法-Prim算法
->* 图算法-Kruskal算法
-
-> 参考文献
-> * [https://www.jianshu.com/p/f73c7a6f5a53](https://www.jianshu.com/p/f73c7a6f5a53)
-> * [https://blog.csdn.net/jeffleo/article/details/53349825](https://blog.csdn.net/jeffleo/article/details/53349825)
-## 1 问题分析
-
-* Floyd算法是一个经典的**动态规划算法**，它又被称为插点法。该算法名称以创始人之一、1978年图灵奖获得者、斯坦福大学计算机科学系教授罗伯特·弗洛伊德命名。
-* Floyd算法是一种利用动态规划的思想寻找给定的加权图中**多源点最短路径的算法** ,算法目标是寻找从点i到点j的最短路径。
-
-## 2 算法原理
-
-* Floyd算法的基本思想：可以将问题分解:
-  * 第一、先找出最短的距离
-  * 第二、然后在考虑如何找出对应的行进路线。
-
-> 以后再整理一下文字内容
-
-## 3 算法过程
-![](image/2021-03-13-22-44-58.png)
-
-> 顶点名称和下标的对应
-> * A B C D E F G
-> * 0 1 2 3 4 5 6
-
-1. 弗洛伊德算法定义了两个二维矩阵
-   * 矩阵D记录顶点间的最小路径。例如D[0][3]= 10，说明顶点0 到 3 的最短路径为10；
-   * 矩阵P记录顶点间最小路径中的中转点
-   * 例如P[0][3]= 1 说明，0 到 3的最短路径轨迹为：0 -> 1 -> 3。
-
-2. 它通过3重循环，k为中转点，v为起点，w为终点，循环比较D[v][w] 和 D[v][k] + D[k][w] 最小值，如果D[v][k] + D[k][w] 为更小值，则把D[v][k] + D[k][w] 覆盖保存在D[v][w]中。
-
-3. 以A为中间点，原D矩阵中，D[B][G]的值为INF，即不存在B->G的最小路径，但是通过A为中间点，D[B][A] + D[A][G] = 12 + 14 = 26 小于 D[B][G] = INF， 所以D[B][A] + D[A][G] 为 B -> G的最小值，因此覆盖D[B][G] 为 26。
-
-4. 以B为中间点，第2步后的D矩阵中，D[A][C]的值为INF， 但是通过B，D[A][B] + D[B][C] = 12 + 10 = 22 小于 D[A][C] = INF，所以D[A][B] + D[B][C] 为 A->C的最小路径，覆盖D[A][C]的值为22， 以此类推。
-
-## 4 算法效率
-
-时间复杂度为$O(n^3)$
-
-## 5 算法实现
-
-```
-//这里是弗洛伊德算法的核心部分 
-    //k为中间点 
-    for(k = 0; k < G.vexnum; k++){
-        //v为起点 
-        for(v = 0 ; v < G.vexnum; v++){
-            //w为终点 
-            for(w =0; w < G.vexnum; w++){
-                if(D[v][w] > (D[v][k] + D[k][w])){
-                    D[v][w] = D[v][k] + D[k][w];//更新最小路径 
-                    P[v][w] = P[v][k];//更新最小路径中间顶点 
-                }
-            }
-        }
-    }
-```
-
-```C++
 #include<iostream>
 #include<vector>
+#include<queue>
 using namespace std;
 
-struct Dis {
-    string path;
-    int value;
-    bool visit;
-    Dis() {
-        visit = false;
-        value = 0;
-        path = "";
+// 构造边的对象
+struct Edge
+{
+    int start;
+    int end;
+    int weight;
+    Edge(int s,int e,int w){
+        start=s;
+        end=e;
+        weight=2;
+    }
+    // 重写<运算符
+    bool operator<(const Edge& a)const{
+        return a.weight < weight;
     }
 };
 
@@ -97,8 +36,10 @@ public:
     // 打印整个邻接矩阵
     void print_arc();
     //求最短路径
-    void Dijkstra(int begin);
-    void Floyd();
+    void Dijkstra(int begin);//单源最短路
+    void Floyd();//多源最短路
+    void Prim();//最小生成树
+    void Kruskal();//最小生成树
 };
 
 Graph::Graph(){
@@ -178,6 +119,7 @@ void Graph::Dijkstra(int begin){
     for(int i=0;i<vertex_num;i++){
         distance[i]=arc[begin][i];
     }
+
     for(int k=0;k<vertex_num-1;k++){
         // 从中挑选非零的最小值，使用0表示已经挑选到结果集合中。
         int min_distance=INT_MAX;
@@ -214,6 +156,8 @@ void Graph::Floyd(){
     int i,j,k;
     int temp;
 
+    // 三层for循环。k表示中间点。i表示起点，j表示中点。如果经过起始点小于直接点，则更新。
+    // 可以进行优化，例如i||j==k的时候，可以不用运算，直接continue。
     for(k=0;k<vertex_num;k++){
         for(i=0;i<vertex_num;i++){
             for(j=0;j<vertex_num;j++){
@@ -236,12 +180,45 @@ void Graph::Floyd(){
         cout<<endl;
     }
 }
+// 使用优先队列，挑选结果集合
+void Graph::Prim(){
+    // 最小生成树开始的顶点。
+    int start = 2;
+    // 初始化结果集合,边的集合。
+    vector<Edge> result; 
+    // 初始化优先队列，用来挑选满足要求的最小的边
+    priority_queue<Edge,vector<Edge>> pri_edge;
 
+    for(int k=0;k<vertex_num;k++){
+        // 添加边
+        for(int i=0;i<vertex_num;i++){
+            // 检查i是不是已经被选中
+            for(auto e:result){
+                if(i==e.start || i==e.end){
+                    continue;
+                }
+            }
+            if(i!=start && arc[start][i]<INT_MAX){
+                pri_edge.push(Edge(start,i,arc[start][i]));
+            }
+        }
+        // 挑选边.并将end点作为下一个边的扩展。继续添加边
+        Edge e = pri_edge.top();
+        pri_edge.pop();
+        result.push_back(e);
+        start = e.end;
+    }
+
+    // 显示结果
+    for(auto e:result){
+        cout<<e.start<<"\t"<<e.end<<"\t"<<e.weight<<endl;
+    }
+}
 int main(){
     Graph g;
     // g.print();
     // g.Dijkstra(3);
-    g.Floyd();
+    // g.Floyd();
+    g.Prim();
     return 0;
 }
-```
