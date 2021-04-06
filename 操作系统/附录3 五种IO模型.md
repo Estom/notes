@@ -29,6 +29,10 @@
 ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *src_addr, socklen_t *addrlen);
 ```
 ![](image/2021-03-30-22-02-32.png)
+
+
+
+![](image/2021-04-06-11-43-08.png)
 ### 非阻塞式 I/O
 
 * 应用进程执行系统调用之后，内核返回一个错误码。应用进程可以继续执行，但是需要不断的执行系统调用来获知 I/O 是否完成，这种方式称为轮询（polling）。
@@ -37,11 +41,11 @@ ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *
 
 ![](image/2021-03-30-22-02-42.png)
 
-### I/O 复用
+### I/O 复用（事件驱动IO）
 
-* 使用 select 或者 poll 等待数据，并且可以等待多个套接字中的任何一个变为可读。这一过程会被阻塞，当某一个套接字可读时返回，之后再使用 recvfrom 把数据从内核复制到进程中。
-
-* 它可以让单个进程具有处理多个 I/O 事件的能力。又被称为 Event Driven I/O，即事件驱动 I/O。
+* 主要是select、poll、epoll；对一个IO端口，两次调用，两次返回，比阻塞IO并没有什么优越性；关键是能实现同时对**多个IO端口进行监听**；
+* I/O复用模型会用到select、poll、epoll函数，这几个函数也会使进程阻塞，但是和阻塞I/O所不同的的，这两个函数可以同时阻塞多个I/O操作。而且可以同时对多个读操作，多个写操作的I/O函数进行检测，直到有数据可读或可写时，才真正调用I/O操作函数。当某一个套接字可读时返回，之后再使用 recvfrom 把数据从内核复制到进程中。
+* 它可以让**单个进程具有处理多个 I/O 事件的能力**。又被称为 Event Driven I/O，即**事件驱动 I/O**。
 
 * 如果一个 Web 服务器没有 I/O 复用，那么每一个 Socket 连接都需要创建一个线程去处理。如果同时有几万个连接，那么就需要创建相同数量的线程。相比于多进程和多线程技术，I/O 复用不需要进程线程创建和切换的开销，系统开销更小。
 
@@ -55,6 +59,8 @@ ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *
 
 ![](image/2021-03-30-22-03-00.png)
 
+![](image/2021-04-06-11-44-30.png)
+
 ### 异步 I/O
 
 * 应用进程执行 aio_read 系统调用会立即返回，应用进程可以继续执行，不会被阻塞，内核会在所有操作完成之后向应用进程发送信号。
@@ -63,16 +69,14 @@ ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *
 
 ![](image/2021-03-30-22-03-09.png)
 
-### 五大 I/O 模型比较
+![](image/2021-04-06-11-58-05.png)
+### 五大 IO 模型比较
 
-- 同步 I/O：将数据从内核缓冲区复制到应用进程缓冲区的阶段（第二阶段），应用进程会阻塞。
-- 异步 I/O：第二阶段应用进程不会阻塞。
+- 同步IO：将数据从内核缓冲区复制到应用进程缓冲区的阶段（第二阶段），应用进程会阻塞。包括阻塞式 IO、非阻塞式 IO、IO 复用和信号驱动 IO 。
+- 异步IO：第一阶段和第二阶段应用进程不会阻塞。
 
-* 同步 I/O 包括阻塞式 I/O、非阻塞式 I/O、I/O 复用和信号驱动 I/O ，它们的主要区别在第一个阶段。
-
-* 非阻塞式 I/O 、信号驱动 I/O 和异步 I/O 在第一阶段不会阻塞。
+* 同步IO的主要区别在第一个阶段。阻塞式IO、IO复用第一阶段会阻塞。非阻塞式IO、信号驱动IO在第一阶段不会阻塞。
 ![](image/2021-03-30-22-04-01.png)
-
 ## 2 I/O 复用
 
 * select/poll/epoll 都是 I/O 多路复用的具体实现，select 出现的最早，之后是 poll，再是 epoll。
