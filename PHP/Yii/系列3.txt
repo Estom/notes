@@ -1,0 +1,36 @@
+yii
+创建模型即类
+按规则自动验证
+通过小部件自动生成html
+
+
+命名空间
+namespace声明命名空间
+use调用类和模板和小部件
+
+
+感觉controller就像大脑核心，负责各个数据处理，数据分流，文件调配
+
+在Jikecontroller里面定义了Jikecontroller类继承了controller类想当于控制器
+里面含有action（）的方法，可以处理数据。
+
+在models里定义了JikeForm类继承了model类，想当于数据库类
+里面有很多数据和方法。
+
+
+Yii:$app->request->post()访问输入表单的函数
+model->rule()的方法，可以验证表单数据类型
+model->load()给对象赋值，括号中填写对象对应的值
+model->validate()验证model对象的数据是否合法
+
+$this->reder('index-two',['model'=>$model])第一参数，视图中渲染的文件，第二个参数，传给视图的数据。
+
+mvc
+model 模型 负责和数据库的联系。
+view视图 给用户展现的部分
+controller控制器 控制用户请求的输入输出，主干的业务逻辑
+
+
+
+
+

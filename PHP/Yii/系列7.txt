@@ -1,0 +1,45 @@
+﻿<?php
+
+
+<div class="records-search">
+
+    <?php $form = ActiveForm::begin([
+        'action' => ['index'],
+        'method' => 'get',
+    ]); ?>
+
+    <?= $form->field($model, 'record_id') ?>
+
+    <?= $form->field($model, 'label') ?>
+
+    <?= $form->field($model, 'time_data') ?>
+
+    <?= $form->field($model, 'user_own') ?>
+
+    <?= $form->field($model, 'set_top') ?>
+
+    <?php // echo $form->field($model, 'num_love') ?>
+
+    <?php // echo $form->field($model, 'content') ?>
+
+    <div class="form-group">
+        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
+</div>
+
+//$model 是数据类，后边是数据项，提交时形成一个。
+/*
+对activeForm和From类的理解，actioncreate（）和actionupdate（）的方法几乎一样，都是项数据库中保存一条数。
+前者，新建后保存，后者更改后保存
+两个函数分别把一个类的变量传递给create.php 和 update.php二者接受类的对象
+都把对象传递给同一张表单_from.php中的activeForm，进行处理，然后在返回，
+极大的利用了代码的重复利用性。
+同时数据流完美清晰，值的学习。
+
+模型中的isnewrecord 属性能够判断记录是新的记录还是旧的记录。
+
+?>

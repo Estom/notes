@@ -1,0 +1,178 @@
+第一部分Yii2
+1、作用
+Yii 是一个高性能，基于组件的 PHP 框架，用于快速开发现代 Web 应用程序。.Yii 是一个通用的 Web 编程框架，可以用于开发各种基于 PHP 的 Web 应用。因为基于组件的框架结构和设计精巧的缓存支持，Yii 特别适合开发大型应用，如门户网站、论坛、内容管理系统（CMS）、电子商务项目等。
+2、安装教程
+通过归档文件安装?
+1.从[yiiframework.com](http://www.yiiframework.com/download/yii2-basic) 下载归档文件。
+2. 将下载的文件解压缩到 htdocs目录中。
+3. 修改 `config/web.php` 文件，给 `cookieValidationKey` 配置项添加一个密钥(若你通过 Composer 安装，则此步骤会自动完成)：
+? ?'cookieValidationKey' => '输入你的密钥'
+4.需要通过local/.../requirements.php检查是否满足安装yii的环境
+5.如果PHP环境没有搭建好的话，需要搭建PHP环境。把xampp中php.exe的目录添加到环境变量的path路径中个，然后通过cmd。php -v 检测php环境是否安装和安装的版本是否满足要求。
+6.然后通过local/.../web/index.php检测是否能够运行。出现congratulations就成功了。
+
+第二部分Yii的基础知识
+认识：部分功能差不多就像C++模板库，在使用过程中调用相应的类，进行实例化，自定义类继承yii基础类。使用类的属性和方法。
+类，要素特性
+属性、事件、行为
+1.属性
+在类中，属性和成员变量不同。属性是这个类固有的性质，可以定义其访问权限。而类的成员变量是构成类的一部分，是一个量，可以更改。
+实现类的属性的方法：
+* 继承自?yii\base\Object?。
+* 声明一个用于保存该属性的私有成员变量。
+* 提供getter或setter函数，或两者都提供，用于访问、修改上面提到的私有成员变量。 如果只提供了getter，那么该属性为只读属性，只提供了setter，则为只写。
+
+在Yii中，由?yii\base\Object?提供了对属性的设定，因此，如果要使你的类支持属性， 必须继承自?yii\base\Object?。其中有一系列可以设置属性的方法函数
+* __isset()?用于测试属性值是否不为?null
+* __unset()?用于将属性值设为?null
+* hasProperty()?用于测试是否有某个属性
+* canGetProperty()?测试一个属性是否可读
+* canSetProperty()?测试一个属性是否可写
+
+
+2、事件
+>使用事件，可以在特定的时间地点，触发执行预先设定的一段代码。，事件无处不在，比如，你发了个微博，触发了一个事件，导致关注你的人，看到了你新发出来的内容。在JS中也有相关的事件，鼠标点击事件，这时候，事件会出发一系列行为。
+
+>使用时间是需要明白的几个要素
+这是一个什么事件？
+谁触发了事件？
+谁处理事件
+事件怎么处理
+事件相关的数据有哪些
+
+>与事件相关的类
+yii\base\Component或者yii\base\Event
+其中定义了与事件相关的一些函数，直接定义对象的事件特性。
+　　   public static function on($class, $name, $handler, $data = null,
+        $append = true)
+    {
+        // ... ...
+        // 用于绑定事件handler
+    }
+
+    public static function off($class, $name, $handler = null)
+    {
+        // ... ...
+        // 用于取消事件handler绑定
+    }
+
+    public static function hasHandlers($class, $name)
+    {
+        // ... ...
+        // 用于判断是否有相应的handler与事件对应
+    }
+
+    public static function trigger($class, $name, $event = null)
+    {
+        // ... ...
+        // 用于触发事件
+　　    }
+
+>事件的handler，事件处理程序，即对应的php函数
+可以使用全局的PHP函数
+可以使用类的成员函数
+也可以使用匿名函数
+
+>使用on函数进行绑定
+　　$person->on(Person::EVENT_GREET, 'person_say_hello
+使用off函数解除绑定
+　　public function off($name, $handler = null)
+trigger设置事件的发
+　　public function trigger($name, Event $event = null)
+
+
+3、行为
+>作用： 在类的外面对类的属性和方法进行补充。?通过将行为绑定到一个类，可以使类具有行为本身所定义的属性和方法，就好像类本来就有这些属性和方法一样。 而且不需要写一个新的类去继承或包含现有类。
+>与行为相关的类以及绑定行为的方法
+yii\base\bahavior类，进行实例化，定义类的对象
+　　// Step 1: 定义一个将绑定行为的类
+class MyClass extends yii\base\Component
+{
+    // 空的
+}
+
+// Step 2: 定义一个行为类，他将绑定到MyClass上
+class MyBehavior extends yii\base\Behavior
+{
+    // 行为的一个属性
+    public $property1 = 'This is property in MyBehavior.';
+
+    // 行为的一个方法
+    public function method1()
+    {
+        return 'Method in MyBehavior is called.';
+    }
+}
+
+$myClass = new MyClass();
+$myBehavior = new MyBehavior();
+
+// Step 3: 将行为绑定到类上
+$myClass->attachBehavior('myBehavior', $myBehavior);
+
+// Step 4: 访问行为中的属性和方法，就和访问类自身的属性和方法一样
+echo $myClass->property1;
+　　echo $myClass->method1();
+* 从?yii\base\Component?派生自己的类，以便使用行为；
+* 从?yii\base\Behavior?派生自己的行为类，里面定义行为涉及到的属性、方法；
+* 将Component和Behavior绑定起来；
+* 像使用Component自身的属性和方法一样，尽情使用行为中定义的属性和方法。
+>行为类的要素
+$owner?成员变量，用于指向行为的依附对象；
+events()?用于表示行为所有要响应的事件；
+attach()?用于将行为与Component绑定起来；
+deatch()?用于将行为从Component上解除。
+
+>定义行为
+
+4、Yii的约定
+约定就像一种用的模式，最常见的默认值就是一种约定。Yii框架把最通用的内容做成约定，然后提高执行效率。
+>Yii的目录结构，每个文件中存放的内容和作用
+├── backend后台的 资源包和相关配置文件
+├── common公共目录，可供其它应用使用的应用
+├── console
+├── environments
+├── frontend前台存放有前端资源包和相关配置
+├── nbproject
+├── tests
+├── vendor第三方程序目录，比如composer.json的安装和yii框架本身
+├── composer.json
+├── composer.lock
+├── init
+├── init.bat
+├── LICENSE.md
+├── README.md
+├── requirements.php
+├── yii
+└── yii.bat
+index.php的入口文件，协调各个部分的应用。
+
+>别名
+@+预定义的别名
+@yii?表示Yii框架所在的目录，也是?yii\BaseYii?类文件所在的位置；
+@app?表示正在运行的应用的根目录，一般是?digpage.com/frontend；
+@vendor?表示Composer第三方库所在目录，一般是?@app/vendor或?@app/../vendor?；
+@bower?表示Bower第三方库所在目录，一般是?@vendor/bower?；
+@npm?表示NPM第三方库所在目录，一般是?@vendor/npm?；
+@runtime?表示正在运行的应用的运行时用于存放运行时文件的目录，一般是?@app/runtime?；
+@webroot?表示正在运行的应用的入口文件?index.php?所在的目录，一般是?@app/web；
+@web?URL别名，表示当前应用的根URL，主要用于前端；
+@common?表示通用文件夹；
+@frontend?表示前台应用所在的文件夹；
+@backend?表示后台应用所在的文件夹；
+@console?表示命令行应用所在的文件夹；
+其他使用Composer安装的Yii扩展注册的二级别名。
+
+>自动加载机制的约定
+>环境和相关配置文件的约定。
+Yii环境就是一组配置文件，在不同IDE中不同人员的共同开发的过程中
+提供了一种规范，是版本控制变得简单，减少了冲突和繁琐的步骤。
+
+
+
+
+
+
+
+
+

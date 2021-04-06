@@ -1,0 +1,64 @@
+Android studio中常见的使用技巧
+
+1. 编辑器
+折叠县、标记栏
+alt+数字 启动工具窗口
+window中可以修改restore layout
+
+2. 导航工具栏
+project工具栏能够选择不同的模式
+structure工具栏（查看xml和.java的文件结构）
+favorites收藏的文件、行、断点
+TODO工具，补充注释
+Commander工具窗口
+
+3.主菜单栏，实现大部分功能
+4. 工具栏，能够实现基本的文本编辑，运行调试，可以通过View|Toolbar菜单项的选中来隐藏工具栏
+5. 导航栏，用来定位当前的位置。
+6. 状态栏，在整个界面的最低端，主要包括消息去，光标位置，行分隔符区域，文本格式区域，文件访问标识符区域，如出现时级别按钮
+7. 常用操作。
+ctrl+a,ctrl+w,ctrl+z,ctrl+shift+z
+ctrl+e查看最近的文件
+ctrl+alt+方向箭头遍历导航操作。
+ctrl+一般的字母实现cut、copy、paste，扩展粘贴，赋值路径，赋值偏好。
+
+8.上下文菜单
+9. 获取帮助
+10.使用键盘导航
+alt+f1 selectin
+ctrl+n class查找
+ctrl+shift+n find file
+ctrl+g find line
+ctrl+alt+home related file
+ctrl+shift+backspace last edit location
+ctrl+h type hierarchy
+ctrl+b declaration
+11.查找和替换文本
+ctrl+f
+ctrl+shift+f
+ctrl+r
+ctrl+shift+r
+
+
+第三章在Androidstudio中进行编程
+1. helper中能够find action对Androidstudio中的界面和属性进行操作
+ctrl+‘+’折叠光标代码块
+ctrl+‘-’展开光标代码块
+ctrl+shift+‘+’折叠所有代码块
+ctrl+shift+‘-’站看所有代码块
+ctrl+‘。’折叠展开代码块
+2. 执行代码补全
+方向箭头选择，enter键使用
+3. 代码注释
+ctrl+/java行注释
+ctrl+shift+/java筷箸史
+4.使用代码生成工具
+5.插入动态模板
+6.移动代码
+7.设计代码风格（这里都是些无关紧要的细枝末节，让我们来看其他的东西）
+
+第四章代码重构
+感觉也不是我现在应该看得东西
+这本书怎么看都是给老鸟进阶用的，还是随便浏览一下，直接归还得了。
+
+可恶，git的学习时间可能又要拖一段了。另外，如果有一天完成了当下所有的作业而且还有足够的心情时在去学习和使用这些新东西吧。
