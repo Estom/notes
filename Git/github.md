@@ -13,38 +13,53 @@
 * Watch看着你呢，关注一个项目。
 * Github主页仓库主页——仓库相关的信息和相关操作
 
+## 2 pull request
+## 2 fork sycnize
 
-## 2 fork同步
 > 参考文献
 > * [https://blog.csdn.net/qq_22918243/article/details/89642445](https://blog.csdn.net/qq_22918243/article/details/89642445)
-Fork 之后同步源的更新内容
-配置fork 远程仓库
-查看fork之后的项目的远程仓库状态 git remote -v
 
-添加一个将被同步给 fork 远程的上游仓库
 
- git remote add upstream <git_url>
-1
-再次查看状态确认是否配置成功
+### 配置fork远程仓库
+1. 查看fork之后的项目的远程仓库状态
+```
+git remote -v
+```
+2. 添加一个将被同步给 fork 远程的上游仓库
 
-同步Fork
-从上游仓库 fetch 分支和提交点，传送到本地，并会被存储在一个本地分支 upstream/master.
+```
+git remote add upstream <git_url>
+```
+3. 再次查看状态确认是否配置成功
 
-执行 git fetch upstream
+### 同步Fork
 
-切换到本地主分支 git checkout master
+1. 从上游仓库 fetch 分支和提交点，传送到本地，并会被存储在一个本地分支 upstream/master.
 
-把 upstream/master 分支合并到本地 master 上，这样就完成了同步，并且不会丢掉本地修改的内容。
+```
+git fetch upstream
+```
 
-执行 git merge upstream/master
+2. 切换到本地主分支
+```
+git checkout master
+```
+3. 把 upstream/master 分支合并到本地 master 上，这样就完成了同步，并且不会丢掉本地修改的内容。
+```
+git merge upstream/master
+```
 
-如果想更新到 GitHub 的 fork 上，直接 git push origin master 就好了。
+4. 更新到 GitHub 的 fork
+```
+git push origin master
+```
+5. 提交代码到原有的源上。在原有的代码修改之后，使用 git rebase 合并代码。然后再行提交
 
-提交代码到原有的源上
-在原有的代码修改之后，使用 git rebase 合并代码。然后再行提交
-
+> git rebase教程
+> * [https://www.jianshu.com/p/6960811ac89c](https://www.jianshu.com/p/6960811ac89c)
+```
 git remote add
 git fetch
 git rebase/merge
 git push
-
+```
