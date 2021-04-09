@@ -14,85 +14,37 @@
 * Github主页仓库主页——仓库相关的信息和相关操作
 
 
+## 2 fork同步
+> 参考文献
+> * [https://blog.csdn.net/qq_22918243/article/details/89642445](https://blog.csdn.net/qq_22918243/article/details/89642445)
+Fork 之后同步源的更新内容
+配置fork 远程仓库
+查看fork之后的项目的远程仓库状态 git remote -v
 
+添加一个将被同步给 fork 远程的上游仓库
 
+ git remote add upstream <git_url>
+1
+再次查看状态确认是否配置成功
 
-### **git remote**
+同步Fork
+从上游仓库 fetch 分支和提交点，传送到本地，并会被存储在一个本地分支 upstream/master.
 
-```
-git remote
-```
+执行 git fetch upstream
 
-列出你和远程仓库之间的远程连接
+切换到本地主分支 git checkout master
 
-```
-git remote -v
-```
+把 upstream/master 分支合并到本地 master 上，这样就完成了同步，并且不会丢掉本地修改的内容。
 
-列出每个连接的名字和url
+执行 git merge upstream/master
 
-```
-git remote add \<name\> \<url\>
-```
+如果想更新到 GitHub 的 fork 上，直接 git push origin master 就好了。
 
-创建一个新的远程连接并添加名字
-```
-git remote rm \<name\>
-```
+提交代码到原有的源上
+在原有的代码修改之后，使用 git rebase 合并代码。然后再行提交
 
-移除远程仓库的链接
+git remote add
+git fetch
+git rebase/merge
+git push
 
-### **git fetch**
-
-```
-git fetch \<remote\>
-```
-
-拉取仓库中的所有分支（包括相关的文件和所有的提交）
-```
-git fetch \<remote\> \<branch\>
-```
-
-拉取制定仓库中的所有分支（包括相关的文件和所欲的提交）
-
-> 注意，这个步骤知识拉取远程的分支，在本地并没有合并也没有生成本地分支，知识一个可读的远程分支。
-> * 使用git branch -r 命令可以查看所有只读的远程分支。
-> * 使用gitcheckout命令可以创建本地分支，并与远程分支关联。
-> * 使用git merge命令可以将远程分支与本地分支合并。
-
-### **git pull**
-```
-git pull remote
-```
-
-拉取当前分支对应的远程副本，并将远程副本的更改写入本地副本。相当于git fetch之后git merge。
-
-```
-git pull -rebase \<remote\>
-```
-
-使用git rebase命令合并远程分支与本地分支，不使用git merge
-
-### **git push**
-
-```
-git push \<remote\> \<branch\>
-```
-
-将制定分支推送到远程分支。包括所有的文件和提交。
-
-```
-git push \<remote\> --force
-```
-强制推送
-```
-git push \<remote\> --all
-```
-
-本地所有的分支推送到远程仓库当中
-
-```
-git push \<remote\> --tags
-```
-
-将本地所有标签推送到远程仓库中
