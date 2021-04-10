@@ -1,8 +1,23 @@
-几种关系
+# 类关系
 
-在UML类图中，常见的有以下几种关系: 泛化（Generalization）, 实现（Realization）,
-关联（Association), 聚合（Aggregation）, 组合(Composition), 依赖(Dependency)
+## 概述
 
+### 关系
+在UML类图中，常见的有以下几种关系: 泛化（Generalization）, 实现（Realization）,关联（Association), 聚合（Aggregation）, 组合(Composition), 依赖(Dependency)
+
+### 关系表示
+
+* 虚线箭头指向依赖；
+* 实线箭头指向关联；
+* 虚线三角指向接口；
+* 实线三角指向父类；
+* 空心菱形能分离而独立存在，是聚合；
+* 实心菱形精密关联不可分，是组合；
+
+![](image/2021-04-10-12-52-24.png)
+
+
+## 详述
 **1. 泛化（Generalization）**
 
 【泛化关系】：（is a）是一种继承关系, 表示一般与特殊的关系,
