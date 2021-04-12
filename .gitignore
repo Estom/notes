@@ -2,3 +2,5 @@
 *.pyc
 __pycache__
 .vscode
+*.class
+.vscode/launch.json
