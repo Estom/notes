@@ -13,6 +13,7 @@
         "xlocbuf": "cpp",
         "xlocmon": "cpp",
         "xlocnum": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "xtree": "cpp"
     }
 }
