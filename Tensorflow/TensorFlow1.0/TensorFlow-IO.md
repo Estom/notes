@@ -6,7 +6,7 @@
 ### preload
 
 直接将数据设置为常量，加载到TensorFlow的graph中。
-```
+```py
 import tensorflow as tf
 x1 = tf.constant([2,3,4])
 x2 = tf.constant([4,0,1])
@@ -37,7 +37,7 @@ with tf.Session() as sess:
 
 > 基于队列（Queue）API构建输入通道（pipelines）,读取文件中的数据
 
-##### 原理介绍
+### 原理介绍
 
 * 使用字符串张量(比如["file0", "file1"]) 或者tf.train.match_filenames_once 函数来产生文件名列表。
 * 文件名打乱（可选）（Optional filename shuffling）。
