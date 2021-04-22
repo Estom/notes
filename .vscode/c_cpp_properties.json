@@ -2,7 +2,6 @@
     "configurations": [
         {
             "name": "Win32",
-            // 用来设置头文件
             "includePath": [
                 "${workspaceFolder}/**"
             ],
