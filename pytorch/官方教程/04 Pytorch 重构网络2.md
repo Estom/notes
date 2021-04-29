@@ -1,11 +1,23 @@
+- [`torch.nn`到底是什么？](#torchnn到底是什么)
+  - [0 MNIST 数据集](#0-mnist-数据集)
+  - [1 从零开始的神经网络（没有`torch.nn`）](#1-从零开始的神经网络没有torchnn)
+  - [2 使用`torch.nn.functional`](#2-使用torchnnfunctional)
+  - [3 使用`nn.Module`重构](#3-使用nnmodule重构)
+  - [4 使用`nn.Linear`重构](#4-使用nnlinear重构)
+  - [5 使用`optim`重构](#5-使用optim重构)
+  - [6 使用`Dataset`重构](#6-使用dataset重构)
+  - [7 使用`DataLoader`重构](#7-使用dataloader重构)
+  - [8 添加验证](#8-添加验证)
+  - [8 创建`fit()`和`get_data()`](#8-创建fit和get_data)
+  - [9 切换到 CNN](#9-切换到-cnn)
+  - [`nn.Sequential`](#nnsequential)
+  - [9 包装`DataLoader`](#9-包装dataloader)
+  - [10 使用您的 GPU](#10-使用您的-gpu)
+  - [总结](#总结)
+
 # `torch.nn`到底是什么？
 
-> 原文：<https://pytorch.org/tutorials/beginner/nn_tutorial.html>
-
-作者：Jeremy Howard，[fast.ai](https://www.fast.ai)。 感谢 Rachel Thomas 和 Francisco Ingham。
-
-
-PyTorch 提供设计精美的模块和类[`torch.nn`](https://pytorch.org/docs/stable/nn.html)，[`torch.optim`](https://pytorch.org/docs/stable/optim.html)，[`Dataset`](https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Dataset)和[`DataLoader`](https://pytorch.org/docs/stable/data.html?highlight=dataloader#torch.utils.data.DataLoader)神经网络。 为了充分利用它们的功能并针对您的问题对其进行自定义，您需要真正了解它们在做什么。 为了建立这种理解，我们将首先在 MNIST 数据集上训练基本神经网络，而无需使用这些模型的任何功能。 我们最初将仅使用最基本的 PyTorch 张量函数。 然后，我们将一次从`torch.nn`，`torch.optim`，`Dataset`或`DataLoader`中逐个添加一个函数，以准确显示每个函数，以及如何使代码更简洁或更有效。 灵活。
+PyTorch 提供设计精美的模块和类[`torch.nn`]()，[`torch.optim`]()，[`Dataset`]()和[`DataLoader`]()神经网络。 为了充分利用它们的功能并针对您的问题对其进行自定义，您需要真正了解它们在做什么。 为了建立这种理解，我们将首先在 MNIST 数据集上训练基本神经网络，而无需使用这些模型的任何功能。 我们最初将仅使用最基本的 PyTorch 张量函数。 然后，我们将一次从`torch.nn`，`torch.optim`，`Dataset`或`DataLoader`中逐个添加一个函数，以准确显示每个函数，以及如何使代码更简洁或更有效。 灵活。
 
 **本教程假定您已经安装了 PyTorch，并且熟悉张量操作的基础知识。** （如果您熟悉 Numpy 数组操作，将会发现此处使用的 PyTorch 张量操作几乎相同）。
 

@@ -1,10 +1,16 @@
+- [通过示例学习 PyTorch](#通过示例学习-pytorch)
+  - [1 预热：NumPy](#1-预热numpy)
+  - [2 PyTorch：张量](#2-pytorch张量)
+  - [3 Autograd](#3-autograd)
+  - [3.1 PyTorch：张量和 Autograd](#31-pytorch张量和-autograd)
+  - [3.2 PyTorch：定义新的 Autograd 函数](#32-pytorch定义新的-autograd-函数)
+  - [4 `nn`模块](#4-nn模块)
+  - [4.1 PyTorch：`nn`](#41-pytorchnn)
+  - [4.2 PyTorch：`optim`](#42-pytorchoptim)
+  - [4.3 PyTorch：自定义`nn`模块](#43-pytorch自定义nn模块)
+  - [4.4 PyTorch：控制流 + 权重共享](#44-pytorch控制流--权重共享)
+
 # 通过示例学习 PyTorch
-
-> 原文：<https://pytorch.org/tutorials/beginner/pytorch_with_examples.html>
-
-**作者**：[Justin Johnson](https://github.com/jcjohnson/pytorch-examples)
-
-本教程通过独立的示例介绍 [PyTorch](https://github.com/pytorch/pytorch) 的基本概念。
 
 PyTorch 的核心是提供两个主要功能：
 
