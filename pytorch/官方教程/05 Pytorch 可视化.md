@@ -1,10 +1,44 @@
-# 使用 TensorBoard 可视化模型，数据和训练
+# tensorboard 使用说明
+
+
+## 1 数据形式
+
+Tensorboard可以记录与展示以下数据形式：
+1. 标量Scalars
+2. 图片Images
+3. 音频Audio
+4. 计算图Graph
+5. 数据分布Distribution
+6. 直方图Histograms
+7. 嵌入向量Embeddings
+
+## 2 操作流程tensorflow-tensorboard
+
+Tensorboard的可视化过程
+
+1. 首先肯定是先建立一个graph,你想从这个graph中获取某些数据的信息
+2. 确定要在graph中的哪些节点放置summary operations以记录信息
+
+```
+使用tf.summary.scalar记录标量
+使用tf.summary.histogram记录数据的直方图
+使用tf.summary.distribution记录数据的分布图
+使用tf.summary.image记录图像数据
+```
+
+3. operations并不会去真的执行计算，除非你告诉他们需要去run,或者它被其他的需要run的operation所依赖。而我们上一步创建的这些summary operations其实并不被其他节点依赖，因此，我们需要特地去运行所有的summary节点。但是呢，一份程序下来可能有超多这样的summary 节点，要手动一个一个去启动自然是及其繁琐的，因此我们可以使用tf.summary.merge_all去将所有summary节点合并成一个节点，只要运行这个节点，就能产生所有我们之前设置的summary data。
+
+4. 使用tf.summary.FileWriter将运行后输出的数据都保存到本地磁盘中
+
+5. 运行整个程序，并在命令行输入运行tensorboard的指令，之后打开web端可查看可视化的结果
+
+
+## 3 操作流程pytorch-tensorboard
+
 
 > 原文：<https://pytorch.org/tutorials/intermediate/tensorboard_tutorial.html>
 
-在 [60 分钟突击](https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html)中，我们向您展示了如何加载数据，如何通过定义为`nn.Module`子类的模型提供数据，如何在训练数据上训练该模型以及在测试数据上对其进行测试。 为了了解发生的情况，我们在模型训练期间打印一些统计数据，以了解训练是否在进行中。 但是，我们可以做得更好：PyTorch 与 TensorBoard 集成在一起，TensorBoard 是一种工具，用于可视化神经网络训练运行的结果。 本教程使用 [Fashion-MNIST 数据集](https://github.com/zalandoresearch/fashion-mnist)说明了其某些功能，可以使用`torchvision.datasets`将其读入 PyTorch。
-
-在本教程中，我们将学习如何：
+教程使用 [Fashion-MNIST 数据集](https://github.com/zalandoresearch/fashion-mnist)说明了其某些功能，可以使用`torchvision.datasets`将其读入 PyTorch。在本教程中，我们将学习如何：
 
 > 1.  读取数据并进行适当的转换（与先前的教程几乎相同）。
 > 2.  设置 TensorBoard。
@@ -18,6 +52,9 @@
 > *   在训练模型时如何跟踪其表现
 > *   在训练后如何评估模型的表现。
 
+
+
+# pytorch-tensorboard实例
 我们将从 [CIFAR-10 教程](https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html)中类似的样板代码开始：
 
 ```py
@@ -32,7 +69,8 @@ import torchvision.transforms as transforms
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-
+```
+```py
 # transforms
 transform = transforms.Compose(
     [transforms.ToTensor(),
@@ -107,7 +145,7 @@ optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
 ```
 
-## 1\. TensorBoard 设置
+## 1. TensorBoard 设置
 
 现在，我们将设置 TensorBoard，从`torch.utils`导入`tensorboard`并定义`SummaryWriter`，这是将信息写入 TensorBoard 的关键对象。
 
@@ -121,7 +159,7 @@ writer = SummaryWriter('runs/fashion_mnist_experiment_1')
 
 请注意，仅此行会创建一个`runs/fashion_mnist_experiment_1`文件夹。
 
-## 2\. 写入 TensorBoard
+## 2. 写入 TensorBoard
 
 现在，使用[`make_grid`](https://pytorch.org/docs/stable/torchvision/utils.html#torchvision.utils.make_grid)将图像写入到 TensorBoard 中，具体来说就是网格。
 
@@ -154,7 +192,7 @@ tensorboard --logdir=runs
 
 现在您知道如何使用 TensorBoard 了！ 但是，此示例可以在 Jupyter 笔记本中完成-TensorBoard 真正擅长的地方是创建交互式可视化。 接下来，我们将介绍其中之一，并在本教程结束时介绍更多内容。
 
-## 3\. 使用 TensorBoard 检查模型
+## 3. 使用 TensorBoard 检查模型
 
 TensorBoard 的优势之一是其可视化复杂模型结构的能力。 让我们可视化我们构建的模型。
 
@@ -172,7 +210,7 @@ writer.close()
 
 TensorBoard 具有非常方便的功能，可在低维空间中可视化高维数据，例如图像数据。 接下来我们将介绍这一点。
 
-## 4\. 在 TensorBoard 中添加“投影仪”
+## 4. 在 TensorBoard 中添加“投影仪”
 
 我们可以通过[`add_embedding`](https://pytorch.org/docs/stable/tensorboard.html#torch.utils.tensorboard.writer.SummaryWriter.add_embedding)方法可视化高维数据的低维表示
 
@@ -208,7 +246,7 @@ writer.close()
 
 现在我们已经彻底检查了我们的数据，让我们展示了 TensorBoard 如何从训练开始就可以使跟踪模型的训练和评估更加清晰。
 
-## 5\. 使用 TensorBoard 跟踪模型训练
+## 5. 使用 TensorBoard 跟踪模型训练
 
 在前面的示例中，我们仅*每 2000 次迭代*打印该模型的运行损失。 现在，我们将运行损失记录到 TensorBoard 中，并通过`plot_classes_preds`函数查看模型所做的预测。
 
@@ -299,7 +337,7 @@ print('Finished Training')
 
 在之前的教程中，我们研究了模型训练后的每类准确率； 在这里，我们将使用 TensorBoard 绘制每个类别的精确调用曲线（[在这里解释](https://www.scikit-yb.org/en/latest/api/classifier/prcurve.html)）。
 
-## 6\. 使用 TensorBoard 评估经过训练的模型
+## 6. 使用 TensorBoard 评估经过训练的模型
 
 ```py
 # 1\. gets the probability predictions in a test_size x num_classes Tensor
@@ -346,3 +384,4 @@ for i in range(len(classes)):
 ![intermediate/../../_static/img/tensorboard_pr_curves.png](img/d15de2be2b754f9a4f46418764232b5e.png)
 
 这是 TensorBoard 和 PyTorch 与之集成的介绍。 当然，您可以在 Jupyter 笔记本中完成 TensorBoard 的所有操作，但是使用 TensorBoard 时，默认情况下会获得交互式的视觉效果。
+

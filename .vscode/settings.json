@@ -79,5 +79,5 @@
         "xtr1common": "cpp",
         "xutility": "cpp"
     },
-    "python.pythonPath": "D:\\anaconda\\envs\\tensorflow\\python.exe"
+    "python.pythonPath": "C:\\Python\\python.exe",
 }
