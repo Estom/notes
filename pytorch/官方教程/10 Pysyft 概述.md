@@ -1,12 +1,15 @@
 # pysyft
 > 对pytorch框架和TensorFlow框架的federated框架进行了研究。
+> * tensorflow federated 框架只提供了本地的仿真。
+> * pysyft 框架提供了websocket worker初步实现了基于websocket网络通信的多进程仿真，是当前最接近于实践的一种仿真方式，能够实现多个linux/python环境下的仿真与多个进程下的仿真。只在0.2.4中有，可以尝试在此基础进行改进和训练。
 
 > 参考文献
 > * [A generic framework for privacy preserving deep learning](https://zhuanlan.zhihu.com/p/114774133)
 > * [FedAvg 的 Pytorch 实现](https://zhuanlan.zhihu.com/p/259806876?utm_source=wechat_session)
+> * [安全深度学习框架PySyft](https://blog.csdn.net/u011602557/article/details/103661581/)
+
 
 ## 1 论文阅读
-
 
 ### pysyft的特点
 
@@ -53,5 +56,62 @@ PySyft是用于安全和隐私深度学习的Python库，它在主流深度学�
 1. 由于主模型的参数和节点中所有局部模型的参数都是随机初始化的，所有这些参数将彼此不同。因此，在对节点中的本地模型进行训练之前，主模型会将模型参数发送给节点。
 2. 节点使用这些参数在其自身的数据上训练本地模型。
 3. 每个节点在训练自己的模型时都会更新其参数。训练过程完成后，每个节点会将其参数发送到主模型。
-主模型采用这些参数的平均值并将其设置为新的权重参数，并将其传递回节点以进行下一次迭代。
+4. 主模型采用这些参数的平均值并将其设置为新的权重参数，并将其传递回节点以进行下一次迭代。
 
+## 3 Pysyft简介
+
+### 环境简介
+
+* pysyft==0.2.4
+* pytorch==1.4.0
+
+### 安装
+
+```
+git clone https://github.com/OpenMined/PySyft.git
+cd PySyft
+pip install -r pip-dep/requirements.txt
+pip install -r pip-dep/requirements_udacity.txt
+python setup.py install
+python setup.py test
+
+pip install scipy
+pip install nbformat
+pip install pandas
+pip install pyOpenSSL
+pip install papermill
+pip install scikit-learn
+
+pip install jupyter_latex_envs --upgrade [--user|sys-prefix]
+jupyter nbextension install --py latex_envs --user
+jupyter nbextension enable latex_envs --user --py
+```
+
+
+## 4 设计思路
+
+提供了不同级别的联邦学习技术
+
+1. 本地单线程仿真virtual_worker：move模型，依次训练。
+2. 本地单线程仿真virtual_worker：集中数据分离，训练模型聚合。
+3. 本地单线程仿真virtual_worker：分散数据，训练模型聚合。
+4. 本地多线程仿真websocket_worker：多线程通信，训练模型聚合
+5. 远程多线程仿真websocket_worker：多线程通信，训练模型聚合
+
+
+主要的设计思想
+
+1. 使用“张量指针”来记录对远程张量的操作。
+2. 使用“worker”的send和get方法封装不同的通信过程（虚拟通信和websocket远程通信）
+   1. 张量通信
+   2. plan&protocol通信
+
+
+主要包含以下五个模块
+
+
+1. 张量指针：tensor_ptr指针模块。
+2. 工作机器：worker通信原理和websocket实现（send、receive、client、server）、
+3. 远程计算：远程计算的实现（plan，protocol）、
+4. 加密计算：加密算法的实现（MFC同态加密）、
+5. 联邦平均：联邦平均算法的实现（util.fed_avg(models))

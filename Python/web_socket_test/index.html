@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+<script>
+    var wsObj = new WebSocket("ws://127.0.0.1:5678");   //建立连接
+    wsObj.onopen = function(){  //发送请求
+        alert("open");
+        wsObj.send("admin:123456");
+    };
+    wsObj.onmessage = function(ev){  //获取后端响应
+        alert(ev.data);
+    };
+    wsObj.onclose = function(ev){
+        alert("close");
+    };
+    wsObj.onerror = function(ev){
+        alert("error");
+    };
+</script>
+</body>
+</html>

@@ -109,8 +109,13 @@ async def fit_model_on_worker(
         optimizer="SGD",
         optimizer_args={"lr": lr},
     )
+    # 需要发送的数据。调用send，通过websocket发送给worker
     train_config.send(worker)
+
+    # 远程执行过程。远程客户端调用训练代码，执行操作。并取回训练的结果。
     loss = await worker.async_fit(dataset_key="mnist", return_ids=[0])
+    
+    # 将训练的结果取回
     model = train_config.model_ptr.get().obj
     return worker.id, model, loss
 
