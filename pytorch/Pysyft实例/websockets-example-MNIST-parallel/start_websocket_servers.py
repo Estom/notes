@@ -9,7 +9,7 @@ import sys
 
 # Downloads MNIST dataset
 mnist_trainset = datasets.MNIST(
-    root="../../官方教程/data",
+    root="./data",
     train=True,
     download=True,
     transform=transforms.Compose(

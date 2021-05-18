@@ -115,3 +115,8 @@ jupyter nbextension enable latex_envs --user --py
 3. 远程计算：远程计算的实现（plan，protocol）、
 4. 加密计算：加密算法的实现（MFC同态加密）、
 5. 联邦平均：联邦平均算法的实现（util.fed_avg(models))
+## 说明
+
+1. 联邦平均实现了一种同步平均的方法
+2. 多段训练 没有实现联邦平均算法，没有聚合。
+3. Mnist实例 没有实现联邦平均算法，只是依次训练
