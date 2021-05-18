@@ -79,5 +79,5 @@
         "xtr1common": "cpp",
         "xutility": "cpp"
     },
-    "python.pythonPath": "C:\\Python\\python.exe",
+    "python.pythonPath": "/usr/bin/python3",
 }
