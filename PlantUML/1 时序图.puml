@@ -1,0 +1,533 @@
+## 0 标准实例
+
+@startuml
+用户 -> 认证中心: 登录操作
+认证中心 -> 缓存: 存放(key=token+ip,value=token)token
+
+用户 <- 认证中心 : 认证成功返回token
+用户 -> 认证中心: 下次访问头部携带token认证
+认证中心 <- 缓存: key=token+ip获取token
+其他服务 <- 认证中心: 存在且校验成功则跳转到用户请求的其他服务
+其他服务 -> 用户: 信息
+@enduml
+
+
+## 1 箭头类型
+
+### 箭头形状
+* 表示一条丢失的消息：末尾加 x
+* 让箭头只有上半部分或者下半部分：将<和>替换成\或者 /
+* 细箭头：将箭头标记写两次 (如 >> 或 //)
+* 虚线箭头：用 -- 替代 -
+* 箭头末尾加圈：->o
+* 双向箭头：<->
+
+
+@startuml
+Bob ->x Alice
+Bob -> Alice
+Bob ->> Alice
+Bob -\ Alice
+Bob \\- Alice
+Bob //-- Alice
+
+Bob ->o Alice
+Bob o\\-- Alice
+
+Bob <-> Alice
+Bob <->o Alice
+@enduml
+
+@startuml
+participant Alice as a
+participant Bob   as b
+a ->     b : ""->   ""
+a ->>    b : ""->>  ""
+a -\     b : ""-\   ""
+a -\\    b : ""-\\\\""
+a -/     b : ""-/   ""
+a -//    b : ""-//  ""
+a ->x    b : ""->x  ""
+a x->    b : ""x->  ""
+a o->    b : ""o->  ""
+a ->o    b : ""->o  ""
+a o->o   b : ""o->o ""
+a <->    b : ""<->  ""
+a o<->o  b : ""o<->o""
+a x<->x  b : ""x<->x""
+a ->>o   b : ""->>o ""
+a -\o    b : ""-\o  ""
+a -\\o   b : ""-\\\\o""
+a -/o    b : ""-/o  ""
+a -//o   b : ""-//o ""
+a x->o   b : ""x->o ""
+@enduml
+
+### 箭头颜色
+
+* []修改箭头颜色
+@startuml
+Bob -[#red]> Alice : hello
+Alice -[#0000FF]->Bob : ok
+@enduml
+
+
+## 2 参与者类型
+
+### 关键字participant用来声明参与者。参与者主要有以下内容
+* actor（角色）
+* boundary（边界）
+* control（控制）
+* entity（实体）
+* database（数据库）
+* collections（集合）
+* queue（队列）
+
+@startuml
+participant participant as Foo
+actor       actor       as Foo1
+boundary    boundary    as Foo2
+control     control     as Foo3
+entity      entity      as Foo4
+database    database    as Foo5
+collections collections as Foo6
+queue       queue       as Foo7
+Foo -> Foo1 : To actor 
+Foo -> Foo2 : To boundary
+Foo -> Foo3 : To control
+Foo -> Foo4 : To entity
+Foo -> Foo5 : To database
+Foo -> Foo6 : To collections
+Foo -> Foo7 : To queue
+@enduml
+
+
+### as&color
+
+* 关键字 as 用于重命名参与者。#RGB值或者#颜色名修改参与者的背景颜色。
+
+@startuml
+actor Bob #red
+' actor 和 participant 只在外观上有区别
+participant Alice
+participant "很长很长很长\n的名字" as L #99FF99
+/' 也可以这样声明：
+   participant L as "很长很长很长\n的名字"  #99FF99
+  '/
+
+Alice->Bob: 认证请求
+Bob->Alice: 认证响应
+Bob->L: 记录事务日志
+@enduml
+
+### 关键字order
+* order自定义顺序来打印参与者。
+
+@startuml
+participant 最后 order 30
+participant 中间 order 20
+participant 首个 order 10
+@enduml
+
+### ""引号
+
+* ""引号定义参与者，并用关键字 as 给参与者定义别名。
+
+@startuml
+Alice -> "Bob()" : Hello
+"Bob()" -> "This is very\nlong" as Long
+' You can also declare:
+' "Bob()" -> Long as "This is very\nlong"
+Long --> "Bob()" : ok
+@enduml
+
+### 参与者可以给自己发送消息
+
+@startuml
+Alice->Alice: This is a signal to self.\nIt also demonstrates\nmultiline \ntext
+@enduml
+
+### 关键字create创建参与者
+
+* 关键字create放在第一次接收到消息之前，以强调本次消息实际上是在创建新的对象。
+@startuml
+Bob -> Alice : hello
+
+create Other
+Alice -> Other : new
+
+create control String
+Alice -> String
+note right : You can also put notes!
+
+Alice --> Bob : ok
+
+@enduml
+
+### 使用<<和>>给参与者添加构造类型
+
+@startuml
+
+participant "Famous Bob" as Bob << Generated >>
+participant Alice << (C,#ADD1B2) Testable >>
+
+Bob->Alice: First message
+
+@enduml
+
+## 3 消息类型
+
+### 消息位置
+* skinparam responseMessageBelowArrow true命令，让响应信息显示在箭头下面。
+
+@startuml
+skinparam responseMessageBelowArrow true
+Bob -> Alice : hello
+Alice -> Bob : ok
+@enduml
+
+### 消息编号
+
+关键字 autonumber 用于自动对消息编号。
+
+* 语句 autonumber //start// 用于指定编号的初始值，
+* 而 autonumber //start// //increment// 可以同时指定编号的初始值和每次增加的值。
+
+@startuml
+autonumber
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+@enduml
+
+@startuml
+autonumber
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+
+autonumber 15
+Bob -> Alice : Another authentication Request
+Bob <- Alice : Another authentication Response
+
+autonumber 40 10
+Bob -> Alice : Yet another authentication Request
+Bob <- Alice : Yet another authentication Response
+
+@enduml
+
+
+### 消息组合
+
+通过以下关键词来组合消息：
+* alt/else
+* opt
+* loop
+* par
+* break
+* critical
+* group后面紧跟着消息内容
+
+关键词 end 用来结束分组
+@startuml
+Alice -> Bob: 认证请求
+
+alt 成功情况
+
+    Bob -> Alice: 认证接受
+
+else 某种失败情况
+
+    Bob -> Alice: 认证失败
+    group 我自己的标签
+    Alice -> Log : 开始记录攻击日志
+        loop 1000次
+            Alice -> Bob: DNS 攻击
+        end
+    Alice -> Log : 结束记录攻击日志
+    end
+
+else 另一种失败
+
+   Bob -> Alice: 请重复
+
+end
+@enduml
+
+### 消息注释
+
+* 通过在消息后面添加 note left 或者 note right 关键词来给消息添加注释。note across可以跨所有参与者
+* 通过使用 end note 来添加多行注释。
+* 可以通过修改背景色来高亮显示注释。
+* 使用 hnote 和 rnote 这两个关键字还可以改变备注的形状。hnote代表六边形（hexagonal）的备注框；rnote代表正方形（rectangle）的备注框。
+* 支持html格式的注释
+* 添加\n使长文本换行
+
+@startuml
+Alice->Bob : hello
+note left: this is a first note
+
+Bob->Alice : ok
+note right #aqua: this is another note 
+
+Bob->Bob : I am thinking
+note across
+a note
+can also be defined
+on several lines
+end note
+@enduml
+
+
+@startuml
+caller -> server : conReq
+hnote over caller : 空闲
+caller <- server : conConf
+rnote over server
+ "r"是正方形
+ "h"是六边形
+endrnote
+rnote over server
+ 多
+ 行
+ 文本
+endrnote
+hnote over caller
+ 多
+ 行
+ 文本
+endhnote
+@enduml
+
+
+### 进入和发出消息
+
+使用方括号[和]表示图示的左、右两侧。
+
+@startuml 
+[-> A: DoWork
+
+activate A
+
+A -> A: Internal call
+activate A
+
+A ->] : << createRequest >>
+
+A<--] : RequestCreated
+deactivate A
+[<- A: Done
+deactivate A
+@enduml
+
+
+### 短发出消息
+
+短发出信息（使用'?'）
+
+@startuml
+participant Alice as a
+participant Bob   as b
+a ->     b : //Long long label//
+a ->?      : ""->?   ""
+a ->>?     : ""->>?  ""
+a -\?      : ""-\?   ""
+a -\\?     : ""-\\\\?""
+a -/?      : ""-/?   ""
+a -//?     : ""-//?  ""
+a ->x?     : ""->x?  ""
+a x->?     : ""x->?  ""
+a o->?     : ""o->?  ""
+a ->o?     : ""->o?  ""
+a o->o?    : ""o->o? ""
+a <->?     : ""<->?  ""
+a o<->o?   : ""o<->o?""
+a x<->x?   : ""x<->x?""
+a ->>o?    : ""->>o? ""
+a -\o?     : ""-\o?  ""
+a -\\o?    : ""-\\\\o?""
+a -/o?     : ""-/o?  ""
+a -//o?    : ""-//o? ""
+a x->o?    : ""x->o? ""
+@enduml
+
+## 4 页面控制
+
+### 页眉和页脚
+
+
+* 使用title关键词增加标题
+* 使用header关键词增加页眉
+* 使用footer关键词增加页脚
+
+@startuml 
+
+header Page Header
+footer Page %page% of %lastpage%
+
+title Example Title
+
+Alice -> Bob : message 1
+Alice -> Bob : message 2
+
+@enduml
+
+### 关键字 newpage 分页
+
+用于把一张图分割成多张
+
+@startuml
+
+Alice -> Bob : message 1
+Alice -> Bob : message 2
+
+newpage
+
+Alice -> Bob : message 3
+Alice -> Bob : message 4
+
+newpage A title for the\nlast page
+
+Alice -> Bob : message 5
+Alice -> Bob : message 6
+@enduml
+
+### ==关键词来将你的图表分割成多个逻辑步骤
+
+@startuml
+
+== 初始化 ==
+
+Alice -> Bob: 认证请求
+Bob --> Alice: 认证响应
+
+== 重复 ==
+
+Alice -> Bob: 认证请求
+Alice <-- Bob: 认证响应
+
+@enduml
+
+### ...来表示延迟，并且还可以给延迟添加注释
+
+@startuml
+
+Alice -> Bob: 认证请求
+...
+Bob --> Alice: 认证响应
+...5分钟后...
+Bob --> Alice: 再见！
+
+@enduml
+
+### 使用|||来增加空间
+
+还可以使用数字指定增加的像素的数量。
+
+@startuml
+
+Alice -> Bob: message 1
+Bob --> Alice: ok
+|||
+Alice -> Bob: message 2
+Bob --> Alice: ok
+||45||
+Alice -> Bob: message 3
+Bob --> Alice: ok
+
+@enduml
+
+## 5 生命线
+
+### 生命线的激活与撤销
+
+* 关键字activate和deactivate用来表示参与者的生命活动
+
+@startuml
+participant User
+
+User -> A: DoWork
+activate A
+
+A -> B: << createRequest >>
+activate B
+
+B -> C: DoWork
+activate C
+C --> B: WorkDone
+destroy C
+
+B --> A: RequestCreated
+deactivate B
+
+A -> User: Done
+deactivate A
+
+@enduml
+
+### 嵌套生命线
+* 使用不同颜色标注
+@startuml
+participant User
+
+User -> A: DoWork
+activate A #FFBBBB
+
+A -> A: Internal call
+activate A #DarkSalmon
+
+A -> B: << createRequest >>
+activate B
+
+B --> A: RequestCreated
+deactivate B
+deactivate A
+A -> User: Done
+deactivate A
+
+@enduml
+
+### 自动激活生命线
+
+* 自动激活关键字（autoactivate），这需要与return关键字配合
+
+@startuml
+autoactivate on
+alice -> bob : hello
+bob -> bob : self call
+bill -> bob #005500 : hello from thread 2
+bob -> george ** : create
+return done in thread 2
+return rc
+bob -> george !! : delete
+return success
+
+@enduml
+
+
+
+### 激活撤销创建销毁快捷语法
+
+* ++ 激活目标（可选择在后面加上#color）
+* -- 撤销激活源
+* ** 创建目标实例
+* !! 摧毁目标实例
+
+@startuml
+alice -> bob ++ : hello
+bob -> bob ++ : self call
+bob -> bib ++  #005500 : hello
+bob -> george ** : create
+return done
+return rc
+bob -> george !! : delete
+return success
+@enduml
+
+### 实线和虚线
+
+* nosolid 虚线（默认）
+* solid 实线
+@startuml
+skinparam lifelineStrategy solid
+Bob -> Alice : hello
+Alice -> Bob : ok
+@enduml

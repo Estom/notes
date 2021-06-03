@@ -1,0 +1,127 @@
+## 1 简单状态
+
+* 使用([*])开始和结束状态图。
+* 使用-->添加箭头。
+* hide empty description隐藏元素的空内容
+@startuml
+
+[*] --> State1
+State1 --> [*]
+State1 : this is a string
+State1 : this is another string
+
+State1 -> State2
+State2 --> [*]
+
+@enduml
+
+## 2 合成状态
+一个状态也可能是合成的，必须使用关键字state和花括号来定义合成状态。
+@startuml
+scale 350 width
+[*] --> NotShooting
+
+state NotShooting {
+  [*] --> Idle
+  Idle --> Configuring : EvConfig
+  Configuring --> Idle : EvConfig
+}
+
+state Configuring {
+  [*] --> NewValueSelection
+  NewValueSelection --> NewValuePreview : EvNewValue
+  NewValuePreview --> NewValueSelection : EvNewValueRejected
+  NewValuePreview --> NewValueSelection : EvNewValueSaved
+
+  state NewValuePreview {
+     State1 -> State2
+  }
+
+}
+@enduml
+
+## 3 同步状态
+
+`<<fork>>` and `<<join>>` 表示分支与合并
+
+ @startuml
+
+state fork_state <<fork>>
+[*] --> fork_state
+fork_state --> State2
+fork_state --> State3
+
+state join_state <<join>>
+State2 --> join_state
+State3 --> join_state
+join_state --> State4
+State4 --> [*]
+
+@enduml
+
+## 4 并发状态
+用-- or ||作为分隔符来合成并发状态。
+
+@startuml
+[*] --> Active
+
+state Active {
+  [*] -> NumLockOff
+  NumLockOff --> NumLockOn : EvNumLockPressed
+  NumLockOn --> NumLockOff : EvNumLockPressed
+  --
+  [*] -> CapsLockOff
+  CapsLockOff --> CapsLockOn : EvCapsLockPressed
+  CapsLockOn --> CapsLockOff : EvCapsLockPressed
+  --
+  [*] -> ScrollLockOff
+  ScrollLockOff --> ScrollLockOn : EvCapsLockPressed
+  ScrollLockOn --> ScrollLockOff : EvCapsLockPressed
+}
+
+@enduml
+
+
+## 5 分支状态
+`<<choice>>`表示分支状态
+@startuml
+state "Req(Id)" as ReqId <<sdlreceive>>
+state "Minor(Id)" as MinorId
+state "Major(Id)" as MajorId
+ 
+state c <<choice>>
+ 
+Idle --> ReqId
+ReqId --> c
+c --> MinorId : [Id <= 10]
+c --> MajorId : [Id > 10]
+@enduml
+
+## 6 fork/join/choice实例
+
+@startuml
+state choice1 <<choice>>
+state fork1   <<fork>>
+state join2   <<join>>
+state end3    <<end>>
+
+[*]     --> choice1 : from start\nto choice
+choice1 --> fork1   : from choice\nto fork
+choice1 --> join2   : from choice\nto join
+choice1 --> end3    : from choice\nto end
+
+fork1   ---> State1 : from fork\nto state
+fork1   --> State2  : from fork\nto state
+
+State2  --> join2   : from state\nto join
+State1  --> [*]     : from state\nto end
+
+join2   --> [*]     : from join\nto end
+@enduml
+
+
+## 7 相同内容
+
+* 注释
+* 箭头方向
+* 线条类型

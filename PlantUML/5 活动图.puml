@@ -1,0 +1,204 @@
+## 0 活动图实例
+
+@startuml
+title Servlet Container
+
+(*) --> "ClickServlet.handleRequest()"
+--> "new Page"
+
+if "Page.onSecurityCheck" then
+  ->[true] "Page.onInit()"
+
+  if "isForward?" then
+   ->[no] "Process controls"
+
+   if "continue processing?" then
+     -->[yes] ===RENDERING===
+   else
+     -->[no] ===REDIRECT_CHECK===
+   endif
+
+  else
+   -->[yes] ===RENDERING===
+  endif
+
+  if "is Post?" then
+    -->[yes] "Page.onPost()"
+    --> "Page.onRender()" as render
+    --> ===REDIRECT_CHECK===
+  else
+    -->[no] "Page.onGet()"
+    --> render
+  endif
+
+else
+  -->[false] ===REDIRECT_CHECK===
+endif
+
+if "Do redirect?" then
+ ->[yes] "redirect request"
+ --> ==BEFORE_DESTROY===
+else
+ if "Do Forward?" then
+  -left->[yes] "Forward request"
+  --> ==BEFORE_DESTROY===
+ else
+  -right->[no] "Render page template"
+  --> ==BEFORE_DESTROY===
+ endif
+endif
+
+--> "Page.onDestroy()"
+-->(*)
+
+@enduml
+
+## 1 基本元素
+
+* 使用(*)作为活动图的开始点和结束点。用(*top)强制开始点位于图示的顶端。
+* 使用-->绘制箭头。默认情况下，箭头开始于最接近的活动。
+
+@startuml
+
+(*) --> "First Activity"
+"First Activity" --> (*)
+
+@enduml
+
+* 简略写法
+
+@startuml
+
+(*) 
+- "First Activity"
+- "2First Activity" 
+- (*)
+
+
+@enduml
+
+## 2 箭头
+### 箭头标签
+用[和]放在箭头定义的后面来添加标签。
+
+@startuml
+
+(*) --> "First Activity"
+-->[You can put also labels] "Second Activity"
+--> (*)
+
+@enduml
+
+### 箭头方向
+
+* -down-> (default arrow)
+* -right-> or ->
+* -left->
+* -up->
+
+@startuml
+
+(*) -up-> "First Activity"
+-right-> "Second Activity"
+--> "Third Activity"
+-left-> (*)
+
+@enduml
+
+## 3 分支同步
+
+### 分支
+
+你可以使用关键字if/then/else创建分支。
+@startuml
+(*) --> "Initialization"
+
+if "Some Test" then
+  -->[true] "Some Activity"
+  --> "Another activity"
+  -right-> (*)
+else
+  ->[false] "Something else"
+  -->[Ending process] (*)
+endif
+
+@enduml
+
+### 分支嵌套
+* 默认情况下，一个分支连接上一个最新的活动，但是也可以使用if关键字进行连接。还可以嵌套定义分支。
+@startuml
+
+(*) --> if "Some Test" then
+
+  -->[true] "action 1"
+
+  if "" then
+    -> "action 3" as a3
+  else
+    if "Other test" then
+      -left-> "action 5"
+    else
+      --> "action 6"
+    endif
+  endif
+
+else
+
+  ->[false] "action 2"
+
+endif
+
+a3 --> if "last test" then
+  --> "action 7"
+else
+  -> "action 8"
+endif
+
+@enduml
+
+### 同步
+
+你可以使用 === code === 来显示同步条。
+
+@startuml
+
+(*) --> ===B1===
+--> "Parallel Activity 1"
+--> ===B2===
+
+===B1=== --> "Parallel Activity 2"
+--> ===B2===
+
+--> (*)
+
+@enduml
+
+## 4 分区
+
+用关键字partition定义分区，还可以设置背景色(用颜色名或者颜色值)。
+定义活动的时候，它自动被放置到最新的分区中。
+用}结束分区的定义。
+@startuml
+
+partition Conductor {
+  (*) --> "Climbs on Platform"
+  --> === S1 ===
+  --> Bows
+}
+
+partition Audience #LightSkyBlue {
+  === S1 === --> Applauds
+}
+
+partition Conductor {
+  Bows --> === S2 ===
+  --> WavesArmes
+  Applauds --> === S2 ===
+}
+
+partition Orchestra #CCCCEE {
+  WavesArmes --> Introduction
+  --> "Play music"
+}
+
+@enduml

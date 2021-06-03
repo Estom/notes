@@ -1,0 +1,266 @@
+## 1 类元素
+
+### 元素声明
+@startuml
+abstract        abstract
+abstract class  "abstract class"
+annotation      annotation
+circle          circle
+()              circle_short_form
+class           class
+diamond         diamond
+<>              diamond_short_form
+entity          entity
+enum            enum
+interface       interface
+@enduml
+
+
+
+## 2 类间关系
+
+### 基本关系
+* 虚线箭头指向依赖；
+* 实线箭头指向关联；
+* 虚线三角指向接口；
+* 实线三角指向父类；
+* 空心菱形能分离而独立存在，是聚合；
+* 实心菱形精密关联不可分，是组合；
+
+
+@startuml
+Class01 <|-- Class02
+Class01 <|.. Class02
+note bottom:继承、实现
+Class03 <--* Class04
+Class03 <--o Class04
+note bottom:聚合、组合
+Class05 <-- Class06
+Class05 <.. Class06
+note bottom:关联、依赖
+Class07 -- Class08
+Class07 .. Class08
+note bottom:连接
+@enduml
+
+### 拓展关系
+
+@startuml
+Class21 #-- Class22
+Class23 x-- Class24
+Class25 }-- Class26
+Class27 +-- Class28
+Class29 ^-- Class30
+@enduml
+
+## 3 关系标签
+
+* :tag,表示关系上的标签 。
+* ""说明端的标签
+* 在标签的开始或结束位置添加< 或 >以表明是哪个对象作用到哪个对象上。.
+
+
+@startuml
+
+Class01 "1" *-- "many" Class02 : contains
+
+Class03 o-- Class04 : aggregation
+
+Class05 --> "1" Class06
+
+class Car
+
+Driver - Car : drives >
+Car *- Wheel : have 4 >
+Car -- Person : < owns
+
+@enduml
+
+## 4 元素内容
+
+### 字段和方法
+* ArrayList:声明字段和方法。系统根据括号自动区分。
+* {}中括号包含字段和方法。系统根据括号自动区分。
+* 可以（显式地）使用 {field} 和 {method} 修饰符来覆盖解析器的对于字段和方法的默认行为
+@startuml
+Object <|-- ArrayList
+
+Object : equals()
+ArrayList : Object[] elementData
+ArrayList : size()
+
+class Dummy {
+  String data
+  void methods()
+}
+
+class Flight {
+   flightNumber : Integer
+   departureTime : Date
+}
+
+class Dummy {
+  {field} A field (despite parentheses)
+  {method} Some method
+}
+
+@enduml
+
+### 访问属性
+
+* -：private
+* #：protect
+* ~：package private 
+* +: public 
+
+* 采用以下命令停用这些特性skinparam classAttributeIconSize 0 
+@startuml
+skinparam classAttributeIconSize 0
+class Dummy {
+ -field1
+ #field2
+ ~method1()
+ +method2()
+}
+
+@enduml
+
+### 其他修饰
+
+通过修饰符{static}或者{abstract}，可以定义静态或者抽象的方法或者属性。
+
+@startuml
+class Dummy {
+  {static} String id
+  {abstract} void methods()
+}
+@enduml
+
+### 内容分组
+
+* 自己定义分隔符来重排方法和属性，下面的分隔符都是可用的：--..==__
+
+@startuml
+class Foo1 {
+  You can use
+  several lines
+  ..
+  as you want
+  and group
+  ==
+  things together.
+  __
+  You can have as many groups
+  as you want
+  --
+  End of class
+}
+
+class User {
+  .. Simple Getter ..
+  + getName()
+  + getAddress()
+  .. Some setter ..
+  + setName()
+  __ private data __
+  int age
+  -- encrypted --
+  String password
+}
+
+@enduml
+
+## 5 模板、泛型、备注
+
+* 模板通过类关键字("<<"和">>")来定义
+* 你可以使用note left of , note right of , note top of , note bottom of这些关键字来添加备注。
+* 你还可以在类的声明末尾使用note left, note right,note top, note bottom来添加备注。
+* 你可以用 < 和 > 来定义类的泛型。
+@startuml
+class Object << general >>
+Object <|--- ArrayList
+
+note top of Object : In java, every class\nextends this one.
+
+note "This is a floating note" as N1
+note "This note is connected\nto several objects." as N2
+Object .. N2
+N2 .. ArrayList
+
+class Foo
+note left: On last defined class
+
+class Foo3<? extends Element> {
+  int size()
+}
+Foo *- Element
+@enduml
+
+
+## 6 包和命名空间
+
+### package 
+
+@startuml
+
+package "Classic Collections" #DDDDDD {
+  Object <|-- ArrayList
+}
+
+package net.sourceforge.plantuml {
+  Object <|-- Demo1
+  Demo1 *- Demo2
+}
+
+scale 750 width
+package foo1 <<Node>> {
+  class Class1
+}
+
+package foo2 <<Rectangle>> {
+  class Class2
+}
+
+package foo3 <<Folder>> {
+  class Class3
+}
+
+package foo4 <<Frame>> {
+  class Class4
+}
+
+package foo5 <<Cloud>> {
+  class Class5
+}
+
+package foo6 <<Database>> {
+  class Class6
+}
+
+@enduml
+
+### 命名空间
+
+在使用包（package）时（区别于命名空间），类名是类的唯一标识。 也就意味着，在不同的包（package）中的类，不能使用相同的类名。
+
+@startuml
+
+class BaseClass
+
+namespace net.dummy #DDDDDD {
+    .BaseClass <|-- Person
+    Meeting o-- Person
+
+    .BaseClass <|- Meeting
+}
+
+namespace net.foo {
+  net.dummy.Person  <|- Person
+  .BaseClass <|-- Person
+
+  net.dummy.Meeting o-- Person
+}
+
+BaseClass <|-- net.unused.Person
+
+@enduml
