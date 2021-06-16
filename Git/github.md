@@ -14,7 +14,7 @@
 * Github主页仓库主页——仓库相关的信息和相关操作
 
 ## 2 pull request
-## 2 fork sycnize
+## 2 fork syncize
 
 > 参考文献
 > * [https://blog.csdn.net/qq_22918243/article/details/89642445](https://blog.csdn.net/qq_22918243/article/details/89642445)
