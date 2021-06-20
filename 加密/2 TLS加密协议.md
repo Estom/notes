@@ -3,20 +3,28 @@
 ### 协议简介
 
 SSL/TLS是一种密码通信框架，他是世界上使用最广泛的密码通信方法。SSL/TLS综合运用了密码学中的对称密码，消息认证码，公钥密码，数字签名，伪随机数生成器等，可以说是密码学中的集大成者。
-
-SSL(Secure Socket Layer)安全套接层，是1994年由Netscape公司设计的一套协议，并与1995年发布了3.0版本。
-
-TLS(Transport Layer Security)传输层安全是IETF在SSL3.0基础上设计的协议，实际上相当于SSL的后续版本。
+* SSL(Secure Socket Layer)安全套接层，是1994年由Netscape公司设计的一套协议，并与1995年发布了3.0版本。
+* TLS(Transport Layer Security)传输层安全是IETF在SSL3.0基础上设计的协议，实际上相当于SSL的后续版本。
 
 
 ### 加密算法
 
+包括秘钥生成、加密、解密三个主要过程。
 
 * 非对称加密算法：RSA，DSA/DSS,Diffie–Hellman
 * 对称加密算法：AES，RC4，3DES
-* HASH算法：MD5，SHA1，SHA256
-* Record协议中的MAC(Message Authentication Code)算法
-* premaster secret、master secret生成算法
+* 秘钥生成算法：premaster secret、master secret
+
+### 消息摘要算法
+**消息摘要算法**即**HASH算法**，**消息摘要**（Message Digest）简要地描述了一分较长的信息或文件，它可以被看做一分长文件的**数字指纹**。主要分为以下三类
+
+* MD(Message Digest)：消息摘要。生成的消息摘要都是128位的。包括：MD2，MD4，MD5
+* SHA(Secure Hash Algorithm)：安全散列。固定长度摘要信息。包括：SHA-1，SHA-2(SHA-224，SHA-256，SHA-384，SHA-512)
+* MAC(Message Authentication Code)：消息认证码。HMAC(keyed-Hash Message Authentication Code)：含有密钥的散列函数算法，包含了MD和SHA两个系列的消息摘要算法，HMAC只是在原有的MD和SHA算法的基础上添加了密钥。HMAC运算利用hash算法，以一个消息M和一个密钥K作为输入，生成一个定长的消息摘要作为输出。HMAC算法利用已有的Hash函数，关键问题是如何使用密钥。能够通过MD、SHA确保数据的完整性，通过秘钥确定数据的身份认证（相当于用私钥签名）
+  * MD 系列算法有 HmacMD2、HmacMD4 和 HmacMD5 三种算法；
+  * SHA 系列算法有 HmacSHA1、HmacSHA224、HmacSHA256、HmacSHA384 和 HmacSHA512 五种算法。
+
+
 
 
 ### 协议概念
@@ -77,14 +85,14 @@ TLS主要分为两层
   * Application data protocol应用数据协议负责将TLS承载的应用数据传达给通信对象的协议。
 
 
-## 4 握手协议
+## 4 握手协议——典型过程
 握手协议是TLS协议中非常重要的协议，通过客户端和服务器端的交互，和共享一些必要信息，从而生成共享密钥和交互证书。
 ![](image/2021-06-15-23-09-52.png)
-![](image/2021-06-15-20-41-00.png)
-![](image/2021-06-16-22-33-20.png)
+<!-- ![](image/2021-06-15-20-41-00.png) -->
+<!-- ![](image/2021-06-16-22-33-20.png) -->
 
 
-### 4.1 客户端请求SSL内容
+### 步骤1 客户端请求SSL内容
 
 * client hello客户端向服务器端发送一个client hello的消息，包含下面内容：
 ```
@@ -96,7 +104,7 @@ TLS主要分为两层
 6. 可用的压缩方式清单。
 ```
 
-### 4.2 服务器响应SSL内容
+### 步骤2 服务器响应SSL内容
 
 * server hello服务器端收到client hello消息后，会向客户端返回一个server hello消息，包含如下内容：
 
@@ -116,7 +124,7 @@ TLS主要分为两层
 * 可选步骤:CertificateRequest如果是在一个受限访问的环境，比如fabric中，服务器端也需要向客户端索要证书。如果并不需要客户端认证，则不需要此步骤。
 * server hello done 服务器端发送server hello done的消息告诉客户端自己的消息结束了。
 
-### 4.3 客户端交换秘钥证书
+### 步骤3 客户端交换秘钥证书
 
 
 * 可选步骤:Certificate。客户端发送客户端证书给服务器。
@@ -128,15 +136,15 @@ TLS主要分为两层
 * finished(握手协议结束)客户端告诉服务器端握手协议结束了。
 
 
-### 4.4 服务器交换秘钥证书
+### 步骤4 服务器交换秘钥证书
 * ChangeCipherSpec。服务器端告诉客户端自己要切换密码了。
 * finished(握手协议结束)服务器端告诉客户端，握手协议结束了。
 
 
-### 握手协议——RSA握手协议
+## 4.1 握手协议——RSA握手协议
 ![](image/2021-06-17-11-43-17.png)
 
-### 握手协议——DH握手协议
+## 4.2 握手协议——DH握手协议
 
 ![](image/2021-06-17-11-46-08.png)
 
@@ -148,9 +156,6 @@ TLS记录协议主要负责消息的压缩，加密和认证。当TLS完成握�
 
 * 在发送端：将数据（Record）分段，压缩，增加MAC(Message Authentication Code)和加密。消息首先将会被分段，然后压缩，再计算其消息验证码，然后使用对称密码进行加密，加密使用的是CBC模式，CBC模式的初始向量是通过主密码来生成的。
 * 在接收端：将数据（Record）解密，验证MAC，解压并重组得到密文之后会附加类型，版本和长度等其他信息，最终组成最后的报文数据。
-
-
-
 
 
 ## 6 master secret密码计算
@@ -171,7 +176,37 @@ session_hash = Hash(handshake_messages)
 master_secret = PRF(pre_master_secret, "extended master secret",session_hash)[0..47];
 ```
 
-### 三重握手攻击
+
+## 7 Cipher suite密码套件
+
+### 典型构成
+* key establishment (typically a Diffie-Hellman variant or RSA)密钥协商算法（通常是 Diffie-Hellman 变体或 RSA等非对称加密算法）
+* authentication (the certificate type)身份验证算法（证书类型RSA、DSA等签名算法）
+* confidentiality (a symmetric cipher)机密性算法（对称加密算法）
+* integrity (a hash function)完整性算法（消息摘要函数）
+
+###  “AES128-SHA” 
+
+* RSA for key establishment (implied)
+* RSA for authentication (implied)
+* 128-bit Advanced Encryption Standard in Cipher Block Chaining (CBC) mode for confidentiality
+* 160-bit Secure Hashing Algorithm (SHA) for integrity
+
+### “ECDHE-ECDSA-AES256-GCM-SHA384” 
+
+* Elliptic Curve Diffie-Hellman Ephemeral (ECDHE) key exchange for key establishment 椭圆曲线 Diffie-Hellman Ephemeral ( ECDHE ) 密钥交换
+* Elliptic Curve Digital Signature Algorithms (ECDSA) for authentication 身份验证的椭圆曲线数字签名算法 ( ECDSA )
+* 256-bit Advanced Encryption Standard in Galois/Counter mode (GCM) for confidentiality
+* 384-bit Secure Hashing Algorithm for integrity
+
+
+## 8 中间人攻击
+
+
+### 中间人攻击模型
+
+![](image/2021-06-21-00-59-31.png)
+
 三重握手(Triple Handshake) (CVE-2014-1295)：攻击者（A）分别与客户端（C）和服务器（S）握手，协商出同一个主密钥；之后令客户端（C）和服务器（S）之间重新协商（renegotiation）或继续（resumption）会话来握手。可攻破重新协商，TLS Exporter RFC5705和"tls-unique" RFC5929。
 
 ```
@@ -198,26 +233,3 @@ S向A发送“完成”。A计算其“完成”
 与C的连接，并将其发送给C。
 ```
 通过以上方式，如果使用无“Extended Master Secret”扩展字段的计算方式将发现，从C->A和从A->S之间使用的会话密钥是一样的，这种叫做未知密钥共享（unkown key-share（UKS））攻击。当使用扩展主密钥的计算方式时，因为有session_hash，计算了所有协商消息的hash，如果中间攻击者A对协商消息进行改动，则客户端和服务端计算的hash值则不一样，最后计算出的主密钥也会不同。
-
-
-## 7 Cipher suite密码套件
-
-### 典型构成
-* key establishment (typically a Diffie-Hellman variant or RSA)密钥建立（通常是 Diffie-Hellman 变体或 RSA）
-* authentication (the certificate type)身份验证（证书类型）
-* confidentiality (a symmetric cipher)机密性（对称密码）
-* integrity (a hash function)完整性（散列函数）
-
-###  “AES128-SHA” 
-
-* RSA for key establishment (implied)
-* RSA for authentication (implied)
-* 128-bit Advanced Encryption Standard in Cipher Block Chaining (CBC) mode for confidentiality
-* 160-bit Secure Hashing Algorithm (SHA) for integrity
-
-### “ECDHE-ECDSA-AES256-GCM-SHA384” 
-
-* Elliptic Curve Diffie-Hellman Ephemeral (ECDHE) key exchange for key establishment 椭圆曲线 Diffie-Hellman Ephemeral ( ECDHE ) 密钥交换
-* Elliptic Curve Digital Signature Algorithms (ECDSA) for authentication 身份验证的椭圆曲线数字签名算法 ( ECDSA )
-* 256-bit Advanced Encryption Standard in Galois/Counter mode (GCM) for confidentiality
-* 384-bit Secure Hashing Algorithm for integrity
