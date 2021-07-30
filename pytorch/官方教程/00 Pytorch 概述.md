@@ -11,12 +11,13 @@
 1. 获取数据集
 2. 数据预处理
 3. 训练模型
-   1. 神经网络：torch.nn.Model.__init__定义具有一些可学习参数（或权重）的神经网络
-   2. 正向传播：torch.nn.Model.forward通过网络处理输入，进行正向传播
-   3. 计算损失：torch.nn.loss输出正确的距离有多远
-   4. 反向传播：torch.tensor.backward将梯度传播回网络参数
-   5. 更新权重：troch.optim通常使用简单的更新规则来更新网络的权重：weight = weight - learning_rate * gradient
-   6. 循环迭代：train cycle
+   1. 创建模型：torch.nn.Model.__init__定义具有一些可学习参数（或权重）的神经网络
+   2. 训练算法：
+      1. 正向传播：torch.nn.Model.forward通过网络处理输入，进行正向传播
+      2. 计算损失：torch.nn.loss输出正确的距离有多远
+      3. 反向传播：torch.tensor.backward将梯度传播回网络参数
+      4. 更新权重：troch.optim通常使用简单的更新规则来更新网络的权重：weight = weight - learning_rate * gradient
+      5. 迭代循环：重复以上步骤直到（精确度满足要求 或者 迭代次数到达上限）
 4. 验证模型
 5. 使用模型
 
