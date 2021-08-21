@@ -13,10 +13,10 @@ void doSomething(promise<string>& p){
         cout<<"read char x for exception"<<endl;
         char c = cin.get();
         if(c=='x'){
-            throw runtime_error(string("char")+c+"fault");
+            throw runtime_error(string("char ")+c+" fault");
         }
         else{
-            string s = string("char")+c+"correct";
+            string s = string("char ")+c+" correct";
             p.set_value(move(s));//移动赋值函数。防止退出局部变量后销毁。
         }
     }

@@ -21,6 +21,11 @@ int main(){
 
     // vector<int> vec;
 // 构造边的对象
+
+    vector<int> a{1,2,3};
+    queue<int> b;
+    cout<<b.front()<<endl;
+
 struct Edge
 {
     int start;
