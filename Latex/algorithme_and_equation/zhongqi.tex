@@ -1,0 +1,173 @@
+
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage[top=2cm, bottom=2cm, left=3cm, right=3cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+\floatname{algorithm}{算法}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gkai}
+    $$
+    hello = f(x)
+    this is 
+    $$
+    \renewcommand{\thealgorithm}{1}  
+    \begin{algorithm}[H]  
+    \caption{联邦平均算法Fedavg}  
+    \begin{algorithmic}[1]%每行显示行号
+    \Require{$t,T,k,N,\eta,E,B, w_k^t,$} 
+    \Ensure {$w$} 
+        
+        \Function{ServerAggregate:}{}
+            \For{$t = 0, \cdots , T-1$} 
+                \State select $S_t$ from $K$ device\
+                \State send $w^t$ to device 
+                \For{client $k\in S_t$}
+                    \State $w^k_{t+1} \gets $ ClientUpdate($k,w_t$)
+                \EndFor
+                \State $w_{t+1} \gets \frac{1}{N}\sum_{k=1}^N w_{t+1}^k$
+            \EndFor
+        \EndFunction
+
+        \Function{ClientUpdate:}{$k,w_t$}
+            \State $w_t^k \gets w_t$
+            \For{epoch i from $1 to E$} 
+                \For{batch $b \in B$}
+                    \State $w_t^k \gets w_t^k - \eta\nabla l(w_t^k,b)$
+                \EndFor
+            \EndFor
+        \EndFunction
+
+        \State return $w_{t}^k$;
+    \end{algorithmic}  
+    \end{algorithm}
+
+    \begin{algorithm}[H]  
+        \caption{模型无关的元学习算法MAML}  
+        \begin{algorithmic}[1]%每行显示行号
+        \Require{$p(T):$distribution over task} 
+        \Ensure {$\alpha,\beta:$step size hyperparameters} 
+            \State Randomly initialize $\theta$
+                \While{not done} 
+                    \State Sample batch of task $T_i\sim p(T)$
+                    \For{all $T_i$}
+                        \State Evalute $\nabla L_{T_i}(f_\theta)$ respect to $K$ example
+                        \State Compute adpated parameters with gradient descent
+                        \State $\theta_i' = \theta-\alpha\nabla_\theta L_{T_i}(f_\theta)$
+                    \EndFor
+                    \State Update $\theta \gets \theta-\beta\nabla_\theta\sum_{T_i\sim p_i}L_{T_i}(f_{\theta_i'})$
+                \EndWhile
+        \end{algorithmic}  
+    \end{algorithm}
+
+    \begin{algorithm}[H]  
+        \caption{基于贡献度和元学习的联邦学习算法}  
+        \begin{algorithmic}[1]%每行显示行号
+        \Require{$t,T,k,N,\eta,E,B, w_k^t,$} 
+        \Ensure {$w$} 
+        
+        \Function{ServerAggregate:}{}
+            \For{$t = 0, \cdots , T-1$} 
+                \State select $S_t$ from $K$ device\
+                \State send $w^t$ to device 
+                \For{client $k\in S_t$}
+                    \State $w^k_{t+1} \gets $ ClientUpdate($k,w_t$)
+                \EndFor
+                \State $w_{t+1} \gets \sum_{k=1}^N C_k w_{t+1}^k$
+            \EndFor
+        \EndFunction
+
+        \Function{ClientUpdate:}{$k,w_t$}
+            \State $w_t^k \gets w_t$
+            \For{epoch i from $1 to E$} 
+                \State $\tilde{w_t^k} \gets w_t^k - \alpha\nabla_w l(w_t^k,D_{support})$
+            \EndFor
+            \State $w_{t+1}^k \gets w_t^k-\beta \nabla_w l(\tilde{w_t^k},D_{query})$
+        \EndFunction
+
+        \State return $w_{t+1}^k$;
+    \end{algorithmic}  
+    \end{algorithm}
+
+        
+    \begin{algorithm}[H]  
+        \caption{基于差分隐私的联邦学习算法}  
+        \begin{algorithmic}[1]%每行显示行号
+        \Require{$t,T,k,N,\alpha,,E epoch,B batch, w_k^t,C$} 
+        \Ensure {$w_{t+1}^k$} 
+        
+        \Function{ServerAggregate:}{}
+            \For{$t = 0, \cdots , T-1$} 
+                \State select $S_t$ from $K$ device\
+                \State send $w^t$ to device 
+                \For{client $k\in S_t$}
+                    \State $w^k_{t+1} \gets $ ClientUpdate($k,w_t$)
+                \EndFor
+                \State $w_{t+1} \gets \sum_{k=1}^N C_k w_{t+1}^k$
+            \EndFor
+        \EndFunction    
+        \Function{ClientUpdate:}{$k,w_t$}
+            \State $w_t^k \gets w_t$
+            
+            \For{epoch i from $1 to E$} 
+                \State Compute gradient $g_t^k(w) \gets \nabla_w l(w_t^k,D)$
+                \State Clip gradient $\overline{g_t^k}(w) \gets g_t^k(w)/max(1,\frac{||g_t^k(w)||_2}{C})$
+                \State Add noise $\tilde{g_t^k}(w)\gets (\overline{g_t^k}(w)+N(0,\sigma^2C^2))$
+                \State Descent $w_t^k \gets w_t^k-\alpha \tilde{g_t^k}(w_t^k)$
+            \EndFor
+            \State $w_{t+1}^k\gets w_t^k$
+            \State return $w_{t+1}^k$;
+        \EndFunction
+        
+    \end{algorithmic}  
+    \end{algorithm}
+    \begin{algorithm}
+        \caption{用归并排序求逆序数}
+        \begin{algorithmic}[1] %每行显示行号
+            \Require $Array$数组，$n$数组大小
+            \Ensure 逆序数
+            \Function {MergerSort}{$Array, left, right$}
+                \State $result \gets 0$
+                \If {$left < right$}
+                    \State $middle \gets (left + right) / 2$
+                    \State $result \gets result +$ \Call{MergerSort}{$Array, left, middle$}
+                    \State $result \gets result +$ \Call{MergerSort}{$Array, middle, right$}
+                    \State $result \gets result +$ \Call{Merger}{$Array,left,middle,right$}
+                \EndIf
+                \State \Return{$result$}
+            \EndFunction
+            \State
+            \Function{Merger}{$Array, left, middle, right$}
+                \State $i\gets left$
+                \State $j\gets middle$
+                \State $k\gets 0$
+                \State $result \gets 0$
+                \While{$i<middle$ \textbf{and} $j<right$}
+                    \If{$Array[i]<Array[j]$}
+                        \State $B[k++]\gets Array[i++]$
+                    \Else
+                        \State $B[k++] \gets Array[j++]$
+                        \State $result \gets result + (middle - i)$
+                    \EndIf
+                \EndWhile
+                \While{$i<middle$}
+                    \State $B[k++] \gets Array[i++]$
+                \EndWhile
+                \While{$j<right$}
+                    \State $B[k++] \gets Array[j++]$
+                \EndWhile
+                \For{$i = 0 \to k-1$}
+                    \State $Array[left + i] \gets B[i]$
+                \EndFor
+                \State \Return{$result$}
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+\end{CJK*}
+\end{document} 
