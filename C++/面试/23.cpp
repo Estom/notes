@@ -21,8 +21,8 @@ int main()
     int s1[]={1,2,3,4,5,6,7,8};
     int s2[3]={4,5,6};
     int* s3 = new int(999);
-    test1(s3);
-    test2(s3);
-    test3(s3);
+    test1(s1);
+    test2(s1);
+    test3(s1);
     return 0;
 }

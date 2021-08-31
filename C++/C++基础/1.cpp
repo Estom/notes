@@ -1,6 +1,13 @@
 #include <iostream>
 using namespace std;
 
+class B{
+public:
+    int a = 1;
+    B():a(2){
+        // a=3;
+    }
+};
 int main()
 {
     // unsigned int a =1;
@@ -21,11 +28,34 @@ int main()
     // cout<<*i<<endl;
     // cout<<*j<<endl;
 
-    extern int fff;
-    fff=11;
-    cout << fff << endl;
+    // extern int fff;
+    // fff=11;
+    // cout << fff << endl;
 
     // fff = 11;
     // cout << fff << endl;
+    // int a = 10;
+    // long long b = 10;
+    // cout<<sizeof(a)<<"\t"<<sizeof(b)<<endl;
+
+    // B *b =new B();
+    // cout<<b->a<<endl;
+    // int m = 10;
+    // int *a[3]={&m,&m,&m};
+    // int b[]={1,2,3};
+    // int (*ptr)[3]=&b;
+
+    // cout<<(*a)[7]<<endl;
+    // cout<<(*ptr)[2]<<endl;
+
+    const char* m = "123";
+    const void* n = "123";
+
+    char a[] = "123";
+    char b[3] = "13";
+
+    cout<<sizeof(m)<<"\t"<<sizeof(n)<<endl;
+    cout<<sizeof(a)<<"\t"<<sizeof(b)<<endl;
+
     return 0;
 }
