@@ -1,4 +1,4 @@
-# 10个MySQL性能调优的方法
+# 性能调优
 > 参考文献
 > * [https://www.jb51.net/article/70111.htm](https://www.jb51.net/article/70111.htm)
 > * [https://www.cnblogs.com/jiekzou/p/5371085.html](https://www.cnblogs.com/jiekzou/p/5371085.html)
@@ -8,86 +8,156 @@
 1. 数据库设计优化：
    1. 选择合适的存储引擎
    2. 设计合理的表结构(符合3NF)
-   3. 添加适当索引(index) [四种: 普通索引、主键索引、唯一索引unique、全文索引]
+   3. 添加适当索引(index) 普通索引、主键索引、唯一索引、全文索引、组合索引、覆盖索引。
 2. 查询语句优化：
-   1. 通过show status命令了解各种SQL的执行频率。
-   2. 定位执行效率较低的SQL语句-（重点select，记录慢查询）
-   3. 通过explain分析低效率的SQL
+   1. 遵守查询规范。
+   2. 分析日志：通过show status命令了解各种SQL的执行频率。定位执行效率较低的SQL语句（重点select，记录慢查询）
+   3. explain分析低效率的SQL语句
 3. 查询过程优化
    1. 从内存中读取数据
    2. 减少磁盘写入操作(更大的写缓存)
-   3. 提高磁盘读取速度
-## 1 选择合适的存储引擎: InnoDB
+   3. 提高磁盘读取速度(硬件设备改善)
 
-* 除非你的数据表使用来做只读或者全文检索 (相信现在提到全文检索，没人会用 MYSQL 了)，你应该默认选择 InnoDB 。
 
-* 你自己在测试的时候可能会发现 MyISAM 比 InnoDB 速度快，这是因为： MyISAM 只缓存索引，而 InnoDB 缓存数据和索引，MyISAM 不支持事务。但是 如果你使用 innodb_flush_log_at_trx_commit = 2 可以获得接近的读取性能 (相差百倍) 。
+## 1.1 存储引擎
+* 支持全文索引：MyISAM
+* 支持外键：Innodb
+* 支持缓存：Innodb
+* 支持事务：Innodb
+* 支持并发：MyISAM 只支持表级锁，而 InnoDB 还支持行级锁。
+* 支持备份：InnoDB 支持在线热备份。
+* 崩溃恢复：MyISAM 崩溃后发生损坏的概率比 InnoDB 高很多，而且恢复的速度也更慢。
+* 其它特性：MyISAM 支持压缩表和空间数据索引。
 
-### 1.1 如何将现有的 MyISAM 数据库转换为 InnoDB:
+## 1.2 表结构
 
+符合3BNF/EBNF范式
+* 属性不可分
+* 非主属性依赖完全的主属性
+* 非主属性不依赖其他的非主属性
+* 消除多值依赖（多对多关系）
+## 1.3 添加索引
+索引类型选择：
+1. **前缀索引**。对于 BLOB、TEXT 和 VARCHAR 类型的列，必须使用前缀索引，只索引开始的部分字符。前缀长度的选取需要根据索引选择性来确定。字符串列加索引最好加短索引，即对前该列的前xx个字符，例如：key 'ind_user_info_addr' (addr(10)) USINGBTREE代表对addr列的前10个字符家索引。
+2. **复合索引**。在需要使用多个列作为条件进行查询时，使用多列索引比使用多个单列索引性能更好。如果创建了一个(username,age,addr)的复合索引，那么相当于创建了(username,age,addr)，(username,age)，(username)三个索引，所以在创建复合索引的时候应该将最常用的限制条件的列放在最左边，依次递减。
+
+索引使用规范：
+1. 不能再索引字段上计算。会导致索引无效，成为全表扫描。
+2. 将非”索引”数据分离，比如将大篇文章分离存储，不影响其他自动查询。
+3. **覆盖索引**。能够直接通过索引查询到所需要的字段，不需要通过回表查询，找到数据。
+4. **关联查询**。保证关联的字段都建立索引，并且字段类型一致，这样才能两个表都使用索引。如果字段类型不一样，至少一个表不能使用索引。保证连接的索引是相同类型。即a.age = b.age，a表的和b表的age字段类型保证一样，并且都建立了索引。
+5.  **最左匹配原则**：索引列如果使用like条件进行查询，那么 like 'xxx%' 可以使用索引，like '%xxx' 不能使用索引。
+6. 索引列的值最好不要有null值。列中只要包含null，则不会被包含到索引中，复合索引中只要有一列为null值，则这个复合索引失效的。所以创建索引列不要设置默认值null
+7. 如果where条件中使用了一个列的索引，那么后面order by 在用这个列进行排序时，便不会再使用索引。where条件用到复合索引中的字段时，最好把该字段放在复合索引的左端，这样才能使用索引提高查询。
+8. 排序索引。尽量不要使用包含多个列的排序，如果需要则给这些列加上复合索引。
+
+
+
+## 2.1 查询规范
+
+1. **减少请求的数据量**。单条查询最后增加 LIMIT，停止全表扫描。
+   - 只返回必要的列：最好不要使用 SELECT * 语句。
+   - 只返回必要的行：使用 LIMIT 语句来限制返回的数据。
+3. 不用 MYSQL 内置的函数，因为内置函数不会建立查询缓存。
+4. inner join 内连接也叫做等值连接，left/right join 是外连接。能用inner join连接的尽量用inner join连接
+5. 尽量使用外连接来替换子查询。在使用on和where的时候，先用on，在用where。使用join时，用小的结果驱动大的结果（left join左表结果尽量小，如果有条件，先放左边处理，right join同理反向）。多表联合查询尽量拆分多个简单的sql语句进行查询。
+6. 尽量不要使用BY RAND()命令。减少排序order by。少用OR。尽量不要使用not in 和<> 操作
+7. 避免类型转换，也就是转入的参数类型要和字段类型一致。
+8. 不要在列上进行运算。
+9.  使用批量插入操作代替一个一个插入
+10. 对于多表查询可以建立视图。
+
+
+
+## 2.2 分析日志
+修改mysql的慢查询.
 ```
-mysql -u [USER_NAME] -p -e "SHOW TABLES IN [DATABASE_NAME];" | tail -n +2 | xargs -I '{}' echo "ALTER TABLE {} ENGINE=InnoDB;" > alter_table.sql
-
-perl -p -i -e 's/(search_[a-z_]+ ENGINE=)InnoDB//1MyISAM/g' alter_table.sql
-
-mysql -u [USER_NAME] -p [DATABASE_NAME] < alter_table.sql
-
-mysql -u [USER_NAME] -p -e "SHOW TABLES IN [DATABASE_NAME];" | tail -n +2 | xargs -I '{}' echo "ALTER TABLE {} ENGINE=InnoDB;" > alter_table.sql
-
-perl -p -i -e 's/(search_[a-z_]+ ENGINE=)InnoDB//1MyISAM/g' alter_table.sql
-
-mysql -u [USER_NAME] -p [DATABASE_NAME] < alter_table.sql
+show variables like 'long_query_time' ; //可以显示当前慢查询时间
+set long_query_time=1 ;//可以修改慢查询时间
 ```
-### 1.2 为每个表分别创建 InnoDB FILE：
-
+记录所有查询，这在用 ORM 系统或者生成查询语句的系统很有用。
 ```
-innodb_file_per_table=1
+log=/var/log/mysql.log
 ```
-这样可以保证 ibdata1 文件不会过大，失去控制。尤其是在执行 mysqlcheck -o –all-databases 的时候。
+注意不要在生产环境用，否则会占满你的磁盘空间。
 
- 
-
-## 2. 保证从内存中读取数据，讲数据保存在内存中
-
-### 2.1 足够大的 innodb_buffer_pool_size
-
-推荐将数据完全保存在 innodb_buffer_pool_size ，即按存储量规划 innodb_buffer_pool_size 的容量。这样你可以完全从内存中读取数据，最大限度减少磁盘操作。
-
-第一步：如何确定 innodb_buffer_pool_size 足够大，数据是从内存读取而不是硬盘？
-
-查询buffer size
+记录执行时间超过 1 秒的查询：
 ```
-mysql> SHOW GLOBAL STATUS LIKE 'innodb_buffer_pool_pages_%';
-+----------------------------------+--------+
-| Variable_name          | Value |
-+----------------------------------+--------+
-| Innodb_buffer_pool_pages_data  | 129037 |
-| Innodb_buffer_pool_pages_dirty  | 362  |
-| Innodb_buffer_pool_pages_flushed | 9998  |
-| Innodb_buffer_pool_pages_free  | 0   | !!!!!!!!
-| Innodb_buffer_pool_pages_misc  | 2035  |
-| Innodb_buffer_pool_pages_total  | 131072 |
-+----------------------------------+--------+
-6 rows in set (0.00 sec)
-
-innodb_additional_mem_pool_size = 1/200 of buffer_pool
-innodb_max_dirty_pages_pct 80%
+long_query_time=1
+log-slow-queries=/var/log/mysql/log-slow-queries.log
 ```
-发现 Innodb_buffer_pool_pages_free 为 0，则说明 buffer pool 已经被用光，需要增大 innodb_buffer_pool_size
 
-或者用iostat -d -x -k 1 命令，查看硬盘的操作。
+## 2.3 explain分析查询
 
-第二步：服务器上是否有足够内存用来规划。执行 echo 1 > /proc/sys/vm/drop_caches 清除操作系统的文件缓存，可以看到真正的内存使用量。
-
-### 2.2 数据预热
-
-默认情况，只有某条数据被读取一次，才会缓存在 innodb_buffer_pool。所以，数据库刚刚启动，需要进行数据预热，将磁盘上的所有数据缓存到内存中。数据预热可以提高读取速度。
-
-对于 InnoDB 数据库，可以用以下方法，进行数据预热:
-
-1. 将以下脚本保存为 MakeSelectQueriesToLoad.sql
-
+### 分析方法
 ```
+Explain select * from emp where ename=“wsrcla”
+```
+会产生如下信息：
+
+* select_type:表示查询的类型。
+* table:输出结果集的表
+* type:表示表的连接类型
+* possible_keys:表示查询时，可能使用的索引
+* key:表示实际使用的索引
+* key_len:索引字段的长度
+* rows:扫描出的行数(估算的行数)
+* Extra:执行情况的描述和说明
+
+### 重构查询方式
+
+#### 1. 切分大查询
+
+一个大查询如果一次性执行的话，可能一次锁住很多数据、占满整个事务日志、耗尽系统资源、阻塞很多小的但重要的查询。
+
+```sql
+DELETE FROM messages WHERE create < DATE_SUB(NOW(), INTERVAL 3 MONTH);
+```
+
+```sql
+rows_affected = 0
+do {
+    rows_affected = do_query(
+    "DELETE FROM messages WHERE create  < DATE_SUB(NOW(), INTERVAL 3 MONTH) LIMIT 10000")
+} while rows_affected > 0
+```
+
+#### 2. 分解大连接查询
+
+将一个大连接查询分解成对每一个表进行一次单表查询，然后在应用程序中进行关联，这样做的好处有：
+
+- 让缓存更高效。对于连接查询，如果其中一个表发生变化，那么整个查询缓存就无法使用。而分解后的多个查询，即使其中一个表发生变化，对其它表的查询缓存依然可以使用。
+- 分解成多个单表查询，这些单表查询的缓存结果更可能被其它查询使用到，从而减少冗余记录的查询。
+- 减少锁竞争；
+- 在应用层进行连接，可以更容易对数据库进行拆分，从而更容易做到高性能和可伸缩。
+- 查询本身效率也可能会有所提升。例如下面的例子中，使用 IN() 代替连接查询，可以让 MySQL 按照 ID 顺序进行查询，这可能比随机的连接要更高效。
+
+```sql
+SELECT * FROM tag
+JOIN tag_post ON tag_post.tag_id=tag.id
+JOIN post ON tag_post.post_id=post.id
+WHERE tag.tag='mysql';
+```
+
+```sql
+SELECT * FROM tag WHERE tag='mysql';
+SELECT * FROM tag_post WHERE tag_id=1234;
+SELECT * FROM post WHERE post.id IN (123,456,567,9098,8904);
+```
+
+
+
+## 3.1 内存读取
+
+### 增大缓存
+* 将更新操作先记录在change buffer，减少读磁盘，语句的执行速度会得到明显的提升。而且，数据读入内存是需要占用buffer pool的，所以这种方式还能够避免占用内存，提高内存利用率
+* innodb_buffer_pool_size。将数据完全保存在 innodb_buffer_pool中。可以完全从内存中读取数据，最大限度减少磁盘操作。
+
+### 数据预热
+
+默认情况，只有某条数据被读取一次，才会缓存在 innodb_buffer_pool。数据库启动后，需要进行数据预热，将磁盘上的所有数据缓存到内存中。数据预热可以提高读取速度。
+
+```sql
 SELECT DISTINCT
   CONCAT('SELECT ',ndxcollist,' FROM ',db,'.',tb,
   ' ORDER BY ',ndxcollist,';') SelectQueryToLoadCache
@@ -115,157 +185,34 @@ SELECT DISTINCT
   ) AA
 ORDER BY db,tb;
 ```
-2. 执行
-```
-mysql -uroot -AN < /root/MakeSelectQueriesToLoad.sql > /root/SelectQueriesToLoad.sql
-```
-3. 每次重启数据库，或者整库备份前需要预热的时候执行：
-```
-mysql -uroot < /root/SelectQueriesToLoad.sql > /dev/null 2>&1
-```
 
-### 2.3 不要让数据存到 SWAP 中
 
-如果是专用 MYSQL 服务器，可以禁用 SWAP，如果是共享服务器，确定 innodb_buffer_pool_size 足够大。或者使用固定的内存空间做缓存，使用 memlock 指令。
 
- 
+## 3.2 减少磁盘读写
 
-## 3 定期优化重建数据库
+### 使用足够大的写入缓存innodb_log_file_size
 
-mysqlcheck -o –all-databases 会让 ibdata1 不断增大，真正的优化只有重建数据表结构：
-```
-CREATE TABLE mydb.mytablenew LIKE mydb.mytable;
-INSERT INTO mydb.mytablenew SELECT * FROM mydb.mytable;
-ALTER TABLE mydb.mytable RENAME mydb.mytablezap;
-ALTER TABLE mydb.mytablenew RENAME mydb.mytable;
-DROP TABLE mydb.mytablezap;
-```
+* 如果用 1G 的 innodb_log_file_size ，假如服务器当机，需要 10 分钟来恢复。
+* 推荐 innodb_log_file_size 设置为 0.25 * innodb_buffer_pool_size
 
-## 4 减少磁盘写入操作
-
-### 4.1 使用足够大的写入缓存 innodb_log_file_size
-
-但是需要注意如果用 1G 的 innodb_log_file_size ，假如服务器当机，需要 10 分钟来恢复。
-
-推荐 innodb_log_file_size 设置为 0.25 * innodb_buffer_pool_size
-
-### 4.2 innodb_flush_log_at_trx_commit
+### innodb_flush_log_at_trx_commit
 
 这个选项和写磁盘操作密切相关：
-
+```sql
 innodb_flush_log_at_trx_commit = 1 则每次修改写入磁盘
 innodb_flush_log_at_trx_commit = 0/2 每秒写入磁盘
-
-如果你的应用不涉及很高的安全性 (金融系统)，或者基础架构足够安全，或者 事务都很小，都可以用 0 或者 2 来降低磁盘操作。
-
-### 4.3 避免双写入缓冲
 ```
-innodb_flush_method=O_DIRECT
-``` 
+如果你的应用不涉及很高的安全性 (金融系统)，或者基础架构足够安全，或者事务都很小，都可以用 0 或者 2 来降低磁盘操作。
 
-## 5 提高磁盘读写速度
 
-RAID0 尤其是在使用 EC2 这种虚拟磁盘 (EBS) 的时候，使用软 RAID0 非常重要。
-
- 
-
-## 6 充分使用索引
-
-### 6.1 查看现有表结构和索引
-```
-SHOW CREATE TABLE db1.tb1/G
-```
-### 6.2 添加必要的索引
-
-索引是提高查询速度的唯一方法，比如搜索引擎用的倒排索引是一样的原理。
-
-索引的添加需要根据查询来确定，比如通过慢查询日志或者查询日志,或者通过 EXPLAIN 命令分析查询。
-
-```
-ADD UNIQUE INDEX
-ADD INDEX
-```
-
-### 6.3 实例：优化用户验证表：
-添加索引
-
-```
-ALTER TABLE users ADD UNIQUE INDEX username_ndx (username);
-ALTER TABLE users ADD UNIQUE INDEX username_password_ndx (username,password);
-```
-每次重启服务器进行数据预热
-```
-echo “select username,password from users;” > /var/lib/mysql/upcache.sql
-```
-添加启动脚本到 my.cnf
-```
-[mysqld]
-init-file=/var/lib/mysql/upcache.sql
-```
-### 6.4 实例：使用自动加索引的框架或者自动拆分表结构的框架
-比如，Rails 这样的框架，会自动添加索引，Drupal 这样的框架会自动拆分表结构。会在你开发的初期指明正确的方向。所以，经验不太丰富的人一开始就追求从 0 开始构建，实际是不好的做法。
-
-## 7 分析查询日志和慢查询日志
-修改mysql的慢查询.
-```
-show variables like 'long_query_time' ; //可以显示当前慢查询时间
-set long_query_time=1 ;//可以修改慢查询时间
-```
-记录所有查询，这在用 ORM 系统或者生成查询语句的系统很有用。
-```
-log=/var/log/mysql.log
-```
-注意不要在生产环境用，否则会占满你的磁盘空间。
-
-记录执行时间超过 1 秒的查询：
-```
-long_query_time=1
-log-slow-queries=/var/log/mysql/log-slow-queries.log
-```
-
-### explain查询语句
-
-Explain select * from emp where ename=“wsrcla”
-会产生如下信息：
-select_type:表示查询的类型。
-table:输出结果集的表
-type:表示表的连接类型
-possible_keys:表示查询时，可能使用的索引
-key:表示实际使用的索引
-key_len:索引字段的长度
-rows:扫描出的行数(估算的行数)
-Extra:执行情况的描述和说明
-
-## 8 激进的方法，使用内存磁盘
-
-现在基础设施的可靠性已经非常高了，比如 EC2 几乎不用担心服务器硬件当机。而且内存实在是便宜，很容易买到几十G内存的服务器，可以用内存磁盘，定期备份到磁盘。
-
-将 MYSQL 目录迁移到 4G 的内存磁盘
-```
-mkdir -p /mnt/ramdisk
-sudo mount -t tmpfs -o size=4000M tmpfs /mnt/ramdisk/
-mv /var/lib/mysql /mnt/ramdisk/mysql
-ln -s /tmp/ramdisk/mysql /var/lib/mysql
-chown mysql:mysql mysql
-```
-## 9 用 NOSQL 的方式使用 MYSQL
-
-B-TREE 仍然是最高效的索引之一，所有 MYSQL 仍然不会过时。
-
-用 HandlerSocket 跳过 MYSQL 的 SQL 解析层，MYSQL 就真正变成了 NOSQL。
-
-## 10 其他
-
-1. 单条查询最后增加 LIMIT 1，停止全表扫描。
-2. 将非”索引”数据分离，比如将大篇文章分离存储，不影响其他自动查询。
-3. 不用 MYSQL 内置的函数，因为内置函数不会建立查询缓存。
-4. PHP 的建立连接速度非常快，所有可以不用连接池，否则可能会造成超过连接数。当然不用连接池 PHP 程序也可能将
-5. 连接数占满比如用了 @ignore_user_abort(TRUE);
-6. 使用 IP 而不是域名做数据库路径，避免 DNS 解析问题
+## 3.3 提高磁盘读取速度
 
 
 
+## 4 其他原则
 
-”建立合理索引”(什么样的索引合理?) “
-分表分库”(用什么策略分表分库?)
-“主从分离”(用什么中间件?)
+1. 不在数据库做运算：cpu计算务必移至业务层
+1. 控制单表数据量：单表记录控制在1000w
+1. 控制列数量：字段数控制在20以内
+1. 平衡范式与冗余：为提高效率牺牲范式设计，冗余数据
+1. 拒绝3B：拒绝大sql，大事物，大批量
