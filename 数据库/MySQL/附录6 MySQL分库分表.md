@@ -132,7 +132,7 @@ Mysql服务器之间的主从同步是基于二进制日志BINLOG机制，主服
 5. slave还会创建一个SQL线程，从Relay log里面读取内容，从Exec_Master_Log_Pos位置开始执行读取到的更新事件，将更新内容写入到slave的db.
 
 
-### 主从同步方法
+### 主从同步机制
 
 ![](image/2021-09-02-10-14-13.png)
 
