@@ -1,10 +1,11 @@
-* [原文链接 ](https://www.liwenzhou.com/posts/Go/go_kafka/)
-* [视频：150-152](https://www.bilibili.com/video/BV17Q4y1P7n9?p=150)
+> 参考文献
+> * [原文链接 ](https://www.liwenzhou.com/posts/Go/go_kafka/)
+
 
 
 **Kafka 是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据，具有高性能、持久化、多副本备份、横向扩展等特点**。本文介绍了如何使用 Go 语言发送和接收 kafka 消息。
 
-## 30.1 sarama
+## 1 sarama
 
 Go 语言中连接 kafka 使用第三方库: [github.com/Shopify/sarama](https://github.com/Shopify/sarama)。
 
@@ -25,7 +26,7 @@ exec: "gcc":executable file not found in %PATH%
 
 所以在 Windows 平台请使用 v1.19 版本的 sarama 。
 
-## 30.2 连接 kafka 发送消息
+## 2 连接 kafka 发送消息
 
 ```go
 package main

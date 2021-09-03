@@ -1,24 +1,24 @@
-[原文链接](https://www.liwenzhou.com/posts/Go/go_redis/)、
-[视频地址](https://www.bilibili.com/video/BV17Q4y1P7n9?p=140)
 
-在项目开发中 redis 的使用也比较频繁，本文介绍了 Go 语言中 `go-redis` 库的基本使用。
+> 参考文献
+> * [原文链接](https://www.liwenzhou.com/posts/Go/go_redis/)
 
-## 25.1 Redis 介绍
+
+## 1 Redis 介绍
 
 **`Redis` 是一个开源的内存数据库**，Redis 提供了多种不同类型的数据结构，很多业务场景下的问题都可以很自然地映射到这些数据结构上。除此之外，**通过复制、持久化和客户端分片等特性，我们可以很方便地将 Redis 扩展成一个能够包含数百 GB 数据、每秒处理上百万次请求的系统**。
 
-### 25.1.1 Redis 支持的数据结构
+### 1.1 Redis 支持的数据结构
 
 Redis 支持诸如 字符串（strings）、哈希（hashes）、列表（lists）、集合（sets）、带范围查询的排序集合（sorted sets）、位图（bitmaps）、hyperloglogs、带半径查询和 流的地理空间索引等数据结构（geospatial indexes）。
 
-### 25.1.2 Redis 应用场景
+### 1.2 Redis 应用场景
 
 * 缓存系统，减轻主数据库（MySQL）的压力。
 * 计数场景，比如微博、抖音中的关注数和粉丝数。
 * 热门排行榜，需要排序的场景特别适合使用 `ZSET`。
 * 利用 `LIST` 可以实现队列的功能。
 
-### 25.1.3 准备 Redis 环境
+### 1.3 准备 Redis 环境
 
 这里直接使用 `Docker` 启动一个 redis 环境，方便学习使用。
 
@@ -36,9 +36,9 @@ docker run --name redis507 -p 6379:6379 -d redis:5.0.7
 docker run -it --network host --rm redis:5.0.7 redis-cli
 ```
 
-## 25.2 `go-redis` 库
+## 2 `go-redis` 库
 
-### 25.2.1 安装
+### 2.1 安装
 
 区别于另一个比较常用的 Go 语言 redis client 库：[`redigo`](https://github.com/gomodule/redigo) ，我们这里采用 [https://github.com/go-redis/redis](https://github.com/go-redis/redis) 连接 Redis 数据库并进行操作，因为**`go-redis` 支持连接哨兵及集群模式的Redis**。
 
@@ -48,9 +48,9 @@ docker run -it --network host --rm redis:5.0.7 redis-cli
 go get -u github.com/go-redis/redis
 ```
 
-### 25.2.2 连接
+### 2.2 连接
 
-#### 25.2.2.1 普通连接
+#### 2.2.1 普通连接
 
 ```go
 // 声明一个全局的rdb变量
@@ -78,7 +78,7 @@ func initClient() (err error) {
 rdb.Ping(context.TODO())
 ```
 
-#### 25.2.2.2 连接 Redis 哨兵模式
+#### 2.2.2 连接 Redis 哨兵模式
 
 ```go
 func initClient()(err error){
@@ -94,7 +94,7 @@ func initClient()(err error){
 }
 ```
 
-#### 25.2.2.3 连接 Redis 集群
+#### 2.2.3 连接 Redis 集群
 
 ```go
 func initClient()(err error){
@@ -109,9 +109,9 @@ func initClient()(err error){
 }
 ```
 
-### 25.2.3 基本使用
+### 2.3 基本使用
 
-#### 25.2.3.1 set/get 示例
+#### 2.3.1 set/get 示例
 
 ```go
 func redisExample() {
@@ -140,7 +140,7 @@ func redisExample() {
 }
 ```
 
-#### 25.2.3.2 zset示例
+#### 2.3.2 zset示例
 
 ```go
 func redisExample2() {
@@ -209,7 +209,7 @@ C/C++ 99
 Golang 100
 ```
 
-#### 25.2.3.3 Pipeline
+#### 2.3.3 Pipeline
 
 `Pipeline` 主要**是一种网络优化**。它本质上意味着**客户端缓冲一堆命令并一次性将它们发送到服务器**。这些命令**不能保证在事务中执行**。这样做的好处是节省了每个命令的 **网络往返时间（`RTT`**）。
 
@@ -246,7 +246,7 @@ fmt.Println(incr.Val(), err)
 
 在某些场景下，当我们有多条命令要执行时，就可以考虑使用 pipeline 来优化。
 
-#### 25.2.3.4 事务
+#### 2.3.4 事务
 
 **Redis 是单线程的，因此单个命令始终是原子的**，但是来自不同客户端的两个给定命令可以依次执行，例如在它们之间交替执行。但是，`Multi/exec` 能够确保在 `multi/exec` 两个语句之间的命令之间没有其他客户端正在执行命令。
 
@@ -284,7 +284,7 @@ fmt.Println(incr.Val(), err)
 ```
 
 
-#### 25.2.3.5 Watch
+#### 2.3.5 Watch
 
 在某些场景下，我们除了要使用 `MULTI/EXEC` 命令外，还需要配合使用 `WATCH` 命令。在用户使用 `WATCH` 命令监视某个键之后，直到该用户执行 `EXEC` 命令的这段时间里，如果有其他用户抢先对被监视的键进行了替换、更新、删除等操作，那么当用户尝试执行 EXEC 的时候，事务将失败并返回一个错误，用户可以根据这个错误选择重试事务或者放弃事务。
 
