@@ -136,6 +136,39 @@ public:
         vec.pop_back();
         return vec;
     }
+        // 区分层次的层序遍历2 改进版，单队列,单循环
+    vector<vector<int>> levelOrder2(TreeNode* root) {
+        vector<vector<int>> res;
+        vector<int> vec;
+        queue<TreeNode*> que;
+        que.push(root);
+        int N=1;
+
+        while(!que.empty()){
+            // 每次交换队列创建一个数组
+            if(que.front()==nullptr){
+                que.pop();
+                N--;
+                continue;
+            }
+
+            TreeNode*temp=que.front();
+            que.pop();
+            vec.push_back(temp->val);
+            N--;
+
+            que.push(temp->left);
+            que.push(temp->right);
+            //可以在这里针对每层进行操作。例如反转。
+            if(N==0){
+                res.push_back(vec);
+                vec.clear();
+                N=que.size();
+            }
+        }
+
+        return res;
+    }
     //重建二叉树-前中
     /* 
     * pre 前序遍历的数组
@@ -175,7 +208,7 @@ int main(){
     TreeNode n;
     TreeNode* node=&n;
     BinaryTree tree;
-    // tree.build(node,vec,0);
+    tree.build(node,vec,0);
     // tree.display(node);
     // cout<<endl;
     // tree.pre_order(node);
@@ -183,10 +216,17 @@ int main(){
     // tree.mid_order(node);
     // cout<<endl;
     // tree.lst_order(node);
+    vector<vector<int>> res = tree.levelOrder2(node);
+    for(auto a:res){
+        for(auto b:a){
+            cout<<b<<" ";
+        }
+        cout<<endl;
+    }
     // 数组表示的前序遍历和后续遍历
-    vector<int> pre{3,9,20,15,7};
-    vector<int> mid{9,3,15,20,7};
-    TreeNode* node2 = tree.rebuild(pre,mid,0,0,mid.size()-1);
-    tree.display(node2);
-    return 0;
+    // vector<int> pre{3,9,20,15,7};
+    // vector<int> mid{9,3,15,20,7};
+    // TreeNode* node2 = tree.rebuild(pre,mid,0,0,mid.size()-1);
+    // tree.display(node2);
+    // return 0;
 }
