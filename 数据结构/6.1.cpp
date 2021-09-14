@@ -10,6 +10,9 @@ struct TreeNode{
     TreeNode* left;//左子树
     TreeNode* right;//右子树
     TreeNode* parent;//可以不用
+    // TreeNode(int v){
+    //     val=v;
+    // }
 };
 class BinaryTree{
     //TreeNode* root;//二叉树的根节点
@@ -35,8 +38,6 @@ public:
         int j=0;
         TreeNode* temp;
         while(!que.empty()){
-
-
             if(que.front()==nullptr){
                 que.pop();
                 cout<<"\t";
@@ -61,8 +62,6 @@ public:
         cout<<node->val<<" ";
     }
     
-
-
     //前序遍历
     void pre_order(TreeNode*node){
         if(node == nullptr){
@@ -106,7 +105,7 @@ public:
             que.pop();
         }
     }
-    // 区分层次的层序遍历
+    // 之字形区分层次的层序遍历
     vector<vector<int>> levelOrder(TreeNode* root) {
         vector<vector<int>> vec;
         queue<TreeNode*> que[2];
