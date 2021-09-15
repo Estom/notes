@@ -9,11 +9,11 @@ public:
         // cout<<111<<endl;
     }
     vector<int> max_queue;
-    // 创建堆
+    // 创建堆。从第一个非叶节点开始向下调整
     MaxQueue(vector<int> vec) {
         max_queue=vec;
-        for(int i=vec.size()-1;i>=0;i--){
-            shift_down((i-1)/2);
+        for(int i=vec.size()/2-1;i>=0;i--){
+            shift_down(i);
         }
     }
     // 堆顶值.即队首的元素
@@ -98,9 +98,9 @@ public:
 };
 
 int main(){
-    // vector<int> vec{0,1,2,3,4,5};
-    // MaxQueue mq=MaxQueue(vec);
-    // mq.display();
+    vector<int> vec{0,1,2,3,4,5};
+    MaxQueue mq=MaxQueue(vec);
+    mq.display();
     // cout<<mq.max_value()<<endl;
     // mq.pop_front();
     // mq.display();
