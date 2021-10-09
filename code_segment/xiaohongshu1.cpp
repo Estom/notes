@@ -1,9 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
-/**
- *  交换任意两数的本质是改变了元素位置，
- *  故建立元素与其目标状态应放置位置的映射关系
- */
 int getMinSwaps(vector<int> v)
 {
     vector<int> v1(v);   //将A内元素复制到B。
@@ -42,6 +38,6 @@ int main()
         v.push_back(k);
     }
     int num = getMinSwaps(v);
-    cout<<"交换次数："<<num<<endl;
+    cout<<num<<endl;
     return 0;
 }
