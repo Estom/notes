@@ -1,0 +1,3 @@
+Landroid/os/PowerManager$WakeLock;->acquire()V : ['android.permission.WAKE_LOCK']
+Landroid/os/PowerManager$WakeLock;->release()V : ['android.permission.WAKE_LOCK']
+Landroid/telephony/SmsManager;->sendTextMessage(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String; Landroid/app/PendingIntent; Landroid/app/PendingIntent;)V : ['android.permission.SEND_SMS']
