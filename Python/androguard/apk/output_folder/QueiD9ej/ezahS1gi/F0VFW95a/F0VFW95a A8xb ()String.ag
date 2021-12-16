@@ -1,0 +1,17 @@
+# LQueiD9ej/ezahS1gi/F0VFW95a;->A8xb()Ljava/lang/String; [access_flags=public static]
+#
+# Parameters:
+# local registers: v0...v1
+#
+# - return:java.lang.String
+
+A8xb-BB@0x0 : 
+	0       (00000000) new-instance         v0, Ljava/util/Random;
+	1       (00000004) invoke-direct        v0, Ljava/util/Random;-><init>()V
+	2       (0000000a) const                v1, 2147483647 # [nan]
+	3       (00000010) invoke-virtual       v0, v1, Ljava/util/Random;->nextInt(I)I
+	4       (00000016) move-result          v0
+	5       (00000018) invoke-static        v0, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
+	6       (0000001e) move-result-object   v0
+	7       (00000020) return-object        v0
+

@@ -1,0 +1,14 @@
+# LQueiD9ej/ezahS1gi/nXlZmo5r;->onClick(Landroid/view/View;)V [access_flags=public final]
+#
+# Parameters:
+# - local registers: v0...v2
+# - v3:android.view.View
+#
+# - return:void
+
+onClick-BB@0x0 : 
+	0       (00000000) iget-object          v0, v2, LQueiD9ej/ezahS1gi/nXlZmo5r;->A8xb LQueiD9ej/ezahS1gi/Paa;
+	1       (00000004) const/4              v1, 0
+	2       (00000006) invoke-virtual       v0, v1, LQueiD9ej/ezahS1gi/Paa;->showDialog(I)V
+	3       (0000000c) return-void          
+

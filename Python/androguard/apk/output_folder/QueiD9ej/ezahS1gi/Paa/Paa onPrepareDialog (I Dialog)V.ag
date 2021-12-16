@@ -1,0 +1,32 @@
+# LQueiD9ej/ezahS1gi/Paa;->onPrepareDialog(I Landroid/app/Dialog;)V [access_flags=protected]
+#
+# Parameters:
+# - local registers: v0...v2
+# - v3:int
+# - v4:android.app.Dialog
+#
+# - return:void
+
+onPrepareDialog-BB@0x0 : [ D:onPrepareDialog-BB@0x6 0:onPrepareDialog-BB@0x8 ]
+	0       (00000000) packed-switch        v3, +1e (0x3c)
+
+onPrepareDialog-BB@0x6 : 
+	1       (00000006) return-void          
+
+onPrepareDialog-BB@0x8 : [ onPrepareDialog-BB@0x6 ]
+	2       (00000008) iget-object          v0, v2, LQueiD9ej/ezahS1gi/Paa;->A8xb Landroid/app/ProgressDialog;
+	3       (0000000c) const/4              v1, 0
+	4       (0000000e) invoke-virtual       v0, v1, Landroid/app/ProgressDialog;->setProgress(I)V
+	5       (00000014) new-instance         v0, LQueiD9ej/ezahS1gi/n6fVXvL;
+	6       (00000018) iget-object          v1, v2, LQueiD9ej/ezahS1gi/Paa;->A8xb Landroid/app/ProgressDialog;
+	7       (0000001c) invoke-direct        v0, v2, v1, LQueiD9ej/ezahS1gi/n6fVXvL;-><init>(LQueiD9ej/ezahS1gi/Paa; Landroid/app/ProgressDialog;)V
+	8       (00000022) new-instance         v1, LQueiD9ej/ezahS1gi/SOP4Uh0B;
+	9       (00000026) invoke-direct        v1, v0, v0, LQueiD9ej/ezahS1gi/SOP4Uh0B;-><init>(LQueiD9ej/ezahS1gi/n6fVXvL; Landroid/os/Handler;)V
+	10      (0000002c) iput-object          v1, v0, LQueiD9ej/ezahS1gi/n6fVXvL;->A8xb LQueiD9ej/ezahS1gi/SOP4Uh0B;
+	11      (00000030) iget-object          v0, v0, LQueiD9ej/ezahS1gi/n6fVXvL;->A8xb LQueiD9ej/ezahS1gi/SOP4Uh0B;
+	12      (00000034) invoke-virtual       v0, LQueiD9ej/ezahS1gi/SOP4Uh0B;->start()V
+	13      (0000003a) goto                 -1a
+
+onPrepareDialog-BB@0x3c : 
+	14      (0000003c) packed-switch-payload 0
+

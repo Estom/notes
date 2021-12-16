@@ -1,0 +1,36 @@
+# LQueiD9ej/ezahS1gi/Paa;->onCreateDialog(I)Landroid/app/Dialog; [access_flags=protected]
+#
+# Parameters:
+# - local registers: v0...v2
+# - v3:int
+#
+# - return:android.app.Dialog
+
+onCreateDialog-BB@0x0 : [ D:onCreateDialog-BB@0x6 0:onCreateDialog-BB@0xa ]
+	0       (00000000) packed-switch        v3, +22 (0x44)
+
+onCreateDialog-BB@0x6 : [ onCreateDialog-BB@0x8 ]
+	1       (00000006) const/4              v0, 0
+
+onCreateDialog-BB@0x8 : 
+	2       (00000008) return-object        v0
+
+onCreateDialog-BB@0xa : [ onCreateDialog-BB@0x8 ]
+	3       (0000000a) new-instance         v0, Landroid/app/ProgressDialog;
+	4       (0000000e) invoke-direct        v0, v2, Landroid/app/ProgressDialog;-><init>(Landroid/content/Context;)V
+	5       (00000014) iput-object          v0, v2, LQueiD9ej/ezahS1gi/Paa;->A8xb Landroid/app/ProgressDialog;
+	6       (00000018) iget-object          v0, v2, LQueiD9ej/ezahS1gi/Paa;->A8xb Landroid/app/ProgressDialog;
+	7       (0000001c) const/4              v1, 1
+	8       (0000001e) invoke-virtual       v0, v1, Landroid/app/ProgressDialog;->setProgressStyle(I)V
+	9       (00000024) iget-object          v0, v2, LQueiD9ej/ezahS1gi/Paa;->A8xb Landroid/app/ProgressDialog;
+	10      (00000028) const                v1, 2131099652 # [1.7811663256481714e+38]
+	11      (0000002e) invoke-virtual       v2, v1, LQueiD9ej/ezahS1gi/Paa;->getString(I)Ljava/lang/String;
+	12      (00000034) move-result-object   v1
+	13      (00000036) invoke-virtual       v0, v1, Landroid/app/ProgressDialog;->setMessage(Ljava/lang/CharSequence;)V
+	14      (0000003c) iget-object          v0, v2, LQueiD9ej/ezahS1gi/Paa;->A8xb Landroid/app/ProgressDialog;
+	15      (00000040) goto                 -1c
+
+onCreateDialog-BB@0x42 : 
+	16      (00000042) nop                  
+	17      (00000044) packed-switch-payload 0
+

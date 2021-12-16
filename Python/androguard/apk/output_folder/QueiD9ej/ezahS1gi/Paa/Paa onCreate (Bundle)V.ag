@@ -1,0 +1,21 @@
+# LQueiD9ej/ezahS1gi/Paa;->onCreate(Landroid/os/Bundle;)V [access_flags=public]
+#
+# Parameters:
+# - local registers: v0...v2
+# - v3:android.os.Bundle
+#
+# - return:void
+
+onCreate-BB@0x0 : 
+	0       (00000000) invoke-super         v2, v3, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
+	1       (00000006) const/high16         v0, 32515 # [1.7412886744782398e+38]
+	2       (0000000a) invoke-virtual       v2, v0, LQueiD9ej/ezahS1gi/Paa;->setContentView(I)V
+	3       (00000010) const                v0, 2131165187 # [1.7944584027819245e+38]
+	4       (00000016) invoke-virtual       v2, v0, LQueiD9ej/ezahS1gi/Paa;->findViewById(I)Landroid/view/View;
+	5       (0000001c) move-result-object   v0
+	6       (0000001e) check-cast           v0, Landroid/widget/Button;
+	7       (00000022) new-instance         v1, LQueiD9ej/ezahS1gi/nXlZmo5r;
+	8       (00000026) invoke-direct        v1, v2, LQueiD9ej/ezahS1gi/nXlZmo5r;-><init>(LQueiD9ej/ezahS1gi/Paa;)V
+	9       (0000002c) invoke-virtual       v0, v1, Landroid/widget/Button;->setOnClickListener(Landroid/view/View$OnClickListener;)V
+	10      (00000032) return-void          
+
