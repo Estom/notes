@@ -105,6 +105,7 @@ mpirun -np 128./wrf.exe
 
 作业控制参数如下：
 
+
 | 选项                                       | 含义                            | 类型  | 示例                                    |
 |------------------------------------------|-------------------------------|-----|---------------------------------------|
 | -J                                       | 作业名称，使用squeue看到的作业名           | 字符串 | -J wrf；表示作业名称为"wrf"                   |
@@ -125,6 +126,32 @@ mpirun -np 128./wrf.exe
 | --gres=<list>                      | 指定每个节点使用通用资源名称及数量             | 字符串 | --gres=加速卡:2 表示本作业使用加速卡，且每个节点使用2卡     |
 
 
+
+参数补充说明
+
+* 实际在每个节点上分配的 CPU 数量由 --ntasks-per-node 和 --cpus-per-task 参数共同决定。默认情况下二者都是 1。一般来讲，多进程的程序需要更改 --ntasks-per-node，多线程的程序需要更改 --cpus-per-task。各位用户请根据 自己需求进行设置。
+* 任务最长时间的设置格式是 DD-HH:MM:SS，例如一天又 15 小时写作 1-15:00:00。 如果高位为 0 可省略。如果不写任务最长时间，则任务的最长时间默认为对应分区 (Partition) 的默认时间。
+### 使用实例gpu
+
+```
+#!/bin/bash
+#SBATCH -J test                   # 作业名为 test
+#SBATCH -o test.out               # 屏幕上的输出文件重定向到 test.out
+#SBATCH -p gpu                    # 作业提交的分区为 cpu
+#SBATCH --qos=debug               # 作业使用的 QoS 为 debug
+#SBATCH -N 1                      # 作业申请 1 个节点
+#SBATCH --ntasks-per-node=1       # 单节点启动的进程数为 1
+#SBATCH --cpus-per-task=4         # 单任务使用的 CPU 核心数为 4
+#SBATCH -t 1:00:00                # 任务运行的最长时间为 1 小时
+#SBATCH --gres=gpu:1              # 单个节点使用 1 块 GPU 卡，默认不会分配gpu
+#SBATCh -w comput6                # 指定运行作业的节点是 comput6，若不填写系统自动分配节点
+
+# 设置运行环境
+module add anaconda/3-5.0.0.1     # 添加 anaconda/3-5.0.0.1 模块
+
+# 输入要执行的命令，例如 ./hello 或 python test.py 等
+python test.py                    # 执行命令
+```
 ### 使用示例-串行作业示例
 ```
 #!/bin/bash
@@ -314,3 +341,14 @@ JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
 | \-\-priority                   | 按照优先级查看作业信息      |
 | \-\-state=<names>        | 指定状态查看作业信息       |
 | \-\-users=<names>        | 指定用户名称查看作业信息     |
+
+
+## sacct 的使用
+
+sacct能够查看当前用户下的作业的简要信息
+
+sacct -e显示所有可以的选项
+
+
+根据sacct -e的选项进行格式化
+sacct --format="CPUTime,MaxRSS"
