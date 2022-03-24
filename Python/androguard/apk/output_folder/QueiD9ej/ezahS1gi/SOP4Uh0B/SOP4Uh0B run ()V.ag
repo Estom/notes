@@ -1,0 +1,45 @@
+# LQueiD9ej/ezahS1gi/SOP4Uh0B;->run()V [access_flags=public final]
+#
+# Parameters:
+# local registers: v0...v3
+#
+# - return:void
+
+run-BB@0x0 : [ run-BB@0xc ]
+	0       (00000000) const/4              v2, 1
+	1       (00000002) iput                 v2, v3, LQueiD9ej/ezahS1gi/SOP4Uh0B;->A8xb I
+	2       (00000006) const/4              v0, 0
+	3       (00000008) iput                 v0, v3, LQueiD9ej/ezahS1gi/SOP4Uh0B;->UgmlJgeQci I
+
+run-BB@0xc : [ run-BB@0x14 run-BB@0x4e ]
+	4       (0000000c) iget                 v0, v3, LQueiD9ej/ezahS1gi/SOP4Uh0B;->A8xb I
+	5       (00000010) if-ne                v0, v2, +1f
+
+run-BB@0x14 : [ run-BB@0x18 ]
+	6       (00000014) const-wide/16        v0, 100 # [100.0]
+
+run-BB@0x18 : [ run-BB@0x1e ]
+	7       (00000018) invoke-static        v0, v1, Ljava/lang/Thread;->sleep(J)V
+	18:1d
+	(Ljava/lang/InterruptedException; -> 4a run-BB@0x4a)
+
+run-BB@0x1e : [ run-BB@0xc ]
+	8       (0000001e) iget-object          v0, v3, LQueiD9ej/ezahS1gi/SOP4Uh0B;->A8xb Landroid/os/Handler;
+	9       (00000022) invoke-virtual       v0, Landroid/os/Handler;->obtainMessage()Landroid/os/Message;
+	10      (00000028) move-result-object   v0
+	11      (0000002a) iget                 v1, v3, LQueiD9ej/ezahS1gi/SOP4Uh0B;->UgmlJgeQci I
+	12      (0000002e) iput                 v1, v0, Landroid/os/Message;->arg1 I
+	13      (00000032) iget-object          v1, v3, LQueiD9ej/ezahS1gi/SOP4Uh0B;->A8xb Landroid/os/Handler;
+	14      (00000036) invoke-virtual       v1, v0, Landroid/os/Handler;->sendMessage(Landroid/os/Message;)Z
+	15      (0000003c) iget                 v0, v3, LQueiD9ej/ezahS1gi/SOP4Uh0B;->UgmlJgeQci I
+	16      (00000040) add-int/lit8         v0, v0, 1
+	17      (00000044) iput                 v0, v3, LQueiD9ej/ezahS1gi/SOP4Uh0B;->UgmlJgeQci I
+	18      (00000048) goto                 -1e
+
+run-BB@0x4a : [ run-BB@0x1e ]
+	19      (0000004a) move-exception       v0
+	20      (0000004c) goto                 -17
+
+run-BB@0x4e : 
+	21      (0000004e) return-void          
+

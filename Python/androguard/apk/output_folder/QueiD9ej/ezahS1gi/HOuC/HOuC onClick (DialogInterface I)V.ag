@@ -1,0 +1,14 @@
+# LQueiD9ej/ezahS1gi/HOuC;->onClick(Landroid/content/DialogInterface; I)V [access_flags=public final]
+#
+# Parameters:
+# - local registers: v0...v1
+# - v2:android.content.DialogInterface
+# - v3:int
+#
+# - return:void
+
+onClick-BB@0x0 : 
+	0       (00000000) const/4              v0, 0
+	1       (00000002) invoke-static        v0, Ljava/lang/System;->exit(I)V
+	2       (00000008) return-void          
+

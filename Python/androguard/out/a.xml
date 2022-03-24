@@ -1,0 +1,29 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="7" android:versionName="1.4.2" package="com.gp.lights">
+  <application android:label="@7F060000" android:icon="@7F020001" android:description="@7F060003">
+    <activity android:label="@7F060000" android:name=".ALuces" android:screenOrientation="1">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <activity android:name=".AJuego" android:screenOrientation="1"/>
+    <activity android:label="@7F060001" android:name=".AHelp" android:screenOrientation="1"/>
+    <activity android:label="@7F060002" android:name=".AScores" android:screenOrientation="1"/>
+    <activity android:theme="@android:0103000F" android:name="cn.domob.android.ads.DomobActivity"/>
+    <activity android:label="@7F060000" android:name="com.adwo.adsdk.AdwoAdBrowserActivity"/>
+    <meta-data android:name="ADMOGO_KEY" android:value="d54f3319297749ad85347544ba51ea51"/>
+  </application>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+  <uses-sdk>
+    <minSdkVersion>2.1</minSdkVersion>
+  </uses-sdk>
+  <supports-screens android:anyDensity="true" android:smallScreens="true" android:normalScreens="true" android:largeScreens="true"/>
+</manifest>

