@@ -59,3 +59,16 @@ $("button").click(function(){
     });
 });
 ```
+
+
+## 2 GET JSON方法
+GET - 从指定的资源请求数据.GET 基本上用于从服务器获得（取回）数据。注释：GET 方法可能返回缓存数据。
+```
+$.getJSON(URL,callback);
+
+$("button").click(function(){
+  $.get("demo_test.php",function(data,status){
+    alert("数据: " + data + "\n状态: " + status);
+  });
+});
+```
