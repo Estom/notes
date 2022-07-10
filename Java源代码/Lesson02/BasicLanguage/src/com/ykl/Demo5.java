@@ -1,3 +1,4 @@
+package com.ykl;
 /**
  * @author ykl
  * @since 2022
@@ -7,7 +8,6 @@ public class Demo5 {
     /**
      *
      * @param args canshu
-     * @return 123
      */
     public static void main(String[] args) {
         int i = 128;

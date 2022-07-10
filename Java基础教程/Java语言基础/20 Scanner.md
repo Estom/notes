@@ -1,3 +1,21 @@
+## Scanner
+
+```java
+Scanner s = new Scanner(System.in);
+
+s.next();
+s.nextLine();
+
+s.hasNext();
+s.hasNextLine();
+
+//尽量关闭掉 
+s.close();
+```
+
+
+```java
+
 package com.ykl;
 
 import java.util.Scanner;
@@ -38,3 +56,4 @@ public class ScannerTest {
     }
 
 }
+```

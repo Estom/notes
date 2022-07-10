@@ -188,4 +188,9 @@
         "*.log",
         "*.fdb_latexmk"
     ],
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "java.project.sourcePaths": [
+        "Java源代码/Java1",
+        "Java源代码/Code1"
+    ],
 }

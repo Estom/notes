@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Launch Java01HelloWorld",
+            "request": "launch",
+            "mainClass": "Java01HelloWorld",
+            "projectName": "notes_ce5bf3ea"
+        },
+        {
             "name": "g++.exe - 生成和调试活动文件",
             "type": "cppdbg",
             "request": "launch",
