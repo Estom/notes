@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ConfPoetryConfig">
+    <option name="pathRules">
+      <list>
+        <option value=".*/config/[^/]+/[^/]+/((env)|(drm)|(log)|(meta)|(scheduler)|(serviceGroup)|(zdal)|(ci))/[^/]+" />
+        <option value=".*/config/[^/]+/dbSql/[^/]+" />
+        <option value=".*/conf/iac/[^/]+/((env)|(drm)|(log)|(meta)|(scheduler)|(serviceGroup)|(zdal)|(ci)|(sofamq)|(database))/[^/]+" />
+        <option value=".*/conf/iac/[^/]+/msg/(pub|sub)/[^/]+" />
+      </list>
+    </option>
+  </component>
+</project>

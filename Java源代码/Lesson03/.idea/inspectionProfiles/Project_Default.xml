@@ -1,0 +1,33 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="IncorrectHttpHeaderInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="customHeaders">
+        <set>
+          <option value="SOFA-Tenant" />
+          <option value="DRM-PushMode" />
+          <option value="DRM-DataFormat" />
+          <option value="DRM-Zones" />
+          <option value="DRM-Ips" />
+          <option value="DRM-Profiles" />
+          <option value="RPC-Url" />
+          <option value="RPC-UniqueId" />
+          <option value="RPC-SofaContext" />
+          <option value="RPC-SofaGroup" />
+          <option value="Scheduler-JobRunMode" />
+          <option value="Scheduler-Zone" />
+          <option value="Scheduler-JobAppName" />
+          <option value="MsgBroker-Type" />
+          <option value="MsgBroker-Zone" />
+          <option value="MsgBroker-PayloadClazz" />
+          <option value="MsgBroker-GroupId" />
+          <option value="MsgBroker-Dependencies" />
+          <option value="MsgBroker-Properties" />
+          <option value="MsgBroker-TargetNode" />
+          <option value="MsgBroker-ZoneUid" />
+          <option value="MsgBroker-DevGroup" />
+        </set>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
