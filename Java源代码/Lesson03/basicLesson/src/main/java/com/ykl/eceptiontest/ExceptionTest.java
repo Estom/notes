@@ -2,7 +2,7 @@
  * Alipay.com Inc.
  * Copyright (c) 2004-2022 All Rights Reserved.
  */
-package com.ykl;
+package com.ykl.eceptiontest;
 
 /**
  * @author yinkanglong

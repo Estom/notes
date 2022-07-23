@@ -2,7 +2,7 @@
  * Alipay.com Inc.
  * Copyright (c) 2004-2022 All Rights Reserved.
  */
-package com.ykl;
+package com.ykl.annotationtest;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,6 +14,4 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MyAnnotation {
     String getValue() default "no description";
-}
-public class MyAnnotation {
 }

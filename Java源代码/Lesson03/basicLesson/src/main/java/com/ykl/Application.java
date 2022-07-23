@@ -10,6 +10,13 @@ package com.ykl;
  */
 public class Application {
     public static void main(String[] args) {
+        String a = "test";
+        String b = "test";
+        String c = new String("test");
+        String d = new String("test");
+
+        System.out.println(a==b);
+        System.out.println(c==d);
         System.out.println("hello world");
 
 

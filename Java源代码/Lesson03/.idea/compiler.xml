@@ -8,8 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="web-project" />
         <module name="basicLesson" />
-        <module name="untitled" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="untitled" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
