@@ -22,6 +22,53 @@
 
 ## 2 使用
 
+```java
+
+import java.lang.Thread;
+ /**
+  * AnonymousClass
+  */
+ public class AnonymousClass {
+ 
+    private int a;
+
+    public static void main(String[] args){
+        new AnonymousClass().test(2);
+        // 成员内部类需要创建对象
+        AnonymousClass ac =  new AnonymousClass();
+        ac.new Inner().getName();
+        //静态内部类可以直接访问
+        new AnonymousClass.StaticInner().getName();
+    }
+
+    public class Inner{
+        public void getName(){
+            System.out.println("成员内部类");
+        }
+    }
+
+    public static class StaticInner{
+        public void getName(){
+            System.out.println("静态内部类");
+        }
+    } 
+
+    //事实证明匿名内部类必须访问final类型的变量，或者事实上final类型的变量。
+    public void test(final int a){
+        int b =10;
+        int c =11;
+        new Thread(){
+            public void run() {
+                System.out.println(a);
+                System.out.println(b);
+            }
+        }.start();
+        // b = 12;
+        System.out.print(b);
+    }
+
+ }
+```
 ### 成员内部类
 
 在类的内部方法的外部编写的类就是成员内部类。
@@ -430,7 +477,7 @@ final com.cxh.test2.Outter this$0;
 public com.cxh.test2.Outter$Inner(com.cxh.test2.Outter);
 ```
 
-从这里可以看出，虽然我们在定义的内部类的构造器是无参构造器，编译器还是会默认添加一个参数，该参数的类型为指向外部类对象的一个引用，所以成员内部类中的Outter this&0 指针便指向了外部类对象，因此可以在成员内部类中随意访问外部类的成员。从这里也间接说明了成员内部类是依赖于外部类的，如果没有创建外部类的对象，则无法对Outter this&0引用进行初始化赋值，也就无法创建成员内部类的对象了。、
+从这里可以看出，虽然我们在定义的内部类的构造器是无参构造器，编译器还是会默认添加一个参数，该参数的类型为指向外部类对象的一个引用，所以成员内部类中的Outter this&0 指针便指向了外部类对象，因此可以在成员内部类中随意访问外部类的成员。从这里也间接说明了成员内部类是依赖于外部类的，如果没有创建外部类的对象，则无法对Outter this&0引用进行初始化赋值，也就无法创建成员内部类的对象了。
 
 
 ### 局部内部类和匿名内部类只能访问局部final变量
@@ -515,3 +562,124 @@ public class Test {
 
 
 > 如果局部变量的值在编译期间就可以确定，则直接在匿名内部里面创建一个拷贝。如果局部变量的值无法在编译期间确定，则通过构造器传参的方式来对拷贝进行初始化赋值。
+
+### 静态内部类有特殊的地方吗？
+
+从前面可以知道，静态内部类是不依赖于外部类的，也就说可以在不创建外部类对象的情况下创建内部类的对象。另外，静态内部类是不持有指向外部类对象的引用的，这个读者可以自己尝试反编译class文件看一下就知道了，是没有Outter this&0引用的。
+
+
+## 4 常见的与内部类相关的笔试面试题
+
+### 根据注释填写(1)，(2)，(3)处的代码
+
+```java
+public class Test{
+    public static void main(String[] args){
+           // 初始化Bean1
+           (1)
+           bean1.I++;
+           // 初始化Bean2
+           (2)
+           bean2.J++;
+           //初始化Bean3
+           (3)
+           bean3.k++;
+    }
+    class Bean1{
+           public int I = 0;
+    }
+ 
+    static class Bean2{
+           public int J = 0;
+    }
+}
+
+class Bean{
+    class Bean3{
+           public int k = 0;
+    }
+}
+```
+
+从前面可知，对于成员内部类，必须先产生外部类的实例化对象，才能产生内部类的实例化对象。而静态内部类不用产生外部类的实例化对象即可产生内部类的实例化对象。
+
+**创建静态内部类对象的一般形式为： 外部类类名.内部类类名 xxx = new 外部类类名.内部类类名()**
+
+**创建成员内部类对象的一般形式为： 外部类类名.内部类类名 xxx = 外部类对象名.new 内部类类名()**
+
+因此，（1），（2），（3）处的代码分别为：
+
+```java
+Test test = new Test();    
+
+Test.Bean1 bean1 = test.new Bean1(); 
+```
+
+```java
+Test.Bean2 b2 = new Test.Bean2();   
+```
+
+```java
+Bean bean = new Bean();     
+
+Bean.Bean3 bean3 =  bean.new Bean3();   
+```
+
+### 下面这段代码的输出结果是什么？
+
+```java
+public class Test {
+    public static void main(String[] args)  {
+        Outter outter = new Outter();
+        outter.new Inner().print();
+    }
+}
+ 
+ 
+class Outter
+{
+    private int a = 1;
+    class Inner {
+        private int a = 2;
+        public void print() {
+            int a = 3;
+            System.out.println("局部变量：" + a);
+            System.out.println("内部类变量：" + this.a);
+            System.out.println("外部类变量：" + Outter.this.a);
+        }
+    }
+}
+```
+
+```shell
+3
+2
+1
+```
+
+最后补充一点知识：关于成员内部类的继承问题。一般来说，内部类是很少用来作为继承用的。但是当用来继承的话，要注意两点：
+
+1）成员内部类的引用方式必须为 Outter.Inner.
+
+2）构造器中必须有指向外部类对象的引用，并通过这个引用调用super()。这段代码摘自《Java编程思想》
+
+```java
+class WithInner {
+    class Inner{
+         
+    }
+}
+class InheritInner extends WithInner.Inner {
+      
+    // InheritInner() 是不能通过编译的，一定要加上形参
+    InheritInner(WithInner wi) {
+        wi.super(); //必须有这句调用
+    }
+  
+    public static void main(String[] args) {
+        WithInner wi = new WithInner();
+        InheritInner obj = new InheritInner(wi);
+    }
+}
+```
+

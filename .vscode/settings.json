@@ -190,7 +190,11 @@
     ],
     "java.format.settings.url": ".vscode/java-formatter.xml",
     "java.project.sourcePaths": [
-        "Java源代码/Java1",
-        "Java源代码/Code1"
+        "Java源代码/Lesson01",
+        "Java源代码/Lesson02",
+        "Java源代码/Lesson03",
+        "Java源代码/Lesson04",
+        "Java源代码/Lesson05",
+        "Java源代码/Lesson06"
     ],
 }
