@@ -1,0 +1,34 @@
+{
+    "limitStrategy": "QpsLimiter",
+    "actionConfig": {
+        "actionType": "LIMIT_EXCEPTION",
+        "responseContent": "授信调整限流"
+    },
+    "resourceConfigs": [
+        {
+            "method": "adjustCredit",
+            "paramRelation": "AND",
+            "interface": "com.antgroup.gfrcreditcore.facade.service.GfrCreditManageFacade",
+            "baseName": "com.antgroup.gfrcreditcore.facade.service.GfrCreditManageFacade.adjustCredit",
+            "resourceType": "METHOD"
+        },
+        {
+            "method": "clearOrgCredit",
+            "paramRelation": "AND",
+            "interface": "com.antgroup.gfrcreditcore.facade.service.GfrCreditManageFacade",
+            "baseName": "com.antgroup.gfrcreditcore.facade.service.GfrCreditManageFacade.clearOrgCredit",
+            "resourceType": "METHOD"
+        }
+    ],
+    "runMode": "CONTROL",
+    "calculationConfigs": [
+        {
+            "calculationType": "INVOKE_BY_TIME",
+            "period": "1000",
+            "trafficType": "ALL",
+            "maxAllow": "80"
+        }
+    ],
+    "desc": "授信调整/清退限流[SYNC:4800004]",
+    "resourceType": "METHOD"
+}

@@ -1,0 +1,4 @@
+ID      Name    php  	 Linux  	MySQL 	  Average
+1       AAA      66         66       66           66
+2       BBB      77         77       77           77
+3       CCC      88         88       88           88
