@@ -1,5 +1,6 @@
 > 详情参考
-> [](../Linux工具命令/awk.md)
+> [awk参考文档](../Linux工具命令/awk.md)
+> [awk常用函数](https://www.runoob.com/w3cnote/awk-built-in-functions.html)
 ## 1 awk基本使用
 
 ### 使用格式
