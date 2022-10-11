@@ -115,4 +115,98 @@ public class UserService {
     }
 ```
 
-### 增删查改业务的实现
+## 2 增删查改业务的实现
+
+### 基本业务实现
+* 增 jdbcTemplate.update()
+* 删 jdbcTemplate.update()
+* 改 jdbcTemplate.update()
+* 查
+  * 数量返回值 jdbcTemplate.queryForObject
+  * 单挑记录 jdbcTemplate.queryForObject
+  * 多条记录 jdbcTemplate.query
+
+```java
+
+@Repository
+public class UserDaoImpl implements UserDao {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Override
+    public int addUser(User user) {
+        String sql = "insert into user values(?,?,?)";
+        Object[] args = {user.getUserId(),user.getUsername(),user.getUserStatus()};
+
+        int update = jdbcTemplate.update(sql,args);
+        System.out.println(update);
+        return update;
+    }
+
+    @Override
+    public void updateUser(User user) {
+        String sql = "update user set username=?,userstatus=? where userid=?";
+        Object[] args = {user.getUsername(),user.getUserStatus(),user.getUserId()};
+
+        int update = jdbcTemplate.update(sql,args);
+        System.out.println(update);
+        return ;
+    }
+
+    @Override
+    public void delete(String id) {
+        String sql = "delete from user where userid=?";
+        Object[] args = {id,};
+
+        int update = jdbcTemplate.update(sql,args);
+        System.out.println(update);
+        return ;
+    }
+
+
+    /**
+     * 查询返回整数
+     * @return
+     */
+    @Override
+    public int selectCount(){
+        String sql = "select count(*) from user";
+        Integer count = jdbcTemplate.queryForObject(sql,Integer.class);
+        return count;
+    }
+
+    /**
+     * 查询返回单个记录
+     * @param id
+     * @return
+     */
+    @Override
+    public User findUserInfo(String id){
+        String sql = "select * from user where userid=?";
+        User user = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<User>(User.class),id);
+        return user;
+    }
+
+    @Override
+    public List<User> findAll() {
+        String sql = "select * from user";
+        List<User> users = jdbcTemplate.query(sql, new BeanPropertyRowMapper<User>(User.class));
+        return users;
+    }
+}
+```
+
+
+### 批量操作
+
+* 批量操作，依次遍历集合中的值，调用添加操作。
+
+```java
+    @Override
+    public void batchAdd(List<Object[]> batchArgs) {
+        String sql = "insert into user values(?,?,?)";
+        int [] ints = jdbcTemplate.batchUpdate(sql,batchArgs);
+        System.out.println(Arrays.toString(ints));
+    }
+```

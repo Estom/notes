@@ -1,6 +1,8 @@
 # Dockerfile
 
-## 1 DockerFile介绍
+## 1 DockerFile
+
+### 构建过程
 
 dockerfile是用来构建docker镜像文件！命令参数脚本
 
@@ -13,7 +15,6 @@ dockerfile是用来构建docker镜像文件！命令参数脚本
 dockerhub官方的镜像，会对应到github上一个仓库中的Dockerfile
 
 
-## 2 DockerFile构建过程
 
 ### 指令
 ```
@@ -37,7 +38,7 @@ ENV 构建的时候设置环境变量
 2. `#`表示注释
 3. 每一个指令都会创建提交一个新的镜像层，并提交
 
-### 构建过程
+### DockFile的作用
 ![](image/2022-10-09-22-01-02.png)
 
 dockerfile是面向开发的，发布项目、做镜像需要编写dockerfile。
@@ -130,11 +131,37 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 ### 实践：CMD和ENTRYPOINT
 
 
+1. 编写dockerfilefile
+
+```
+vim dockerfile-cmd-test
+FROM centos
+CMD ["ls","-a"]
+```
+2. 构建镜像
+```
+docker build -f dockerfile-cmd-test -t cmdtest
+```
+
+3. 运行镜像
+```
+docker run cmdtest
+```
+
+4. 测试镜像
+```
+发现CMD追加命令报错，发现ENTRYPOINT命令追加的命令是可以执行的。
+docker run cmtest  -l
+```
+
+
 ### 实践：制作tomcat镜像 
 
+> 更加复杂，日后补充
 
+## 2 发布自己的镜像
 
-### 发布自己的镜像
+### 发布自己的镜像到dockerhub
 
 > DockeHub
 
@@ -147,21 +174,19 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 ### 发布自己的镜像到阿里云
 
 1. 登录阿里云
+2. 申请仓库地址
+3. 登录到阿里云仓库
+4. docker push
 
-### docker save & docker load
+### 本地发布docker save & docker load
 
-将镜像保存压缩包
+1. 将镜像保存压缩包
 
-将压缩包加载为镜像
+2. 将压缩包加载为镜像
 
 ## 总结
 
 ![](image/2022-10-09-23-25-09.png)
-
-
-
-
-
 
 ### 简介
 
@@ -212,33 +237,3 @@ create table
 
 ![](image/2022-10-07-22-43-49.png)
 
-
-## 概念原理
-
-
-### docker volume数据卷操作
-
-```
- create      Create a volume
-  inspect     Display detailed information on one or more volumes
-  ls          List volumes
-  prune       Remove all unused local volumes
-  rm          Remove one or more volumes
-
-```
-* 查看所有的卷的情况
-```
-➜  data docker volume ls    
-DRIVER    VOLUME NAME
-local     635d632e8d79ad10168a6bd6b65ba5b67de68c38c63b619915b6d00db2bd1b4a
-local     0704fe09fca1d196b4d4f1cc14141ba05bae986d03ac1209f63ed1cca3d7bd7c
-local     924b3cbb61444c73191a11200c727b52f9ccc17dd27024bce61ba63a33577663
-
-# 这里发现的，就是匿名挂载。
-```
-### 匿名挂载
-
-```
-# 匿名挂载
-
-```
