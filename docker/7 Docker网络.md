@@ -25,6 +25,10 @@ vethc-pair技术，充当桥梁。
 
 ![](image/2022-10-10-22-33-15.png)
 
+
+> docker 本身提供了两种网络联通的方法。
+> * 一种是NAT端口多路复用（端口映射），通过-p/P参数，docker网络通过映射到宿主机网络的某个端口，使得宿主机外部的机器能够通过宿主机ip访问到docker中的服务。
+> * 另一种是Brige桥接模式，将两个
 ### 容器网络
 
 所有容器在不指定网络的情况下，使用docker0的地址做路由。
@@ -35,6 +39,7 @@ docker中的所有网络接口都是虚拟的，转发效率很高。
 
 ![](image/2022-10-11-00-06-31.png)
 
+![](image/2022-10-12-09-49-41.png)
 ## 2 补充知识
 
 ### --link名称解析
@@ -90,8 +95,46 @@ docker run -d -P --name tomcat01 --net mynet tomcat
 能够将容器加入到网络中
 docker network connnet mynet tomcat01
 ```
+* 查看docker网络
+```
+➜  notes git:(master) ✗ docker network inspect mynet
+[
+    {
+        "Name": "mynet",
+        "Id": "343a1bc0691ca6598e028c517613aba3317ee3267f5febd68f88f9d50f5f98c2",
+        "Created": "2022-10-11T14:41:58.831548151Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "192.168.0.0/16",
+                    "Gateway": "192.168.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+```
 
-
+* docker network create --driver bridge实际上是创建了一个桥接网络，也是创建了一个虚拟网桥。这个网桥负责连接宿主机和这容器网络。
+* 容器网络：所有容器组成网络的方式
+* 桥接网络：容器网络的一种格式。这个网络内的容器通过桥接模式连接到宿主机
+* 虚拟网桥：桥接网络中的概念，用来连接两个网络。
+* 虚拟网卡veth pair：桥接网络中的概念，一对虚拟网卡设备连接到虚拟网桥。
 
 ## 4 实战：Redis集群
 
