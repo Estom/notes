@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--开启组件扫描
+        1. 如果扫描多个包，多个包之间使用逗号隔开
+        2. 扫描包的上层目录-->
+    <context:component-scan base-package="com.ykl"></context:component-scan>
+
+    <!--引入外部属性文件-->
+<!--    <context:property-path path="classpath:jdbc.properties"/>-->
+
+<!--    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">-->
+<!--        <property name="driverClassName" value="${prop.driverClass}"></property>-->
+<!--        <property name="url" value="${prop.url}"></property>-->
+<!--        <property name="username" value="${prop.username}"></property>-->
+<!--        <property name="password" value="${prop.password}"></property>-->
+<!--    </bean>-->
+
+    <!--引入数据库连接-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost:3310/user"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="123456"></property>
+    </bean>
+
+    <!--创建jdbctemplate对象-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <!--注入参数-->
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+
+</beans>
+

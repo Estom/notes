@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--创建对象-->
+    <bean id="book" class="com.ykl.aopxml.Book"></bean>
+    <bean id="bookProxy" class="com.ykl.aopxml.BookProxy"></bean>
+
+    <aop:config>
+        <!--切入点配置-->
+        <aop:pointcut id="p" expression="execution(* com.ykl.aopxml.Book.add(..))"></aop:pointcut>
+        <!--切面配置-->
+        <aop:aspect ref="bookProxy">
+            <aop:before method="before" pointcut-ref="p"></aop:before>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
+
