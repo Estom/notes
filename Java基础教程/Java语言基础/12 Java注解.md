@@ -13,10 +13,11 @@ public @interface 注解名称{
 ```
 
 ### 分类
-根据其定义者的角色可以分为以下三种：
-1. 标准注解：JDK内置的注解
-2. 自定义注解：用户自定义的注解
-3. 第三方框架提供的注解
+根据其定义者的角色可以分为以下四种种：
+1. 元注解：修饰注解的注解
+2. 标准注解：JDK内置的注解
+3. 框架注解：第三方框架提供的注解
+4. 自定义注解：用户自定义的注解
 
 
 > 还可以根据其出现的位置分为类、方法、变量和形参的注解。也可以其作用范围分为标准注解、元注解、自定义注解。
@@ -299,14 +300,104 @@ public class Demo {
 一种信息性注解类型，用于指示接口类型声明旨在成为 Java 语言规范定义的功能接口。从概念上讲，函数式接口只有一个抽象方法。由于默认方法有一个实现，它们不是抽象的。如果接口声明了一个覆盖java.lang.Object的公共方法之一的抽象方法，这也不会计入接口的抽象方法计数，因为接口的任何实现都将具有来自java.lang.Object或其他地方的实现(接口的实现是类,所有类的父类都是Object)。
 请注意，函数式接口的实例可以使用 lambda 表达式、方法引用或构造函数引用来创建。
 如果使用此注解类型对类型进行注解，则编译器需要生成错误消息，除非：
-该类型是接口类型，而不是注解类型、枚举或类。
-带注解的类型满足功能接口的要求。
+* 该类型是接口类型，而不是注解类型、枚举或类。
+* 带注解的类型满足功能接口的要求。
+
 但是，无论接口声明中是否存在FunctionalInterface注释，编译器都会将满足功能接口定义的任何接口视为功能接口。
-
-
 
 ​ 在学习Lambda表达式时，我们了解过函数式接口（接口中只有个一个抽象方法可以存在多个默认方法或多个static方法）。
 
 @FunctionalInterface作用就是用来指定某一个接口必须是函数式接口的，所以@FunctionalInterface只能修饰接口。
 
+
+## 4 Spring框架下一个注解的实现
+> 定义注解、使用注解、实现注解。和定义接口、使用接口、实现接口。与OpenApi中定义服务、使用服务、实现服务。具有相同的含义。
+
+
+### 登录校验——定义注解
+模拟是否需要进行登录校验；如果方法中加上了@LoginRequired注解表示方法需要登录校验，如果没加则不需要。定义一个
+```java
+@LoginRequired注解
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public@interface LoginRequired {
+    
+}
+```
+### 登录校验——使用注解
+
+定义两个简单接口，其中一个添加@LoginRequired注解表示需要登录校验
+```java
+@RestController
+public class UserController {
+    @GetMapping("/login1")
+    public TransDTO login1(){
+        return new TransDTO<>().withMessage("访问login1成功").withCode(HttpStatus.OK.value());
+    }
+    
+    @LoginRequired
+    @GetMapping("/login2")
+    public TransDTO login2(){
+        return new TransDTO<>().withMessage("访问login2成功").withCode(HttpStatus.OK.value());
+    }
+}
+```
+
+### 登录校验——实现注解
+
+自定义拦截器。通过拦截器和反射，实现注解的处理逻辑。
+```java
+@Configuration
+public class MyInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("访问了过滤器！");
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        LoginRequired annotation = handlerMethod.getMethod().getAnnotation(LoginRequired.class);
+        if(annotation != null){
+            //全局异常处理会进行处理
+            throw new BusinessException("访问失败，您没有权限访问！");
+        }
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws         Exception {
+
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception     {
+
+    }
+}
+```
+
+配置拦截路径
+```java
+@Configuration
+public class InterceptorTrainConfigurer implements WebMvcConfigurer {
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**");
+    }
+}
+```
+
+全局异常处理
+```java
+@RestControllerAdvice
+public class MyExceptionAdvice {
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.OK)
+    public TransDTO handleException(HttpServletRequest request,Exception e){
+        e.printStackTrace();
+        return new TransDTO().withCode(500).withSuccess(false).withMessage(e.getMessage());
+    }
+}
+```
+
+自定义注解的场景有很多，比如登录、权限拦截、日志、以及各种框架。java注解对于性能有较大的影响，但可用于软件的架构设计，实现动态加载，对于分解复杂业务有帮助。
+
+### Spring框架下的另一个实现
 
