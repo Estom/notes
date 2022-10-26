@@ -1,0 +1,18 @@
+hhhhhello 
+world
+world
+world
+world
+this is my first vim command;
+pppp
+hello 
+"hello"hello 
+new line insert
+world
+pppp
+pppp
+hello 
+ihello i am  vim command;
+pppp
+hello 
+

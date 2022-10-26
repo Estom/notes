@@ -1,8 +1,15 @@
 ## 1 概述
 
 ### 基本概念
+JSR(Java Specification Request)-Java规范提案
 
-java.ws.rs是jax-rs规范中定义的包名。jax-rs全称Java API for RESTful Services。jax-rs规范目前版本是2.0规范文档
+jax-rs对应JSR370。jax-rs全称Java API for RESTful Services。
+
+java.ws.rs是jax-rs规范中定义的包名。
+
+
+
+
 
 jax-rs中定义了
 * 一组启动方式 (以jee作为http容器 还是配合servlet作为http容器)
@@ -16,6 +23,7 @@ jax-rs中定义了
 * Restlet 由Jerome Louvel和Dave Pawson开发 是最早的REST框架 先于JAX-RS出现
 * Apache Wink 一个Apache软件基金会孵化器中的项目 其服务模块实现JAX-RS规范
 
+### JSR
 ## 2 注解
 ### @Path 
 注解位置 类注解 方法注解
