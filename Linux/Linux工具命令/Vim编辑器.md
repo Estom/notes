@@ -1,7 +1,7 @@
 # vim编辑器
 
 ![](image/vi-vim-cheat-sheet-sch.gif)
-
+![](image/2022-10-26-20-54-56.png)
 ## 1 vi/vim三种模式
 基本上 vi/vim 共分为三种模式，分别是命令模式（Command mode），输入模式（Insert mode）和底线命令模式（Last line mode）。 这三种模式的作用分别是：
 
