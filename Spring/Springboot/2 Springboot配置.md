@@ -97,3 +97,9 @@ server.port=8888
    2. 可以修改SpringbootApplication注解参数中的扫描路径。或者ComponentScan注解。
 3. .properties中的文件是绑定到具体的Java类的。这些类会在容器中创建指定的对象。
 4. 按需加载所有的自动配置，自动配置都在spring-boot-autoconfigure包中
+
+
+
+@ConfigurationProperties简介
+@ConfigurationProperties是springboot提供读取配置文件的一个注解。
+它是实现了BeanPostProcessor接口，在bean被实例化后，会调用后置处理，递归的查找属性，通过反射注入值，对大多数属性而言强制需提供其setter和getter方法。
