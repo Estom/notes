@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-dependencies</artifactId>
+    <version>2.6.2</version>
+  </parent>
+  <groupId>com.ykl</groupId>
+  <artifactId>project03-maven-test</artifactId>
+  <version>0.0.1-snapshot</version>
+
+  <!-- 打包方式改为pom表示是一个parent工程 -->
+  <packaging>pom</packaging>
+  <name>project03-maven-test</name>
+  <url>http://maven.apache.org</url>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <!-- 聚合的配置 -->
+  <modules>
+    <module>project04-maven-moduele</module>
+    <module>project05-maven-moduele</module>
+    <module>project06-maven-moduele</module>
+  </modules>
+
+  <properties>
+    <com.ykl.hello>temp</com.ykl.hello>
+    <com.ykl.world>world</com.ykl.world>
+  </properties>
+  <!-- 在付工程中统一管理依赖信息 -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.spingframwork</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>4.0.0.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>4.0.0.RELEASE</version>
+      </dependency>
+      <dependency>
+         <artifactId>spring-context</artifactId>
+         <groupId>org.springframework</groupId>
+         <version>4.0.0.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-expression</artifactId>
+        <version>4.0.0.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>4.0.0.RELEASE</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
