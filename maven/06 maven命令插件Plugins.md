@@ -85,7 +85,7 @@ mvn archetype:generate -DgroupId=com.ykl -DartifactId=project04-maven-import -Da
 
 
 
-### mvn差价dependcy:依赖管理和分析
+### dependcy:依赖管理和分析
 
 
 * 查看依赖列表

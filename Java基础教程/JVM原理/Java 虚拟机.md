@@ -30,6 +30,9 @@
 <!-- GFM-TOC -->
 
 
+十四、Java 虚拟机Java 内存结构堆栈垃圾回收JVM 内存区域Java 虚拟机栈class 文件字节码指令JVM 参数调优Java 对象模型HotSpot类加载机制编译和反编译反编译工具（javap）JIT虚拟机性能监控和故障处理工具（jps、jstack、jmap、jstat、jconsole、javap）
+https://link.zhihu.com/?target=https%3A//www.bilibili.com/video/BV1DJ411B7cG%3Ffrom%3Dsearch%26seid%3D1705641531822657605
+
 本文大部分内容参考   **周志明《深入理解 Java 虚拟机》**  ，想要深入学习的话请看原书。
 
 ## 一、运行时数据区域

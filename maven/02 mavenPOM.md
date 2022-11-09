@@ -5,13 +5,12 @@ POM( Project Object Model，项目对象模型 ) 是 Maven 工程的基本工作
 
 pom.xml 项目模型对象文件。POM 中可以指定以下配置：
 
-* 项目依赖
-* 插件：执行目标
-* 项目构建 profile
-* 项目版本
-* 项目开发者列表
-* 相关邮件列表信息
-
+* 坐标GAV、Name、pakage、author
+* 项目依赖 dependencies/dependency
+* 项目模块 modules/module
+* 项目集成 parent
+* 项目构建 build、plugins/plugin
+* 配置文件 profiles/profile
 
 ### pom工程之间的关系
 * 在dependency中的依赖关系。
@@ -162,11 +161,43 @@ Maven工程之间，A工程继承B工程
 
     ${com.ykl.spring.version}
 ```
+
 ### 实际意义
 
 ![](image/2022-11-05-21-14-18.png)
 
 * 梳理出一整套版本之间依赖的方案。与我们的火车头版本很想，会总结出一套可以相互兼容没有问题的中间件的合集。
+
+### 继承内容
+
+父POM中的大多数元素都能被子POM继承，这些元素包含：
+
+```
+groupId
+version
+description
+url
+inceptionYear
+organization
+licenses
+developers
+contributors
+mailingLists
+scm
+issueManagement
+ciManagement
+properties
+dependencyManagement
+dependencies
+repositories
+pluginRepositories
+build
+plugin executions with matching ids
+plugin configuration
+etc.
+reporting
+profiles
+```
 
 ## 4 聚合关系modules
 

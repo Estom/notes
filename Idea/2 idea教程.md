@@ -21,11 +21,16 @@
 
 ### 工程组织
 > file-project structure。command+;
-* project整个工程，可以直接添加代码，也可以创建模块后，添加代码。
-* module大型项目可以分为很多模块，相互间彼此依赖。先删除模块，再删除模块中的文件。
-* Libraries 项目以来的jar包或者第三方库
-* facet
-* artifact
+* Project整个工程，可以直接添加代码，也可以创建模块后，添加代码。能够配置sdk的版本。
+![](image/2022-11-09-16-49-29.png)
+* Module大型项目可以分为很多模块，相互间彼此依赖。先删除模块，再删除模块中的文件。与Facets对应
+![](image/2022-11-09-16-49-58.png)
+* Libraries 项目以来的jar包或者第三方库。
+![](image/2022-11-09-16-50-42.png)
+* Facets 英文翻译为：方面，（事务的）面。表述了在Module中使用的各种各样的框架、技术和语言。这些Facets让IDEA知道怎么对待module内容，并保证与相应的框架和语言保持一致。
+![](image/2022-11-09-16-52-30.png)
+* Artifacts 英文翻译为：人工产品。是一个项目资源的组合体。例如，一个已编译的java类的集合，一个已打包的java应用。这里可以理解为Maven中的artifactId，成果产物ID，他可以是一个jar或是一个war。
+![](image/2022-11-09-16-53-54.png)
 
 ### preference设置
 * 外观和行为

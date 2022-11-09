@@ -45,6 +45,9 @@
 
 ## 0 引言
 
+> 本笔记主要介绍java提供的语言级别的支持，不包括标准库的内容。
+
+
 ### Java特性和优势
 
 > write once run anywhere
