@@ -6,17 +6,21 @@
     - [原理](#原理)
   - [2 注解使用](#2-注解使用)
     - [注解的实现原理](#注解的实现原理)
-    - [元注解](#元注解)
     - [注解的使用步骤](#注解的使用步骤)
     - [属性的数据类型及特别的属性：value和数组](#属性的数据类型及特别的属性value和数组)
     - [总结](#总结)
-  - [3 JDK中的标准注解](#3-jdk中的标准注解)
+  - [3 元注解](#3-元注解)
+    - [@Target](#target)
+    - [@Retention](#retention)
+    - [@Documented](#documented)
+    - [@Inherited](#inherited)
+  - [4 JDK中的标准注解](#4-jdk中的标准注解)
     - [@Override](#override)
     - [@Deprecated](#deprecated)
     - [@SuppressWarnings](#suppresswarnings)
     - [@SafeVarargs](#safevarargs)
     - [@FunctionalInterface](#functionalinterface)
-  - [4 Spring框架下一个注解的实现](#4-spring框架下一个注解的实现)
+  - [5 Spring框架下一个注解的实现](#5-spring框架下一个注解的实现)
     - [登录校验——定义注解](#登录校验定义注解)
     - [登录校验——使用注解](#登录校验使用注解)
     - [登录校验——实现注解](#登录校验实现注解)
@@ -120,16 +124,6 @@ public @interface MyAnnotation{
 ```
 
 
-
-### 元注解
-
-加在注解上的注解。
-
-* @Documented：用于制作文档
-* @Target：加在注解上，限定该注解的使用位置。`@Target(ElementType.Field,ElementType.Method)`。它指明了它所修饰的注解使用的范围 如果自定义的注解为含有@Target元注解修饰，那么默认可以是在（除类型参数之外的）任何项之上使用，若有@Target元注解修饰那么根据Value（ElementType枚举常量）的指定的目标进行规定。
-* @Retention：注解的保留策略`@Retention(RetentionPolicy.CLASS/RetentionPolicy.RUNTIME/RetentionPolicy.SOURCE)`。分别对应java编译执行过程的三个阶段。源代码阶段.java-->编译后的字节码阶段.class-->JVM运行时阶段.
-  * 一般来说，普通开发者使用注解的时机都是运行时，比如反射读取注解（也有类似Lombok这类编译期注解）。既然反射是运行时调用，那就要求注解的信息必须保留到虚拟机将.class文件加载到内存为止。如果你需要反射读取注解，却把保留策略设置为RetentionPolicy.SOURCE、RetentionPolicy.CLASS
-* @Inherited：被该元注解修饰的自定义注解再使用后会自动继承，如果使用了该自定义注解去修饰一个class那么这个注解也会作用于该class的子类。就是说如果某个类使用了被@Inherited修饰的注解，则其子类将会自动具有该注释。@Inherited annotation类型是被标注过的class的子类所继承。类并不从它所实现的接口继承annotation，方法并不从它所重载的方法继承annotation。
 
 
 ### 注解的使用步骤
@@ -276,7 +270,38 @@ public class Demo {
 ![](image/2022-07-12-10-04-38.png)
 
 
-## 3 JDK中的标准注解
+## 3 元注解
+
+加在注解上的注解。
+
+### @Target
+
+加在注解上，限定该注解的使用位置,它指明了它所修饰的注解使用的范围。@Target元注解修饰那么根据Value（ElementType枚举常量）的指定的目标进行规定。
+
+* @Target(ElementType.TYPE)   //接口、类、枚举
+* @Target(ElementType.FIELD) //字段、枚举的常量
+* @Target(ElementType.METHOD) //方法
+* @Target(ElementType.PARAMETER) //方法参数
+* @Target(ElementType.CONSTRUCTOR)  //构造函数
+* @Target(ElementType.LOCAL_VARIABLE)//局部变量
+* @Target(ElementType.ANNOTATION_TYPE)//注解
+* @Target(ElementType.PACKAGE) ///包 
+
+### @Retention
+注解的保留策略`@Retention(RetentionPolicy.CLASS/RetentionPolicy.RUNTIME/RetentionPolicy.SOURCE)`。分别对应java编译执行过程的三个阶段。源代码阶段.java-->编译后的字节码阶段.class-->JVM运行时阶段.
+  * 一般来说，普通开发者使用注解的时机都是运行时，比如反射读取注解（也有类似Lombok这类编译期注解）。既然反射是运行时调用，那就要求注解的信息必须保留到虚拟机将.class文件加载到内存为止。如果你需要反射读取注解，却把保留策略设置为RetentionPolicy.SOURCE、RetentionPolicy.CLASS
+
+
+
+### @Documented
+
+用于制作文档
+
+### @Inherited
+
+被该元注解修饰的自定义注解再使用后会自动继承，如果使用了该自定义注解去修饰一个class那么这个注解也会作用于该class的子类。就是说如果某个类使用了被@Inherited修饰的注解，则其子类将会自动具有该注释。@Inherited annotation类型是被标注过的class的子类所继承。类并不从它所实现的接口继承annotation，方法并不从它所重载的方法继承annotation。
+
+## 4 JDK中的标准注解
 
 ### @Override
 
@@ -336,7 +361,7 @@ public class Demo {
 @FunctionalInterface作用就是用来指定某一个接口必须是函数式接口的，所以@FunctionalInterface只能修饰接口。
 
 
-## 4 Spring框架下一个注解的实现
+## 5 Spring框架下一个注解的实现
 > 定义注解、使用注解、实现注解。和定义接口、使用接口、实现接口。与OpenApi中定义服务、使用服务、实现服务。具有相同的含义。
 
 

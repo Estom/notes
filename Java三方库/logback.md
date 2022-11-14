@@ -1,21 +1,20 @@
-
 ## 1 简介
 
 ### 日志组件
 
-logback是一个开源的日志组件，是log4j的作者开发的用来替代log4j的。logback由三个部分组成，logback-core, logback-classic, logback-access。
+logback 是一个开源的日志组件，是 log4j 的作者开发的用来替代 log4j 的。logback 由三个部分组成，logback-core, logback-classic, logback-access。
 
-* 其中logback-core是其他两个模块的基础。
-* logback-classic：它是log4j的一个改良版本，同时它完整实现了slf4j API，使我们可以在其他日志系统，如log4j和JDK14 Logging中进行转换
-* logback-access：访问模块和Servlet容器集成，提供通过Http来访问日志的功能
-
+- 其中 logback-core 是其他两个模块的基础。
+- logback-classic：它是 log4j 的一个改良版本，同时它完整实现了 slf4j API，使我们可以在其他日志系统，如 log4j 和 JDK14 Logging 中进行转换
+- logback-access：访问模块和 Servlet 容器集成，提供通过 Http 来访问日志的功能
 
 ### 日志级别
+
 级别包括：TRACE < DEBUG < INFO < WARN < ERROR
 
 ### 配置流程
 
-1. 添加maven依赖
+1. 添加 maven 依赖
 2. 查找配置文件。logback-spring.xml、logback.xml、BasicConfigurator。
 3. 加载配置内容。configuration
 
@@ -25,7 +24,7 @@ logback是一个开源的日志组件，是log4j的作者开发的用来替代lo
 </configuration>
 ```
 
-### maven依赖
+### maven 依赖
 
 ```xml
 <!--log-->
@@ -47,35 +46,31 @@ logback是一个开源的日志组件，是log4j的作者开发的用来替代lo
 </dependency>
 ```
 
-
-
 ## 2 配置内容
 
 ### configuration
+
 日志配置的根节点
 
 ```
 <configuration></configuration>
 ```
 
-
 ### contextName
 
-<contextName>是<configuration>的子节点。各个logger都被关联到一个loggerContext中，loggerContext负责制造logger，也负责以树结构排列个logger。
-
-
+<contextName>是<configuration>的子节点。各个 logger 都被关联到一个 loggerContext 中，loggerContext 负责制造 logger，也负责以树结构排列个 logger。
 
 ```
 <contextName>atguiguSrb</contextName>
 ```
+
 ### property
 
 <property>是<configuration>的子节点，用来定义变量。
 
-<property> 有两个属性，name和value：name的值是变量的名称，value是变量的值。
+<property> 有两个属性，name 和 value：name 的值是变量的名称，value 是变量的值。
 
-通过<property>定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量。
-
+通过<property>定义的值会被插入到 logger 上下文中。定义变量后，可以使“${}”来使用变量。
 
 ```xml
 <!-- 日志的输出目录 -->
@@ -100,16 +95,17 @@ logback是一个开源的日志组件，是log4j的作者开发的用来替代lo
 ```
 
 ### appender
-`<appender>`是`<configuration>`的子节点，是负责写日志的组件.主要用于指定日志输出的目的地，目的地可以是控制台、文件、远程套接字服务器、MySQL、PostreSQL、Oracle和其他数据库、JMS和远程UNIX Syslog守护进程等。
 
-不同的appender有不同的属性可以配置
+`<appender>`是`<configuration>`的子节点，是负责写日志的组件.主要用于指定日志输出的目的地，目的地可以是控制台、文件、远程套接字服务器、MySQL、PostreSQL、Oracle 和其他数据库、JMS 和远程 UNIX Syslog 守护进程等。
 
+不同的 appender 有不同的属性可以配置
 
 ### ConsoleAppender
-* `<appender>`有两个必要属性name和class：name指定appender名称，class指定appender的全限定名
-* `<encoder>`对日志进行格式化
-  * `<pattern>`定义日志的具体输出格式
-  * `<charset>`编码方式
+
+- `<appender>`有两个必要属性 name 和 class：name 指定 appender 名称，class 指定 appender 的全限定名
+- `<encoder>`对日志进行格式化
+  - `<pattern>`定义日志的具体输出格式
+  - `<charset>`编码方式
 
 ```xml
 <!-- 控制台日志 -->
@@ -120,12 +116,20 @@ logback是一个开源的日志组件，是log4j的作者开发的用来替代lo
         <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         <charset>${ENCODING}</charset>
     </encoder>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        <level>${logging.level}</level>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>ERROR</level>
+        <onMatch>DENY</onMatch>
+    </filter>
 </appender>
 ```
 
 输出模式说明
-* 输出模式：%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n 
-* 输出模式解释：时间日期格式-调用的线程-日志界别-调用对象-日志信息-换行
+
+- 输出模式：%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n
+- 输出模式解释：时间日期格式-调用的线程-日志界别-调用对象-日志信息-换行
 
 ```
 %d{HH:mm:ss.SSS}：日志输出时间（red）
@@ -136,10 +140,14 @@ logback是一个开源的日志组件，是log4j的作者开发的用来替代lo
 %n：平台的换行符
 ```
 
+过滤器说明
+* filter可以过滤指定级别的日志进行打印
+
 ### FileAppender
 
-* `<file>`表示日志文件的位置，如果上级目录不存在会自动创建，没有默认值。\
-* `<append>`默认 true，日志被追加到文件结尾，如果是 false，服务重启后清空现存文件。
+- `<file>`表示日志文件的位置，如果上级目录不存在会自动创建，没有默认值。\
+- `<append>`默认 true，日志被追加到文件结尾，如果是 false，服务重启后清空现存文件。
+
 ```xml
 <!-- 文件日志 -->
 <appender name="FILE" class="ch.qos.logback.core.FileAppender">
@@ -153,14 +161,15 @@ logback是一个开源的日志组件，是log4j的作者开发的用来替代lo
 ```
 
 ### RollingFileAppender
+
 表示滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将旧日志备份到其他文件
 
-* `<rollingPolicy>`是`<appender>`的子节点，用来定义滚动策略。
+- `<rollingPolicy>`是`<appender>`的子节点，用来定义滚动策略。
 
-* TimeBasedRollingPolicy：最常用的滚动策略，根据时间来制定滚动策略。
+- TimeBasedRollingPolicy：最常用的滚动策略，根据时间来制定滚动策略。
 
-* `<fileNamePattern>`：包含文件名及转换符， “%d”可以包含指定的时间格式，如：%d{yyyy-MM-dd}。如果直接使用 %d，默认格式是 yyyy-MM-dd。
-* `<maxHistory>`：可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件。假设设置每个月滚动，且`<maxHistory>`是6，则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除。
+- `<fileNamePattern>`：包含文件名及转换符， “%d”可以包含指定的时间格式，如：%d{yyyy-MM-dd}。如果直接使用 %d，默认格式是 yyyy-MM-dd。
+- `<maxHistory>`：可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件。假设设置每个月滚动，且`<maxHistory>`是 6，则只保存最近 6 个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除。
 
 ```xml
 <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -178,21 +187,92 @@ logback是一个开源的日志组件，是log4j的作者开发的用来替代lo
         <maxHistory>15</maxHistory>
     </rollingPolicy>
 
+   <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <fileNamePattern>${log_path}/userlog-%d{yyyyMMddHHmm}-%i.log</fileNamePattern>
+        <maxFileSize>300KB</maxFileSize>
+        <maxHistory>60</maxHistory>
+    </rollingPolicy>
 
 </appender>
 ```
 
-* 放在`<rollingPolicy>`的子节点的位置，基于实践策略的触发滚动策略`<maxFileSize>`设置触发滚动条件：单个文件大于100M时生成新的文件
+- 放在`<rollingPolicy>`的子节点的位置，基于实践策略的触发滚动策略`<maxFileSize>`设置触发滚动条件：单个文件大于 100M 时生成新的文件
+
+### AsyncAppender
+
+```
+    <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
+        <!--指定某个具体的Appender实现-->
+        <appender-ref ref="rolling"/>
+    </appender>
+```
+
+### SiftingAppender
+之前在介绍常用appender时已经记录过了，SiftingAppender可用于根据给定的运行时属性来分离(或筛选)日志记录。
+
+比如：可以按照业务功能生成独立的日志文件、按照用户会话id为每个用户生成独立的日志文件等。
+
+按照业务功能生成独立的日志文件
+上面我们通过为每个业务类配置<logger>的方式，实现了按照业务功能生成独立的日志文件，下面我们使用SiftingAppender来实现此功能，代码如下：
+
+修改下UserService：
+```java
+@Service
+public class UserService {
+ 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+ 
+    public void testLogger() throws InterruptedException {
+        for (int i = 0; i < 10; i++) {
+            Thread.sleep(2);
+            MDC.put("logKey","userLog"); // logKey设置值后在logback.xml中使用
+            logger.info("user logger!" + i);
+        }
+    }
+```
+
+```xml
+ <property name="log_path" value="D:/logs"/>
+ 
+    <appender name="SIFTING" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>logKey</key> <!-- logKey对应 MDC 中设置的值 -->
+            <defaultValue>general</defaultValue><!-- 设置的默认值 -->
+        </discriminator>
+        <sift>
+            <appender name="FILE-${logKey}"
+                      class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <!-- ${logKey}取出 MDC 中设置的值 -->
+                <file>${log_path}/db/${logKey}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>${log_path}/db/${logKey}.%d{yyyyMMddHHmm}.log</fileNamePattern>
+                    <maxHistory>60</maxHistory>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+ 
+    <root level="DEBUG">
+        <appender-ref ref="SIFTING" />
+    </root>
+```
 
 ### logger
 
 `<logger>`可以是`<configuration>`的子节点，用来设置日志打印级别、指定`<appender>`
 
+- name：用来指定受此 logger 约束的某一个包或者具体的某一个.
+- level：用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF。默认继承上级的级别。logger 日志级别。级别包括：TRACE < DEBUG < INFO < WARN < ERROR，定义于 ch.qos.logback.classic.Level 类中。
+- `<logger>`可以包含零个或多个`<appender-ref>`元素，标识这个 appender 将会添加到这个 logger
 
-* name：用来指定受此logger约束的某一个包或者具体的某一个.
-* level：用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF。默认继承上级的级别
-* logger日志级别。级别包括：TRACE < DEBUG < INFO < WARN < ERROR，定义于ch.qos.logback.classic.Level类中。如果logger没有被分配级别，name它将从有被分配级别的最近的父类那里继承级别，root logger默认级别是DEBUG。
-* `<logger>`可以包含零个或多个`<appender-ref>`元素，标识这个appender将会添加到这个logger
+
+logger继承问题
+* 根据name进行继承。name=com.ykl 继承了name=com继承了root
+* 继承上级日志级别。logger 没有被分配级别，name 它将从有被分配级别的最近的父类那里继承级别，root logger 默认级别是 DEBUG。
+* 向上传递日志信息。类似于拦截器，拦截到消息后是否会放回additivity="false"表示不放回。additivity="true"表示放回。root能够截取所有的消息。
 
 ```xml
 <!-- 日志记录器  -->
@@ -202,7 +282,23 @@ logback是一个开源的日志组件，是log4j的作者开发的用来替代lo
 </logger>
 ```
 
-* logger的取得：通过org.slf4j.LoggerFactory的getLogger()方法取得。getLogger(Class obj)方式是通过传入一个类的形式来进行logger对象和类的绑定；getLogger(String name)方式是通过传入一个contextName的形式来指定一个logger，用同一个名字调用该方法获取的永远都是同一个logger对象的引用。
+- logger 的取得：通过 org.slf4j.LoggerFactory 的 getLogger()方法取得。getLogger(Class obj)方式是通过传入一个类的形式来进行 logger 对象和类的绑定；getLogger(String name)方式是通过传入一个 contextName 的形式来指定一个 logger，用同一个名字调用该方法获取的永远都是同一个 logger 对象的引用。
+
+### root
+
+配置默认的日志打印
+
+也是<loger>元素，但是它是根loger。只有一个level属性，应为已经被命名为"root".
+level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，不能设置为INHERITED或者同义词NULL。默认是DEBUG。
+
+* 没有设置addtivity，默认为true，将此loger的打印信息向上级传递；
+
+```xml
+    <root level="ALL">
+        <appender-ref ref="async"></appender-ref>
+    </root>
+```
+
 ## 3 配置文件
 
 ### 配置文件实例
