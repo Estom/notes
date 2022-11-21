@@ -385,3 +385,26 @@ public static void main(String[] args) {
         map.forEach((key,value)-> System.out.println("key:"+key+"value:"+value));
     }
 ```
+
+
+## 5 jdk中的函数式接口
+
+```java
+@FunctionalInterface
+public interface Runnable {
+    /**
+     * When an object implementing interface <code>Runnable</code> is used
+     * to create a thread, starting the thread causes the object's
+     * <code>run</code> method to be called in that separately executing
+     * thread.
+     * <p>
+     * The general contract of the method <code>run</code> is that it may
+     * take any action whatsoever.
+     *
+     * @see     java.lang.Thread#run()
+     */
+    public abstract void run();
+}
+```
+
+jdk中任意地方可以接收该接口的对象。是一个标准的无参、无返回值的函数。传入任何无参无返回值的函数即可执行。
