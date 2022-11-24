@@ -1,0 +1,584 @@
+# 属性配置文件
+
+> * bean配置文件：spring配置bean的文件。
+>   * java配置文件，通过@Configuration加载
+>   * 原生配置文件，xml定义的配置文件
+> * 属性配置文件：spring配置key-value的文件
+
+## 1 properties配置文件
+
+### properties默认配置文件
+用于配置容器端口名、数据库链接信息、日志级别。pom是项目编程的配置，properties是软件部署的配置。
+
+移除特殊字符、全小写。在环境变量中通过小写转换与.替换_来映射配置文件中的内容，比如：环境变量SPRING_JPA_DATABASEPLATFORM=mysql的配置会产生与在配置文件中设置spring.jpa.databaseplatform=mysql一样的效果。
+
+```
+src/main/resources/application.properties
+```
+
+```
+environments.dev.url=http://dev.bar.com
+environments.dev.name=Developer Setup
+environments.prod.url=http://foo.bar.com
+environments.prod.name=My Cool App
+```
+
+
+### 列表类型
+> 必须使用连续下标索引进行配置。
+
+
+* properties中使用[]在定位列表类型
+```
+pring.my-example.url[0]=http://example.com
+spring.my-example.url[1]=http://spring.io
+```
+* properties中使用,分割列表类型。
+
+```
+pring.my-example.url[0]=http://example.com
+spring.my-example.url[1]=http://spring.io
+```
+
+* yaml中使用列表
+
+```
+spring:
+  my-example:
+    url:
+      - http://example.com
+      - http://spring.io
+
+```
+* yaml文件中使用,分割列表
+```
+spring:
+  my-example:
+    url: http://example.com, http://spring.io
+```
+### Map类型
+
+Map类型在properties和yaml中的标准配置方式如下：
+
+* properties格式：
+
+```
+spring.my-example.foo=bar
+spring.my-example.hello=world
+```
+* yaml格式：
+```
+spring:
+  my-example:
+    foo: bar
+    hello: world
+```
+
+
+### 使用随机数配置
+`${random}`的配置方式主要有一下几种，读者可作为参考使用。
+
+```
+# 随机字符串
+com.didispace.blog.value=${random.value}
+# 随机int
+com.didispace.blog.number=${random.int}
+# 随机long
+com.didispace.blog.bignumber=${random.long}
+# 10以内的随机数
+com.didispace.blog.test1=${random.int(10)}
+# 10-20的随机数
+com.didispace.blog.test2=${random.int[10,20]}
+```
+
+
+### 读取规则
+
+将配置文件中的值引入到java程序中。
+
+在Spring应用程序的environment中读取属性的时候，每个属性的唯一名称符合如下规则：
+
+* 通过.分离各个元素
+* 最后一个.将前缀与属性名称分开
+* 必须是字母（a-z）和数字(0-9)
+* 必须是小写字母
+* 用连字符-来分隔单词
+* 唯一允许的其他字符是[和]，用于List的索引
+* 不能以数字开头
+
+```
+this.environment.containsProperty("spring.jpa.database-platform")
+```
+
+### 配置提示
+
+引入配置提示的依赖。并在maven插件中，将该依赖排除。
+
+```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-configuration-processor</artifactId>
+        <optional>true</optional>
+    </dependency>
+
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <excludes>
+                    <exclude>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-configuration-processor</artifactId>
+                    </exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+
+## 2 yaml配置文件
+### yaml基本语法
+
+*  key: value；kv之间有空格
+*  大小写敏感
+*  使用缩进表示层级关系
+*  缩进不允许使用tab，只允许空格
+*  缩进的空格数不重要，只要相同层级的元素左对齐即可
+*  '#'表示注释
+*  字符串无需加引号，如果要加，''与""表示字符串内容 会被 转义/不转义
+```
+environments:
+    dev:
+        url: http://dev.bar.com
+        name: Developer Setup
+    prod:
+        url: http://foo.bar.com
+        name: My Cool App
+```
+
+### yaml基本类型
+* 字面量：单个的、不可再分的值。date、boolean、string、number、null
+```
+k: v
+```
+* 对象：键值对的集合。map、hash、set、object
+```
+行内写法：  k: {k1:v1,k2:v2,k3:v3}
+#或
+k:
+  k1: v1
+  k2: v2
+  k3: v3
+```
+* 数组：一组按次序排列的值。array、list、queue
+```
+行内写法：  k: [v1,v2,v3]
+#或者
+k:
+ - v1
+ - v2
+ - v3
+```
+
+### yaml的实例
+```java
+@Data
+public class Person {
+	
+	private String userName;
+	private Boolean boss;
+	private Date birth;
+	private Integer age;
+	private Pet pet;
+	private String[] interests;
+	private List<String> animal;
+	private Map<String, Object> score;
+	private Set<Double> salarys;
+	private Map<String, List<Pet>> allPets;
+}
+
+@Data
+public class Pet {
+	private String name;
+	private Double weight;
+}
+
+```
+对应的yaml配置
+
+```
+# yaml表示以上对象
+person:
+  userName: zhangsan
+  boss: false
+  birth: 2019/12/12 20:12:33
+  age: 18
+  pet: 
+    name: tomcat
+    weight: 23.4
+  interests: [篮球,游泳]
+  animal: 
+    - jerry
+    - mario
+  score:
+    english: 
+      first: 30
+      second: 40
+      third: 50
+    math: [131,140,148]
+    chinese: {first: 128,second: 136}
+  salarys: [3999,4999.98,5999.99]
+  allPets:
+    sick:
+      - {name: tom}
+      - {name: jerry,weight: 47}
+    health: [{name: mario,weight: 47}]
+```
+
+
+## 3 其他配置方式
+### 系统环境变量
+
+java程序启动参数 -D是用来做什么：
+Set a system property value. If value is a string that contains spaces, you must enclose the string in double quotes。在运行改程序时加上JVM参数-Ddubbo.token=“666” 或者 -Ddubbo.token=666，那么运行之后你可以看到控制台输出了666！一点值得注意的是，需要设置的是JVM参数而不是program参数
+
+```
+java -Dfoo="some string" SomeClass
+```
+
+* 列表形式：由于环境变量中无法使用[和]符号，所以使用_来替代。任何由下划线包围的数字都会被认为是[]的数组形式。
+```
+MY_FOO_1_ = my.foo[1]
+MY_FOO_1_BAR = my.foo[1].bar
+MY_FOO_1_2_ = my.foo[1][2]
+```
+### 通过命令行配置
+在启动java应用是，添加配置参数。系统属性的绑定也与文件属性的绑定类似，通过[]来标示，同样的，他也支持逗号分割的方式
+
+```
+java -jar xxx.jar --server.port=8888
+
+-D"spring.my-example.url[0]=http://example.com"
+-D"spring.my-example.url[1]=http://spring.io"
+
+
+-Dspring.my-example.url=http://example.com,http://spring.io
+
+```
+
+
+
+## 4 多环境配置
+
+### 多环境配置文件
+对于多环境的配置，各种项目构建工具或是框架的基本思路是一致的，通过配置多份不同环境的配置文件，再通过打包命令指定需要打包的内容之后进行区分打包。
+
+在Spring Boot中多环境配置文件名需要满足application-{profile}.properties的格式，其中{profile}对应你的环境标识，比如：
+
+* application-dev.properties：开发环境
+* application-test.properties：测试环境
+* application-prod.properties：生产环境
+
+
+### 多配置文件的加载规则
+application.yml/properties总是会被加载，不管是否配置spring.profile.active.
+
+
+1. 配置文件的方式。在默认配置文件中application.properties指定环境。最先加载application.yml/properties,然后再按照spring.profile.active加载相应的application-{profile}.yml（properties）。如果application和application-{profile}中键有重复会被application-{profile}替换为最新的。
+2. Java系统属性方式。在启动jar时指定加载配置(Java系统属性方式)或者通过java代码设置系统属性的方式。
+```java
+// -Dspring.profiles.active=mydev123一定要放-jar之前能触发java属性方式
+java -Dspring.profiles.active=mydev123  -jar SpringBootEnv-1.0.jar
+
+// 通过java代码设置系统属性的方式。
+System.setProperty("spring.profiles.active","mydev");
+```
+3. 命令行的方式。在启动jar时指定加载配置(命令行方式)
+```shell
+java -jar SpringBootEnv-1.0.jar --spring.profiles.active=dev56789
+```
+4. 系统环境变量的方式。在启动jar时指定加载配置(系统环境变量方式)。首先增加一个名称为SPRING_PROFILES_ACTIVE的系统环境变量，启动spring程序。
+
+```shell
+#当前系统是windows
+set SPRING_PROFILES_ACTIVE=dev987
+java -jar SpringBootEnv-1.0.jar
+```
+
+以上四种方式的优先级
+```
+命令行方式 > Java系统属性方式 > 系统环境变量方式 > 配置文件方式
+```
+如果需要激活多个profile可以使用逗号隔开，
+```
+spring.profiles.active=dev,test
+```
+
+
+### 配置加载顺序
+
+SpringBoot启动会扫描以下位置的application.properties/yml文件作为spring boot的默认配置文件：
+
+```
+#file: 指当前项目根目录
+file:./config/
+file:./
+#classpath: 指当前项目的resources目录
+classpath:/config/
+classpath:
+```
+
+1. 命令行中传入的参数。
+2. SPRING_APPLICATION_JSON中的属性。SPRING_APPLICATION_JSON是以JSON格式配置在系统环境变量中的内容。
+3. java:comp/env中的JNDI属性。
+4. Java的系统属性，可以通过System.getProperties()获得的内容。
+5. 操作系统的环境变量
+6. 通过random.*配置的随机属性
+7. 位于当前应用jar包之外，针对不同{profile}环境的配置文件内容，例如：application-{profile}.properties或是YAML定义的配置文件
+8. 位于当前应用jar包之内，针对不同{profile}环境的配置文件内容，例如：application-{profile}.properties或是YAML定义的配置文件
+9. 位于当前应用jar包之外的application.properties和YAML配置内容
+10. 位于当前应用jar包之内的application.properties和YAML配置内容
+11. 在@Configuration注解修改的类中，通过@PropertySource注解定义的属性
+12. 应用默认属性，使用SpringApplication.setDefaultProperties定义的内容1. 
+
+## 5 配置绑定
+### 使用Java程序读取
+如何使用Java读取到properties文件中的内容，并且把它封装到JavaBean中，以供随时使用；
+```java
+public class getProperties {
+     public static void main(String[] args) throws FileNotFoundException, IOException {
+         Properties pps = new Properties();
+         pps.load(new FileInputStream("a.properties"));
+         Enumeration enum1 = pps.propertyNames();//得到配置文件的名字
+         while(enum1.hasMoreElements()) {
+             String strKey = (String) enum1.nextElement();
+             String strValue = pps.getProperty(strKey);
+             System.out.println(strKey + "=" + strValue);
+             //封装到JavaBean。
+         }
+     }
+ }
+```
+
+
+### @ConfigurationProperties+Componet 
+1. 只有在容器中的组件，才会有Springboot的强大功能。
+2. 从配置文件中自动加载，进行属性配置，然后使用Componet注册
+
+@EnableConfigurationProperties + @ConfigurationProperties
+假设在propertes配置中有这样一个配置：
+```
+com.didispace.foo=bar
+```
+我们为它创建对应的配置类：
+```java
+@Component
+@ConfigurationProperties(prefix = "com.didispace")
+public class FooProperties {
+
+    private String foo;
+
+}
+```
+接下来，通过最新的Binder就可以这样来拿配置信息了：
+```
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        ApplicationContext context = SpringApplication.run(Application.class, args);
+
+        Binder binder = Binder.get(context.getEnvironment());
+
+        // 绑定简单配置
+        FooProperties foo = binder.bind("com.didispace", Bindable.of(FooProperties.class)).get();
+        System.out.println(foo.getFoo());
+    }
+}
+```
+
+
+### @ConfigurationProperties+ @EnableConfigurationProperties
+
+1. 在配置类上开启属性配置功能。开启car的属性配置功能
+2. 该中方法对配置类进行修改然后装配。不需要修改类本身的代码。
+```
+@EnableConfigurationProperties(Car.class)
+class MyConfig{
+
+}
+```
+
+* 完成配置绑定的类。
+```java
+// @Component，当该类子啊依赖中的的时候无法加载该注解
+@ConfigurationProperties(prefix = "com.didispace")
+public class FooProperties {
+
+    private String foo;
+
+}
+```
+
+
+
+### @Value
+通过占位符的方式加载自定义的参数
+
+* 注入普通字符；
+* 注入操作系统属性；
+* 注入表达式运算结果；
+* 注入其他Bean的属性；
+* 注入文件内容；
+* 注入网址内容；
+* 注入属性文件。
+
+```java
+
+/**
+ * 配置类
+ **/
+@Configuration
+@ComponentScan("com.kongzi")
+@PropertySource("classpath:db.properties")
+public class ElConfig
+{
+    /**
+     * 注入普通字符串
+     */
+    @Value("您好，欢迎访问 carefree 的博客")
+    private String comment;
+ 
+    /**
+     * 注入操作系统属性
+     */
+    @Value("#{systemProperties['os.name']}")
+    private String osName;
+ 
+    /**
+     * 注入表达式运算结果
+     */
+    @Value("#{ T(java.lang.Math).random() * 100.0 }")
+    private double randomNumber;
+ 
+    /**
+     * 注入其他Bean的属性
+     */
+    @Value("#{otherUser.userName}")
+    private String fromUserName;
+ 
+    @Value("#{otherUser.blogUrl}")
+    private String fromBlogUrl;
+ 
+    /**
+     * 注入文件资源
+     */
+    @Value("classpath:info.txt")
+    private Resource testFile;
+ 
+    /**
+     * 注入网址资源
+     */
+    @Value("https://blog.csdn.net/carefree31441")
+    private Resource testUrl;
+ 
+    /**
+     * 注入配置文件
+     */
+    @Value("${jdbc.driver}")
+    private String jdbc_driver;
+ 
+    @Value("${jdbc.url}")
+    private String jdbc_url;
+ 
+    @Value("${jdbc.username}")
+    private String jdbc_username;
+ 
+    @Value("${jdbc.password}")
+    private String jdbc_password;
+ 
+    @Autowired
+    private Environment environment;
+ 
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfigurer()
+    {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+ 
+    public void outputResource()
+    {
+        try
+        {
+            System.out.println("注入普通字符串：");
+            System.out.println(comment);
+            System.out.println("------------------------------------------------");
+ 
+            System.out.println("注入操作系统属性：");
+            System.out.println(osName);
+            System.out.println("------------------------------------------------");
+ 
+            System.out.println("注入表达式运算结果：");
+            System.out.println(randomNumber);
+            System.out.println("------------------------------------------------");
+ 
+            System.out.println("注入其他Bean的属性：");
+            System.out.println("用户名称：" + fromUserName);
+            System.out.println("博客地址："+ fromBlogUrl);
+            System.out.println("------------------------------------------------");
+ 
+            System.out.println("注入文件资源：");
+            System.out.println("文件中的内容：" + IOUtils.toString(testFile.getInputStream()));
+            System.out.println("------------------------------------------------");
+ 
+            System.out.println("注入配置文件（方式一）：");
+            System.out.println("数据库驱动：" + jdbc_driver);
+            System.out.println("数据库连接：" + jdbc_url);
+            System.out.println("数据库用户：" + jdbc_username);
+            System.out.println("数据库密码：" + jdbc_password);
+            System.out.println("------------------------------------------------");
+ 
+            System.out.println("注入配置文件（方式二）：");
+            System.out.println("数据库驱动：" + environment.getProperty("jdbc.driver"));
+            System.out.println("数据库连接：" + environment.getProperty("jdbc.url"));
+            System.out.println("数据库用户：" + environment.getProperty("jdbc.username"));
+            System.out.println("数据库密码：" + environment.getProperty("jdbc.password"));
+            System.out.println("------------------------------------------------");
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+}
+```
+
+### @PropertySource注解加载properties文件
+PropertySource注解的作用是加载指定的属性文件，配置属性如下
+```
+@PropertySource(value= {"classpath:config/mail.properties"},ignoreResourceNotFound=false,encoding="UTF-8",name="mail.properties")
+```
+* 其中value是设置需要加载的属性文件，可以一次性加载多个（多个时以,分隔）; 
+* encoding用于指定读取属性文件所使用的编码，我们通常使用的是UTF-8；
+* ignoreResourceNotFound含义是当指定的配置文件不存在是否报错，默认是false;如这里配置的config/mail.properties，若在classpath路径下不存在时，则ignoreResourceNotFound为true的时候，程序不会报错，如果ignoreResourceNotFound为false的时候，程序直接报错。实际项目开发中，最好设置ignoreResourceNotFound为false，该参数默认值为false。
+* name的值我们设置的是mail.properties。这个值在Springboot的环境中必须是唯一的，如果不设置，则值为：“class path resource [config/mail.properties]“。
+
+
+```java
+@Component
+@ConfigurationProperties(prefix = "mail")
+@PropertySource(value = "classpath:config/mail.properties",encoding = "UTF-8")
+public class MailConfig
+{
+    private String host;
+ 
+    private String port;
+ 
+    //省略getter与setter方法...
+}
+```

@@ -21,10 +21,10 @@
 @startuml
 
 object HttpServlet{
-    doGet()
-    doPost()
-    doPut()
-    doDelete()
+    doGet
+    doPost
+    doPut
+    doDelete
 }
 note bottom : 这是所有http请求的入口。\
 \n 可以通过子类，不断丰富和具体要执行的内容。
@@ -35,16 +35,16 @@ object HttpServletBean{
 }
 
 object FrameworkServlet{
-    doGet()--> processRequest()
-    doPost()--> processRequest()
-    doPut()--> processRequest()
-    doDelete() --> processRequest()
-    processRequest()-->doService()
+    doGet--> processRequest 
+    doPost --> processRequest 
+    doPut --> processRequest 
+    doDelete  --> processRequest 
+    processRequest -->doService 
 }
 
 object DispatcherServlet{
-    doService()-->doDispatcher()
-    doDispatcher()
+    doService -->doDispatcher 
+    doDispatcher 
 }
 
 
