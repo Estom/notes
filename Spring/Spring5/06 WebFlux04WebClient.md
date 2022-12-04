@@ -163,11 +163,11 @@ BodyInserter<Object, ReactiveHttpOutputMessage> inserter3
 ```java
 WebClient.ResponseSpec response1 = uri1
   .body(inserter3)
-    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-    .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
-    .acceptCharset(Charset.forName("UTF-8"))
-    .ifNoneMatch("*")
-    .ifModifiedSince(ZonedDateTime.now())
+  .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+  .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
+  .acceptCharset(Charset.forName("UTF-8"))
+  .ifNoneMatch("*")
+  .ifModifiedSince(ZonedDateTime.now())
   .retrieve();
 ```
 

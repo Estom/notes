@@ -1,0 +1,90 @@
+{
+    "status": "UP",
+    "details": {
+        "SOFABootReadinessHealthCheckInfo": {
+            "status": "UP",
+            "details": {
+                "HealthChecker": {
+                    "alipaySofaRuntimeHealthChecker": {
+                        "status": "UP"
+                    },
+                    "sofaComponentHealthChecker": {
+                        "status": "UP",
+                        "details": {
+                            "reference:com.alipay.sofa.cloud.osp.instance.facade.MeterFacade:#-259276000": "[bolt,passed] [jvm,passed]",
+                            "extension-point:opscloudExtension$opsSyncChangeService": "passed",
+                            "service:com.alipay.opscloudcore.common.service.client.http.HttpHeartbeatCheck": "[jvm,passed]",
+                            "reference:com.alipay.sofa.cloud.osp.instance.facade.InstanceFacade:#-528282148": "[bolt,passed] [jvm,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.ExecutionNotifyClient": "[jvm,passed]",
+                            "extension-point:opscloudExtension$opsChangeService": "passed",
+                            "service:com.alipay.sofa.servicegovern.common.service.facade.RouterRuleFacade": "[tr,passed]",
+                            "reference:com.alipay.sofa.cloud.osp.user.facade.UserFacade:#1276066022": "[bolt,passed] [jvm,passed]",
+                            "service:com.alipay.antcloud.dsrconsole.common.service.facade.DrmServiceFacade": "[bolt,passed]",
+                            "reference:com.alipay.antcloud.drmdata.facade.DrmDataQueryFacade:#1340292234": "[bolt,passed] [jvm,passed]",
+                            "service:com.alipay.opscloudcore.framework.sdk.clientframework.SyncChangeServiceShortcut": "[jvm,passed]",
+                            "reference:com.alipay.antscheduler.facade.IAntJobFacade:#-54943409": "[jvm,passed] [bolt,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.OpsChngTraceClient": "[jvm,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.OpscloudApiSwitch": "[jvm,passed]",
+                            "service:com.alipay.antcloud.dsrconsole.core.service.opscloud.template.OpscloudFacadeTemplate": "[jvm,passed]",
+                            "service:com.alipay.huanyu.facade.change.ChangePlanCallback:dsrconsoleMAIN_SITE": "[tr,passed]",
+                            "service:com.alipay.opscloudcore.framework.core.facade.OpscloudClientSyncServiceFacade:dsrconsole": "[tr,passed] [jvm,passed]",
+                            "reference:com.alipay.antcloud.drmdata.facade.DrmDataClusterFacade:#-234876751": "[bolt,passed] [jvm,passed]",
+                            "extension-point:opscloudExtension$opsChangeTransaction": "passed",
+                            "service:com.alipay.opscloudcore.common.service.client.ChangeServiceCheckClient": "[jvm,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.http.HttpOpsChngTraceFacade": "[jvm,passed]",
+                            "reference:com.alipay.huanyu.facade.change.ChangePlanFacade:#2078914018": "[tr,passed] [jvm,passed]",
+                            "reference:com.alipay.sofa.discovery.sync.enterprise.facade.api.ServiceRestFacade:#223367432": "[bolt,passed] [jvm,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.http.HttpChangeServiceSyncExecuteFacade": "[jvm,passed]",
+                            "reference:com.alipay.sofa.cloud.osp.instance.facade.OSPMetadataFacade:#1502309493": "[bolt,passed] [jvm,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.http.HttpChangeServiceCheckFacade": "[jvm,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.ChangeServiceAsyncCheckClient": "[jvm,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.ChangeServiceSyncExecuteClient": "[jvm,passed]",
+                            "service:com.alipay.antcloud.dsrconsole.core.service.opscloud.OpscloudStrategy": "[jvm,passed]",
+                            "service:com.alipay.antcloud.dsrconsole.common.service.facade.ReportServiceFacade": "[tr,passed]",
+                            "extension-point:opscloudClientExtension$facades": "passed",
+                            "reference:com.alipay.antscheduler.facade.ISwitchZoneFacade:#-1973549567": "[bolt,passed] [jvm,passed]",
+                            "reference:com.alipay.antscheduler.facade.IJobTriggerInstanceFacade:#973874193": "[bolt,passed] [jvm,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.http.HttpChangeServiceAsyncCheckFacade": "[jvm,passed]",
+                            "reference:com.alipay.sofa.cloud.auth.AuthenticationService:#-1387992122": "[bolt,passed] [jvm,passed]",
+                            "reference:com.alipay.antscheduler.facade.IJobExecuteInstanceFacade:#1941186356": "[bolt,passed] [jvm,passed]",
+                            "service:com.alipay.antcloud.dsrconsole.common.service.facade.DrmResourceMetaFacade": "[bolt,passed]",
+                            "service:com.alipay.opscloudcore.common.service.client.extension.OpscloudClientExtensionImpl": "[jvm,passed]",
+                            "service:com.alipay.antcloud.dsrconsole.common.service.facade.AuthFacade": "[bolt,passed]",
+                            "reference:com.alipay.sofa.discovery.sync.enterprise.facade.api.ClusterRestFacade:#685631288": "[bolt,passed] [jvm,passed]",
+                            "reference:com.alipay.sofa.cloud.osp.console.openapi.OspOpenAPIConfigFacade:#208429739": "[bolt,passed] [jvm,passed]"
+                        }
+                    }
+                },
+                "ReadinessCheckCallback": {
+                    "applicationAfterReadinessCheckCallback": {
+                        "status": "UP"
+                    },
+                    "lazyActivateBeanProcessor": {
+                        "status": "UP"
+                    },
+                    "rpcAfterHealthCheckCallback": {
+                        "status": "UP"
+                    }
+                }
+            }
+        },
+        "diskSpace": {
+            "status": "UP",
+            "details": {
+                "total": 528311816192,
+                "free": 457311166464,
+                "threshold": 10485760,
+                "exists": true
+            }
+        },
+        "pingHealthContributor": {
+            "status": "UP"
+        },
+        "sessionConnectionHealthChecker": {
+            "status": "UP",
+            "details": {
+                "sessionConnection": "session connection is health"
+            }
+        }
+    }
+}

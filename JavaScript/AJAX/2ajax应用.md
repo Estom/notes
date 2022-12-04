@@ -1,6 +1,6 @@
 ## 1 实例
 
-```
+```html
 <!DOCTYPE html>
 <html>
 <head>
