@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<bookstore>
+	<!-- 中文书本信息 -->
+    <book>
+        <title lang="cn">Java并发编程实战</title>
+        <author>Brian Goetz /  Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea</author> 
+        <year>2012</year>
+        <price>69</price>
+    </book>
+    
+    <!-- 英文书本信息 -->
+    <book>
+        <title lang="en">Java Concurrency in Practice</title>
+        <author>Brian Goetz /  Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea</author> 
+        <year>2006</year>
+        <price>59.99</price>
+    </book>
+    
+    <book>
+        <title lang="de">德文书</title>
+        <author>德国</author> 
+        <year>2014</year>
+        <price>50</price>
+    </book>
+    
+    <book>
+        <title>没有lang属性</title>
+        <author>试试</author> 
+        <year>2016</year>
+    </book>
+
+</bookstore>

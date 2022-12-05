@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Instrumentation" default="run" basedir="../../../../../../../">
+
+	<property name="project.src.dir" value="${basedir}/src" />
+	<property name="project.lib.dir" value="${basedir}/lib" />
+	<property name="project.conf.dir" value="${basedir}/conf" />
+	<property name="project.target.dir" value="${basedir}/classes" />
+	<property name="project.dist.dir" value="${basedir}/dist" />
+
+	<path id="project.classpath">
+		<fileset dir="${project.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="prepare">
+		<delete dir="${project.target.dir}" />
+		<mkdir dir="${project.target.dir}"/>
+		<copy todir="${project.target.dir}">
+			<fileset dir="${project.conf.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+		
+		<delete dir="${project.dist.dir}" />
+		<mkdir dir="${project.dist.dir}" />
+	</target>
+
+	<target name="compileWithJavac" depends="prepare">
+		<echo message="compile with javac" />
+		<javac destdir="${project.target.dir}" srcdir="${project.src.dir}" source="1.8" target="1.8" 
+			encoding="UTF-8" debug="true" includeantruntime="false">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="package" depends="compileWithJavac">
+	    <jar destfile="${project.dist.dir}/hello.jar">
+	        <fileset dir="${project.target.dir}">
+	            <include name="cn/aofeng/demo/java/lang/instrument/*.class" />
+	        </fileset>
+	    	<manifest>
+	    	    <attribute name="Premain-Class" value="cn.aofeng.demo.java.lang.instrument.FirstInstrumentation" />
+	    	</manifest>
+	    </jar>
+	</target>
+
+	<target name="run" depends="package">
+	    <java classname="cn.aofeng.demo.java.lang.instrument.Hello" fork="true">
+	        <classpath refid="project.classpath" />
+	        <classpath location="${project.target.dir}" />
+	    	<jvmarg value="-javaagent:${project.dist.dir}/hello.jar=&quot;Hello, Instrumentation&quot;" />
+	    </java>
+	</target>
+
+</project>

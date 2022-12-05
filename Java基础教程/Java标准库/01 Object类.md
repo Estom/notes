@@ -2,6 +2,10 @@
 
 ### 概览
 
+`java.lang.Object`类是Java语言中的根类，即所有类的父类。它中描述的所有方法子类都可以使用。在对象实例化的时候，最终找的父类就是Object。
+
+如果一个类没有特别指定父类，	那么默认则继承自Object类。
+
 ```java
 
 public native int hashCode()
@@ -353,4 +357,39 @@ CloneConstructorExample e1 = new CloneConstructorExample();
 CloneConstructorExample e2 = new CloneConstructorExample(e1);
 e1.set(2, 222);
 System.out.println(e2.get(2)); // 2
+```
+
+
+## 2 Objects工具类
+
+
+Objects类是对象工具类，它里面的的方法都是用来操作对象的。
+
+### equals方法
+
+在**JDK7**添加了一个Objects工具类，它提供了一些方法来操作对象，它由一些静态的实用方法组成，这些方法是null-save（空指针安全的）或null-tolerant（容忍空指针的），用于计算对象的hashcode、返回对象的字符串表示形式、比较两个对象。
+
+在比较两个对象的时候，Object的equals方法容易抛出空指针异常，而Objects类中的equals方法就优化了这个问题。方法如下：
+
+* `public static boolean equals(Object a, Object b)`:判断两个对象是否相等。
+
+我们可以查看一下源码，学习一下：
+
+```java
+public static boolean equals(Object a, Object b) {  
+    return (a == b) || (a != null && a.equals(b));  
+}
+```
+
+### isNull
+
+`static boolean isNull(Object obj)` 判断对象是否为null，如果为null返回true。
+
+```java
+Student s1 = null;
+Student s2 = new Student("蔡徐坤", 22);
+
+// static boolean isNull(Object obj) 判断对象是否为null,如果为null返回true
+System.out.println(Objects.isNull(s1)); // true
+System.out.println(Objects.isNull(s2)); // false
 ```

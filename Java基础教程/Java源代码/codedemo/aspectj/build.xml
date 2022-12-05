@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JavaTutorial" default="runNormal" basedir="../../../../../">
+
+	<property name="project.src.dir" value="${basedir}/src" />
+	<property name="project.lib.dir" value="${basedir}/lib" />
+	<property name="project.conf.dir" value="${basedir}/conf" />
+	<property name="project.tmp.dir" value="${basedir}/tmp" />
+	<property name="project.target.dir" value="${basedir}/classes" />
+
+	<path id="project.classpath">
+		<fileset dir="${project.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
+		<classpath refid="project.classpath" />
+	</taskdef>
+
+	<target name="prepare">
+		<delete dir="${project.target.dir}" />
+		<mkdir dir="${project.target.dir}"/>
+		<copy todir="${project.target.dir}">
+			<fileset dir="${project.conf.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="compileWithIajc" depends="prepare">
+		<echo message="compile with iajc" />
+		<iajc destdir="${project.target.dir}" sourceroots="${project.src.dir}" source="1.8" target="1.8" encoding="UTF-8">
+			<classpath refid="project.classpath" />
+		</iajc>
+	</target>
+
+	<!-- 运行AspectJ编译时织入功能的代码 -->
+	<target name="runNormal" depends="compileWithIajc">
+		<java classname="cn.aofeng.demo.aspectj.BusinessService">
+			<classpath refid="project.classpath" />
+			<classpath location="${project.target.dir}" />
+		</java>
+	</target>
+
+	<target name="compileWithJavac" depends="prepare">
+		<echo message="compile with javac" />
+		<javac destdir="${project.target.dir}" srcdir="${project.src.dir}" source="1.8" target="1.8" 
+			encoding="UTF-8" debug="true" includeantruntime="false">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<!-- 载入代码时织入功能（LTW） -->
+	<target name="runLTW" depends="compileWithJavac">
+		<java classname="cn.aofeng.demo.aspectj.BusinessService" fork="true">
+			<jvmarg value="-Daj.weaving.verbose=true" />
+			<jvmarg value="-javaagent:${project.lib.dir}/aspectjweaver-1.8.10.jar"/>
+			<classpath refid="project.classpath" />
+			<classpath location="${project.target.dir}" />
+		</java>
+	</target>
+
+</project>

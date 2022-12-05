@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.aofeng.demo.mybatis.dao.MonitNotifyHistoryMapper">
+  <resultMap id="BaseResultMap" type="cn.aofeng.demo.mybatis.entity.MonitNotifyHistory">
+    <id column="record_id" jdbcType="BIGINT" property="recordId" />
+    <result column="monit_id" jdbcType="INTEGER" property="monitId" />
+    <result column="app_id" jdbcType="TINYINT" property="appId" />
+    <result column="notify_type" jdbcType="TINYINT" property="notifyType" />
+    <result column="notify_target" jdbcType="INTEGER" property="notifyTarget" />
+    <result column="notify_content" jdbcType="VARCHAR" property="notifyContent" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="retry_times" jdbcType="TINYINT" property="retryTimes" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+  </resultMap>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select record_id, monit_id, app_id, notify_type, notify_target, notify_content, status, 
+      retry_times, create_time 
+    from monit_notify_history
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from monit_notify_history
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.aofeng.demo.mybatis.entity.MonitNotifyHistory">
+    insert into monit_notify_history (record_id, monit_id, app_id, 
+      notify_type, notify_target, notify_content, 
+      status, retry_times, create_time
+      )
+    values (#{recordId,jdbcType=BIGINT}, #{monitId,jdbcType=INTEGER}, #{appId,jdbcType=TINYINT}, 
+      #{notifyType,jdbcType=TINYINT}, #{notifyTarget,jdbcType=INTEGER}, #{notifyContent,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{retryTimes,jdbcType=TINYINT}, #{createTime,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.aofeng.demo.mybatis.entity.MonitNotifyHistory">
+    insert into monit_notify_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        record_id,
+      </if>
+      <if test="monitId != null">
+        monit_id,
+      </if>
+      <if test="appId != null">
+        app_id,
+      </if>
+      <if test="notifyType != null">
+        notify_type,
+      </if>
+      <if test="notifyTarget != null">
+        notify_target,
+      </if>
+      <if test="notifyContent != null">
+        notify_content,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="retryTimes != null">
+        retry_times,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="monitId != null">
+        #{monitId,jdbcType=INTEGER},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=TINYINT},
+      </if>
+      <if test="notifyType != null">
+        #{notifyType,jdbcType=TINYINT},
+      </if>
+      <if test="notifyTarget != null">
+        #{notifyTarget,jdbcType=INTEGER},
+      </if>
+      <if test="notifyContent != null">
+        #{notifyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="retryTimes != null">
+        #{retryTimes,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.aofeng.demo.mybatis.entity.MonitNotifyHistory">
+    update monit_notify_history
+    <set>
+      <if test="monitId != null">
+        monit_id = #{monitId,jdbcType=INTEGER},
+      </if>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=TINYINT},
+      </if>
+      <if test="notifyType != null">
+        notify_type = #{notifyType,jdbcType=TINYINT},
+      </if>
+      <if test="notifyTarget != null">
+        notify_target = #{notifyTarget,jdbcType=INTEGER},
+      </if>
+      <if test="notifyContent != null">
+        notify_content = #{notifyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="retryTimes != null">
+        retry_times = #{retryTimes,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=BIGINT},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.aofeng.demo.mybatis.entity.MonitNotifyHistory">
+    update monit_notify_history
+    set monit_id = #{monitId,jdbcType=INTEGER},
+      app_id = #{appId,jdbcType=TINYINT},
+      notify_type = #{notifyType,jdbcType=TINYINT},
+      notify_target = #{notifyTarget,jdbcType=INTEGER},
+      notify_content = #{notifyContent,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      retry_times = #{retryTimes,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=BIGINT}
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+</mapper>
