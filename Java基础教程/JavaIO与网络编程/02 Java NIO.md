@@ -1,4 +1,6 @@
-
+> 参考文献
+> * [java nio一篇博客](https://blog.csdn.net/forezp/article/details/88414741)
+> * [java nio并发编程网](http://ifeve.com/overview/)
 
 # NIO
 
