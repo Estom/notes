@@ -268,10 +268,14 @@ produce..produce..consume..consume..produce..consume..produce..consume..produce.
 * ConcurrentLinkedDeque
 
 * ConcurrentHashMap
+* ConcurrentHashSet
 
-是专用于高并发的Map实现，内部实现进行了锁分离，get操作是无锁的。
+
 
 * ConcurrentSkipListMap
+* ConcurrentSkipListSet
+
+ConcurrentHashMap是专用于高并发的Map实现，内部实现进行了锁分离，get操作是无锁的。
 
 java api也提供了一个实现ConcurrentSkipListMap接口的类，ConcurrentSkipListMap接口实现了与ConcurrentNavigableMap接口有相同行为的一个非阻塞式列表。从内部实现机制来讲，它使用了一个Skip List来存放数据。Skip List是基于并发列表的数据结构，效率与二叉树相近。
 当插入元素到映射中时，ConcurrentSkipListMap接口类使用键值来排序所有元素。除了提供返回一个具体元素的方法外，这个类也提供获取子映射的方法。
