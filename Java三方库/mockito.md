@@ -27,7 +27,8 @@ public class ApplicationTest {
 }
 //2
 public class ApplicationTest {
-    @Rule public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
+    @Rule 
+    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
  
     //code
 }
@@ -711,7 +712,7 @@ mockito 会将 @Mock、@Spy 修饰的对象自动注入到 @InjectMocks 修饰�
 * 设值函数注入（set函数）
 * 属性注入
 
-
+```java
 package demo;
 
 import java.util.Random;
@@ -745,6 +746,7 @@ public class ExampleService {
     }
 
 }
+```
 编写测试类：
 ```java
 import org.junit.Assert;

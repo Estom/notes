@@ -14,6 +14,8 @@
   - [4 泛型通配符](#4-泛型通配符)
   - [5 泛型中的 KTVE](#5-泛型中的-ktve)
   - [6 泛型的实现原理](#6-泛型的实现原理)
+  - [7 泛型实例化](#7-泛型实例化)
+    - [反射](#反射)
 
 # 泛型机制
 
@@ -370,3 +372,74 @@ public class Apple<T supers A>{}
 实际上编译器会正常的将使用泛型的地方编译并进行类型擦除，然后返回实例。但是除此之外的是，如果构建泛型实例时使用了泛型语法，那么编译器将标记该实例并关注该实例后续所有方法的调用，每次调用前都进行安全检查，非指定类型的方法都不能调用成功。
 
 实际上编译器不仅关注一个泛型方法的调用，它还会为某些返回值为限定的泛型类型的方法进行强制类型转换，由于类型擦除，返回值为泛型类型的方法都会擦除成 Object 类型，当这些方法被调用后，编译器会额外插入一行 checkcast 指令用于强制类型转换，这一个过程就叫做『泛型翻译』。
+
+
+## 7 泛型实例化
+
+
+### 反射
+```java
+getClass().getGenericSuperclass()).getActualTypeArguments()[0].newInstance();
+
+
+
+   public void init(){
+
+      try {
+         Type[] typeArguments = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+         for(Type type : typeArguments){
+            System.out.println("type:"+type);//打印映射的实际类
+         }
+         Class<T> tClass = (Class<T>) typeArguments[0];
+         Class<D> dClass = (Class<D>) typeArguments[1];
+         Class<E> cClass = (Class<E>) typeArguments[2];
+         this.t = tClass.newInstance();
+         this.d = dClass.newInstance();
+         this.e = cClass.newInstance();
+      } catch ( Exception e) {
+         e.printStackTrace();
+      }
+   }
+
+```
+
+
+```java
+getConstructor().newInstance()
+
+public void init(){
+
+      try {
+         Type[] typeArguments = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+         for(Type type : typeArguments){
+            System.out.println("type:"+type);
+         }
+         T e = (T) ((Class)typeArguments[0]).getConstructor().newInstance();
+         D e = (D) ((Class)typeArguments[1]).getConstructor().newInstance();
+         E e = (E) ((Class)typeArguments[2]).getConstructor().newInstance();
+      } catch ( Exception e) {
+         e.printStackTrace();
+      }
+   }
+```
+
+
+```java
+Class.forName(className).newInstance()
+
+   public void init(){
+
+      try {
+         Type[] typeArguments = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+         for(Type type : typeArguments){
+            System.out.println("type:"+type);//打印映射的实际类
+         }
+         T t = (T) Class.forName(typeArguments[0].getTypeName()).newInstance();
+         D d = (D) Class.forName(typeArguments[1].getTypeName()).newInstance();
+         E e = (E) Class.forName(typeArguments[2].getTypeName()).newInstance();
+      } catch ( Exception e) {
+         e.printStackTrace();
+      }
+   }
+
+```

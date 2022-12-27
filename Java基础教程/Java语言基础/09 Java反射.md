@@ -39,6 +39,29 @@ Class对象的作用
 * 对象.getClass()	
 * 任何类型.class
 
+```java
+package com.zking.jee07.reflect;
+ 
+public class Test {
+ 
+	public static void main(String[] args) throws Exception {
+		
+		//获取大写Class的三种方式
+		//1.Class.forName()  得到Student的模板
+		Class<Student> stuClazz =(Class<Student>)Class.forName("com.zking.jee07.reflect.Student");
+		
+		//2.Student.class
+		Class<Student> stuClazz01 =Student.class;
+		
+		//3.对象.getClass()
+		Student stu =new Student();
+		Class<Student> stuClazz02 =(Class<Student>)stu.getClass();
+		
+	}
+	
+}
+```
+
 
 ### 反射机制的使用
 

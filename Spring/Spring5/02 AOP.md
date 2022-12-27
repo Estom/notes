@@ -107,8 +107,8 @@ class UserDaoProxy implements InvocationHandler{
 * 前置通知Before。
 * 后置通知AfterReturn。正常返回才有
 * 环绕通知Around。通过切入点修改前后
-* 异常通知afterThrowing
-* 最终通知after。finally无论出现异常都执行。
+* 异常通知AfterThrowing
+* 最终通知After。finally无论出现异常都执行。
 
 ### 切面
 切面是一个工作。
