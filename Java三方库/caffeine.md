@@ -182,6 +182,7 @@ public static void demo() throws ExecutionException, InterruptedException {
 	}
 ```
 
+
 ## 3 数据驱逐
 
 Caffeine提供以下几种剔除方式：基于大小、基于权重、基于时间、基于引用
@@ -531,3 +532,44 @@ public class MyTicker implements Ticker {
 	}
 }
 ```
+
+
+## 7 缓存常见问题处理
+
+### 缓存穿透——不存在的key
+
+尝试返回一个空对象。
+
+
+### 缓存击穿——大量线程同时访问同一个Key
+* 在一个key失效的瞬间有大量访问进入。
+  * 多线程单一key互斥（该包已经实现。）
+  * 如果对 get(K) 的另一个调用当前正在加载键的值，则该线程只是等待该线程完成并返回其加载的值。 请注意，多个线程可以同时加载不同键的值。
+  * 如果指定的键尚未与值关联，则尝试计算其值并将其输入此缓存，除非为空。 整个方法调用是原子执行的，因此每个键最多应用一次函数。 当计算正在进行时，其他线程对此缓存的一些尝试更新操作可能会被阻塞，因此计算应该简短，并且不得尝试更新此缓存的任何其他映射。
+
+* 在一开始的时候，该key还没有加入有大量key同时访问
+  * 缓存预热。
+
+```java
+    @PostConstruct
+    private void preLoading(){
+        List<InstanceMetaDO> instanceMetaDOS = instanceMetaDAO.findByQuery();
+        int nums = 0;
+        for(InstanceMetaDO metaDO:instanceMetaDOS){
+            if(StringUtils.isNotEmpty(metaDO.getInstanceId())){
+                nums++;
+                if(StringUtils.isNotEmpty(metaDO.getWorkspaceId())){
+                    workspaceIdCache.put(metaDO.getInstanceId(),metaDO.getWorkspaceId());
+                }
+                if(StringUtils.isNotEmpty(metaDO.getInstanceId())){
+                    tenantIdCache.put(metaDO.getInstanceId(),metaDO.getTenantId());
+                }
+            }
+        }
+        log.info("[InstanceMetaCacheService] preload count:{}",nums);
+    }
+```
+
+
+### 缓存雪崩——大量key同时失效
+
