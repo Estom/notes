@@ -18,7 +18,8 @@
 </dependency>
 ```
 
-### 在application.properties中配置mysql的链接配置
+### 配置数据库连接
+在application.properties中配置mysql的链接配置
 
 ```
 spring.datasource.url=jdbc:mysql://localhost:3306/test

@@ -170,7 +170,7 @@ public class MyConfig {}
 
 * @ConditionalOnBean(name="bean")当容器中存在指定名称的容器的时候，才会进行注册。
 
-```xml
+```java
 @=====================测试条件装配==========================
 @Configuration(proxyBeanMethods = false) //告诉SpringBoot这是一个配置类 == 配置文件
 //@ConditionalOnBean(name = "tom")

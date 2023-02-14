@@ -60,7 +60,8 @@ CREATE TABLE `User` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 ```
 
-### 编写领域对象（并不是MVC的一部分。数据层，实现数据访问）
+### 编写领域对象
+并不是MVC的一部分。数据层，实现数据访问
 
 ```
 @Data
@@ -73,10 +74,11 @@ public class User {
 }
 ```
 
-### 编写数据访问对象（并非MVC的一部分。服务层，实现业务逻辑）
+### 编写数据访问对象
+并非MVC的一部分。服务层，实现业务逻辑
+
 * 定义包含插入、删除、查询的抽象接口UserService
-```
-定义包含有插入、删除、查询的抽象接口UserService
+```java
 public interface UserService {
 
     /**
