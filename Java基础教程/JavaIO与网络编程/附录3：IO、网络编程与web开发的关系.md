@@ -17,7 +17,8 @@
 
 ### web开发
 以下三个是Http服务实现。技能够提供http协议的服务端，也能实现http协议的客户端。是有协议的。
-1. Servlet 最基本的http服务实现方法。采用多线程阻塞的方式。包括服务端和HttpClient，可以独立使用
-2. Java ws.rs - Resteasy  基于标准接口的http服务的实现方法。包括服务端和ResteasyClient，可以独立使用
-3. Spring MVC 基于Servlet的http服务的封装和实现方法。包括服务端和RestTemplate，可以独立使用
-4. Spring Flux 基于Netty的http服务的封装和实现方法。包括服务端和WebClient，可以独立使用
+1. JDK&Jetty&Netty，提供了不同的socket通信方式，可以自己实现http服务的客户端和服务端
+2. apache Servlet 最基本的http服务实现方法。采用多线程阻塞的方式。包括服务端和HttpClient，可以独立使用
+3. Java ws.rs - Resteasy  基于标准接口的http服务的实现方法。包括服务端和ResteasyClient，可以独立使用
+4. Spring MVC 基于Servlet的http服务的封装和实现方法。包括服务端和RestTemplate，可以独立使用
+5. Spring Flux 基于Netty的http服务的封装和实现方法。包括服务端和WebClient，可以独立使用
