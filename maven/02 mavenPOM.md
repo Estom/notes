@@ -37,6 +37,7 @@ scope的取值用来定义依赖生效的空间（main目录、test目录）和�
 * runtime编译时不需要，但是运行时需要的jar。实际运行时需要接口的实现类。JDBC接口标准提供了一系列借口，能够进行编译。但是运行时需要JDBC的具体实现。
 ![](image/2022-11-06-22-30-18.png)
 
+<table><thead><tr><th>值</th><th>解释</th></tr></thead><tbody><tr><td>compile</td><td><code>默认的scope</code>，表示 dependency 都可以在生命周期中使用。而且，这些dependencies 会传递到依赖的项目中。适用于所有阶段，会随着项目一起发布。</td></tr><tr><td>provided</td><td>跟compile相似，但是表明了dependency 由JDK或者容器提供，例如Servlet AP和一些Java EE APIs。这个scope 只能作用在编译和测试时，同时没有传递性。</td></tr><tr><td>runtime</td><td>表示dependency不作用在编译时，但会作用在运行和测试时，如JDBC驱动，适用运行和测试阶段。</td></tr><tr><td>test</td><td>表示dependency作用在测试时，不作用在运行时。 只在测试时使用，用于编译和运行测试代码。不会随项目发布。</td></tr><tr><td><code>system </code></td><td>与provided类似，但是它不会去maven仓库寻找依赖，而是在本地找；而<code>systemPath</code>标签将提供本地路径</td></tr><tr><td>import</td><td>这个标签就是 引入该dependency的pom中定义的所有dependency定义</td></tr></tbody></table>
 ### optional可选依赖
 
 在开发阶段需要的类，但是在运行阶段可能不需要的类，就不需要再打包的时候导入到其中。

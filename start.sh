@@ -10,3 +10,4 @@ find . -name "*.java" -exec wc -l  {} \; | awk 'BEGIN{num=0} {num+=$1;print $1;}
 
 # 查看今天的日志
 find . -name "*.log" | xargs grep "wrod"
+n

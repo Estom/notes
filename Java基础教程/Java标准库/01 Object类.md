@@ -186,7 +186,13 @@ CloneExample e1 = new CloneExample();
 ```
 
 重写 clone() 得到以下实现：
+重写clone()方法，一般会先调用super.clone()进行浅复制，然后再复制那些易变对象，从而达到深复制的效果.也就是说JavaDoc指明了Object.clone()有特殊的语义，他就是能把当前对象的整个结构完全浅拷贝一份出来，至于如何实现的，可以把JVM原生实现的Object.clone()的语义想象成拿到this引用后通过反射去找到该对象实例的所有字段，然后逐一字段拷贝。。(不是作用域object类的方法，而是当前对象this的方法)
 
+
+HotSpot vm中，Object.clone()在不同的优化层级上有不同的实现。在其中最不优化的版本是这样做的：拿到this引用，通过对象头里记录的Klass信息去找出这个对象有多大，然后直接分配一个新的同样大的空对象并且把Klass信息塞进对象头（这样就已经实现了x.clone.getClass() == x.getClass()这部分语义），然后直接把对象体 的内容看作数组拷贝一样从源对象“盲”拷贝到目标对象，bitwise copy。然后就完事啦。
+
+我的理解是super.clone() 的调用就是沿着继承树不断网上递归调用直到Object 的clone方法，而跟据JavaDoc所说Object.clone()根据当前对象的类型创建一个新的同类型的空对象，然后把当前对象的字段的值逐个拷贝到新对象上，然后返回给上一层clone() 调用。
+也就是说super.clone() 的浅复制效果是通过Object.clone()实现的。
 ```java
 public class CloneExample {
     private int a;

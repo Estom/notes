@@ -1,6 +1,10 @@
 supervisord
 ===
 
+https://blog.csdn.net/weixin_40680612/article/details/124422102
+
+Supervisor是用Python开发的一套通用的进程管理程序，能将一个普通的命令行进程变为后台daemon，并监控进程状态，异常退出时能自动重启。它是通过fork/exec的方式把这些被管理的进程当作supervisor的子进程来启动，这样只要在supervisor的配置文件中，把要管理的进程的可执行文件的路径写进去即可。也实现当子进程挂掉的时候，父进程可以准确获取子进程挂掉的信息的，可以选择是否自己启动和报警。supervisor还提供了一个功能，可以为supervisord或者每个子进程，设置一个非root的user，这个user就可以管理它对应的进
+
 配置后台服务/常驻进程的进程管家工具。
 supervisord的出现，可以用来管理后台运行的程序。通过supervisorctl客户端来控制supervisord守护进程服务，真正进行进程监听的是supervisorctl客户端，而运行supervisor服务时是需要制定相应的supervisor配置文件的。
 
@@ -9,6 +13,17 @@ supervisord的出现，可以用来管理后台运行的程序。通过superviso
 ```shell
 # 安装 supervisord
 apt-get install supervisor
+```
+
+```
+启动
+systemctl start supervisord.service
+停止
+systemctl start supervisord.service
+重启
+systemctl restart supervisord.service
+查看状态
+systemctl status supervisord.service
 ```
 
 ## 使用
@@ -36,6 +51,17 @@ supervisorctl stop app
 supervisorctl reload # 修改/添加配置文件需要执行这个
 supervisorctl status
 webserver                        RUNNING   pid 1120, uptime 0:08:07
+supervisorctl status 查看进程运行状态
+supervisorctl start 进程名 启动进程
+supervisorctl stop 进程名 关闭进程
+supervisorctl restart 进程名 重启进程
+supervisorctl update 重新载入配置文件
+supervisorctl shutdown 关闭supervisord
+supervisorctl clear 进程名 清空进程日志
+supervisorctl 进入到交互模式下。使用help查看所有命令。
+start stop restart + all 表示启动，关闭，重启所有进程进程名 清空进程日志 
+supervisorctl 进入到交互模式下。使用help查看所有命令。 
+start stop restart + all 表示启动，关闭，重启所有进程 
 ```
 
 启动supervisor程序
@@ -117,3 +143,56 @@ numprocs 启动几个进程
 autostart supervisor启动的时候是否随着同时启动
 autorestart 当程序over的时候，这个program会自动重启，一定要选上
 ```
+
+
+```shell
+配置监控应用
+cd /etc/supervisord.d
+vim frpserver.conf
+[program:frpServer]                     ; 程序名称，可以通过ctl指定名称进行控制
+#directory = /home/kangaroo/build/CIServer             ; 程序的启动目录
+command = /root/frp/frps -c /root/frp/frps.ini
+#  ; 启动命令，可以看出与手动在命令行启动的命令是一样的
+autostart = true                        ; 在 supervisord 启动的时候也自动启动
+startsecs = 20                          ; 启动 5 秒后没有异常退出，就当作已经正常启动了
+autorestart = true                      ; 程序异常退出后自动重启
+startretries = 3                         ; 启动失败自动重试次数，默认是 3
+user = root                              ; 用哪个用户启动
+redirect_stderr = true                   ; 把 stderr 重定向到 stdout，默认 false
+stdout_logfile = /home/supervisor/log/frps.log
+stdout_logfile_maxbytes = 20MB           ; stdout 日志文件大小，默认 50MB
+stdout_logfile_backups = 20              ; stdout 日志文件备份数
+
+tomcat配置：
+
+cd /etc/supervisord.d
+vim frpserver.conf
+[program:tomcat]
+command=/apache-tomcat-8.5.55/bin/catalina.sh run
+environment=JAVA_HOME="/java/jdk1.8.0_191/",JAVA_BIN="/java/jdk1.8.0_191/bin"
+directory=/apache-tomcat-8.5.55/
+autostart = true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=20MB
+
+nginx配置
+
+cd /etc/supervisord.d
+vim frpserver.conf
+[program:nginxServer]                       ; 程序名称，可以通过ctl指定名称进行控制
+#directory = /home/kangaroo/build/CIServer             ; 程序的启动目录
+command = /usr/sbin/nginx -g 'daemon off;'
+#  ; 启动命令，可以看出与手动在命令行启动的命令是一样的
+autostart = true                    ; 在 supervisord 启动的时候也自动启动
+startsecs = 20                      ; 启动 5 秒后没有异常退出，就当作已经正常启动了
+autorestart = true                  ; 程序异常退出后自动重启
+startretries = 3                    ; 启动失败自动重试次数，默认是 3
+user = root                         ; 用哪个用户启动
+redirect_stderr = true              ; 把 stderr 重定向到 stdout，默认 false
+stdout_logfile = /home/supervisor/log/nginx.log
+stdout_logfile_maxbytes = 20MB       ; stdout 日志文件大小，默认 50MB
+stdout_logfile_backups = 20          ; stdout 日志文件备份数
+```
+

@@ -26,6 +26,9 @@ public class ExceptionTest{
         } finally{
             System.out.println("finnaly清理工作");
         }
+        // print some test cases
+        System.out.println("hello world");
+        
     }
 }
 
