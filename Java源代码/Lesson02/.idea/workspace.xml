@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6287d1ea-cc51-48fe-ac05-ba07e5be5962" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../.vscode/java-formatter.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/01 Java基础.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/02 流程控制.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/03 函数方法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/04 Java数组.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/06 异常处理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/10 包装器类.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/11 String&amp;StringBuffer类.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/20 Scanner.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/Input&amp;Output.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/image/2022-07-09-09-40-30.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/image/2022-07-09-10-21-44.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/image/2022-07-10-10-32-18.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/image/2022-07-10-18-27-47.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/image/2022-07-10-21-39-34.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/阿里巴巴java开发手册2020.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java面试原理/03 关键字.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java面试原理/04 修饰符.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java基础教程/Java面试原理/Arrays类.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lesson01/Java01HelloWorld.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BasicLanguage/BasicLanguage.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BasicLanguage/src/com/ykl/HelloWorld.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Lesson02.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../allclasses-frame.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../allclasses-noframe.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/ykl/Demo5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/ykl/HelloWorld.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/ykl/class-use/Demo5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/ykl/class-use/HelloWorld.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/ykl/package-frame.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/ykl/package-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/ykl/package-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/ykl/package-use.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../constant-values.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../deprecated-list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../help-doc.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../index-files/index-1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../index-files/index-2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../index-files/index-3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../index-files/index-4.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../overview-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../package-list" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../script.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stylesheet.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java网站开发/MyBatis/7日志.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Java网站开发/java中@的作用.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../.vscode/launch.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/java.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/java.thread.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/java.thread.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/jdk阅读笔记说明.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/429f749d3870e8c9a198746da0d0ca6e.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/429f749d3870e8c9a198746da0d0ca6e.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/4c9b2a5287c91f386c9db0ba1920904b.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/4c9b2a5287c91f386c9db0ba1920904b.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/51d56de3dfb3391d64c34cc5121e3bd0.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/51d56de3dfb3391d64c34cc5121e3bd0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/51e409b11aa51c150090697429a953ed.gif" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/51e409b11aa51c150090697429a953ed.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/54db549dedb71c1ac0e24d21fa81faf4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/54db549dedb71c1ac0e24d21fa81faf4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/6cb91c2845273c5693a564bab023d4e3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/6cb91c2845273c5693a564bab023d4e3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/7932f8d9c5acc2d3a1896b4c3233612e.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/7932f8d9c5acc2d3a1896b4c3233612e.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/995e20b243fa0e000d51589ebb780e75.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/995e20b243fa0e000d51589ebb780e75.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/c5008c69466298cf4ed608e4f6b569f0.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/c5008c69466298cf4ed608e4f6b569f0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JDK阅读/media/ec7fd9666c2bd70bfc26c6c2a1f7538a.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/media/ec7fd9666c2bd70bfc26c6c2a1f7538a.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/DAO模式的理解.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/DAO模式的理解.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/JAVA中库的理解.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/JAVA中库的理解.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/JAVA代码组织.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/JAVA代码组织.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/JSP代码作用.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/JSP代码作用.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/JSP技术详解.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/JSP技术详解.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/computer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/computer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/java中@的作用.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/12 Number&amp;Math类.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/jdbc标准范例.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/jdbc标准范例.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/media/033dc67bcd465edb89b52cc8d9bdd5c1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/media/033dc67bcd465edb89b52cc8d9bdd5c1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/media/0df06acb323561f7014fed6f60125206.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/media/0df06acb323561f7014fed6f60125206.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/media/4f52e7856884d1457ab7d1867caab247.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/media/4f52e7856884d1457ab7d1867caab247.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/media/896ddc649ace2c4d5b318d11c887ece9.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/media/896ddc649ace2c4d5b318d11c887ece9.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/关于JAVAEE非框架的理解.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/关于JAVAEE非框架的理解.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/关键字——transient.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/关键字——transient.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/移动自动测试工具appium.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/移动自动测试工具appium.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/简单的实验.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/简单的实验.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/JavaEE企业级开发/软件测试中的总结.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/软件测试中的总结.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/JAVA数据近似.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/JAVA数据近似.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/Java IO.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/21 Java IO.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/Java 基础.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/05 面向对象.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/Java 容器.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/20 Java容器.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/Java 并发.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/Java 并发.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/Java 虚拟机.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/JVM原理/Java 虚拟机.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/Toolkit和Image类的应用.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java图形界面/Toolkit和Image类的应用.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/paint方法和Graphic类.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java图形界面/paint方法和Graphic类.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/事件处理.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/事件处理.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/事件监听机制.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/事件监听机制.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/多线程共享受限资源.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/多线程共享受限资源.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/多线程共享资源问题.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/多线程共享资源问题.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/多线程理论补充.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/多线程基本操作.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/多线程的其他操作.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/多线程的其他操作.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/多线程的应用.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/多线程的应用.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/多线程通讯问题.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/多线程通讯问题.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/多线程间的通讯.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/多线程间的通讯.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/底层事件处理.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/底层事件处理.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Java基础/补充：多线程基本操作.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java并发编程/多线程理论补充.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/Lombok/Lombok.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/Lombok/Lombok.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/MyBatis/1简介.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/MyBatis/1简介.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/MyBatis/2XML配置.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java基础教程/Java语言基础/Number&amp;Math.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/MyBatis/3XML映射.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/MyBatis/3XML映射.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/MyBatis/4动态SQL.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/MyBatis/2XML配置.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/MyBatis/5Java API.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/MyBatis/4动态SQL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/MyBatis/6SQL语句构建器.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/MyBatis/5Java API.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/MyBatis/7日志.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Java网站开发/MyBatis/6SQL语句构建器.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Java基础教程/说明.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BasicLanguage/src/com/ykl/Demo5.java" beforeDir="false" afterPath="$PROJECT_DIR$/BasicLanguage/src/com/ykl/Demo5.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BasicLanguage/src/com/ykl/Demo6.java" beforeDir="false" afterPath="$PROJECT_DIR$/BasicLanguage/src/com/ykl/Demo6.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BasicLanguage/src/com/ykl/ScannerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BasicLanguage/src/com/ykl/ScannerTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2BjW2etGaEcF9vTZUsf4EX0hEEo" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "jdk.selected.JAVA_MODULE": "1.8",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "terminal"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.Demo6">
+    <configuration name="Demo5" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Demo5" />
+      <module name="BasicLanguage" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Demo6" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ykl.Demo6" />
+      <module name="BasicLanguage" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ykl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ScannerTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ykl.ScannerTest" />
+      <module name="BasicLanguage" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ykl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.ykl.HelloWorld" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ykl.HelloWorld" />
+      <module name="BasicLanguage" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Demo6" />
+        <item itemvalue="Application.ScannerTest" />
+        <item itemvalue="Application.Demo5" />
+        <item itemvalue="Application.com.ykl.HelloWorld" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6287d1ea-cc51-48fe-ac05-ba07e5be5962" name="Changes" comment="" />
+      <created>1657419769282</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1657419769282</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
