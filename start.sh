@@ -10,4 +10,6 @@ find . -name "*.java" -exec wc -l  {} \; | awk 'BEGIN{num=0} {num+=$1;print $1;}
 
 # 查看今天的日志
 find . -name "*.log" | xargs grep "wrod"
-n
+
+# wsl访问宿主机网络
+New-NetFirewallRule -DisplayName "WSL" -Direction Inbound -InterfaceAlias "vEthernet (WSL)" -Action Allow
