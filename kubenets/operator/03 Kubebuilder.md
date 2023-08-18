@@ -33,7 +33,7 @@ go mod init contollers.happyhacker.io
 2. 定义crd所属的domain，生成一个工程.定义 crd 所属的 domain，这个指令会帮助你生成一个工程。
 
 ```
-kubebuilder init --domain controller.daocloud.io --license apache2 --owner "Holder"
+kubebuilder init --domain estom.com --license apache2 --owner "Estom"
 ```
 
 创建后的目录结构如下:
