@@ -198,4 +198,5 @@
         "Java源代码/Lesson06"
     ],
     "java.configuration.updateBuildConfiguration": "disabled",
+    "java.compile.nullAnalysis.mode": "automatic",
 }
