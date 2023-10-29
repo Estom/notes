@@ -2,8 +2,8 @@
 
 
 > * bean配置文件：spring配置bean的文件。
->   * java配置文件，通过@Configuration加载
->   * 原生配置文件，xml定义的配置文件
+>   * java Bean配置文件，通过@Configuration加载
+>   * XML Bean配置文件，xml定义的配置文件
 > * 属性配置文件：spring配置key-value的文件
 
 
@@ -15,12 +15,29 @@
 3. Spring标准注解@Bean @Component @Serivce,@Controller,@Configuration,@Import,@Autowire
 4. springboot补充注解
 
-### @SpringbootConfiguration开启自动配置
+### 导入容器
+spring导入容器主要有三种方式
+1. 标准组件：@Compoent、@Repository、@Service、@Controller四种类型的组件。**通过@ComponentScan定义的扫描路径**扫描后，导入到Spring容器中。
+2. 自动配置：通过@Configuration定义的配置类。**通过@EnableAutoConfiguration注解定义扫描** **主类包路径下的所有配置类** 和 SpringFactories加载的**spirng配置文件中声明的全类名**，扫描后导入到Spring容器中。
+3. 导入配置：通过@Import和@ImportResource注解导入类。通过这两个注解可以**间接导入第三方、XML Bean配置文件中**的组件。
+
+
+> 这三种导入的组件都有其开启的方式，定义了扫描的范围。如果允许以上注解标识的组件导入到容器中，就必须满足其开启条件。
+
+导入容器还需要注意一下规则
+* 扫描到组件并不代表一定加载组件，导入组件都受到@Condition注解的过滤和影响。
+* 导入组件可以规定顺序，通过@AutoConfigurOrder 和 @AutoConfigureAfter
+
+### @SpringbootConApplication开启自动配置
 
 ```
 @SpringBootConfiguration  springboot启动
 @EnableAutoConfiguration  通过properties自动加载
 @ComponentScan("com.atguigu.boot")扫描范围
+
+===>
+
+@SpringBootApplication
 ```
 
 springboot项目中的启动注解。
@@ -131,7 +148,7 @@ public class MyConfig {
 * @Component和@Import是不会冲突，如果已经通过@Component导入的bean（优先级更高）不会通过@Import重复导入
 
 
-### ImportResource 
+### @ImportResource 
 
 导入原生配置文件
 ```xml
