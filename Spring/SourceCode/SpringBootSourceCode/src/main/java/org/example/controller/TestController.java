@@ -1,6 +1,7 @@
 package org.example.controller;
 
 
+import org.example.bean.Person;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,5 +40,11 @@ public class TestController {
         map.put("request",request.getAttribute("request"));
 
         return map;
+    }
+
+    @ResponseBody
+    @GetMapping("/person")
+    public Person getPerson(){
+        return Person.builder().name("hello").age(12).build();
     }
 }

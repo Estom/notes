@@ -5,14 +5,31 @@ import org.apache.catalina.Group;
 import org.apache.catalina.Role;
 import org.apache.catalina.User;
 import org.apache.catalina.UserDatabase;
+import org.example.interceptor.LoginInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Iterator;
 @Data
 @Configuration
 public class MyConfiguration {
+
+    @Configuration
+    public class WebMvnConfig implements WebMvcConfigurer{
+        @Autowired
+        LoginInterceptor loginInterceptor;
+
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+            registry.addInterceptor(loginInterceptor)
+                    .addPathPatterns("/**")
+                    .excludePathPatterns("/plugins/**","/dist/**","/login");
+        }
+    }
 
     @Bean
     public User getUser(){
