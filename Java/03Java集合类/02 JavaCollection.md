@@ -19,7 +19,7 @@ C++中的容器分为（都是线性的）
   * queue 队列
 
 
-Java中的容器分为（都是线性的）集合collection。除了一下基本集合类型，还有多个特殊的类型，后续补充
+Java中的集合容器分为单列集合collection和双列映射Map。除了一下基本集合类型，还有多个特殊的类型，后续补充
 * List
   * Arraylist，有序，插入序
   * vector

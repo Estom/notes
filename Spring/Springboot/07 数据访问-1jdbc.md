@@ -1,7 +1,10 @@
 ## 1 jdbc配置
 
 > 数据库与数据源不是同一个东西。。。
-
+> 三层关键概念需要理解
+> 1. 数据库驱动mysql、hsqldb
+> 2. 数据源datasource和数据库连接池Harica、Druid
+> 3. 数据库操作工具JDBCTemplates、Mybatis
 
 ### 数据源配置
 pom.xml
@@ -13,7 +16,7 @@ pom.xml
 </dependency>
 ```
 
-### 嵌入式数据库支持
+### 嵌入式数据库驱动
 嵌入式数据库支持：H2、HSQL、Derby。不需要任何配置，被集成到springboot的jar包当中。
 ```
 <dependency>
@@ -23,7 +26,7 @@ pom.xml
 </dependency>
 ```
 
-### 连接mysql数据库
+### mysql数据库驱动
 
 * 引入mysql依赖包
 
@@ -50,7 +53,7 @@ JNDI不需要用户使用java代码与数据库建立连接，而是将连接交
 spring.datasource.jndi-name=java:jboss/datasources/customers
 ```
 
-## 2 使用jdbcTemplate操作数据库
+## 2 JdbcTemplate操作数据库
 
 ### 准备数据库
 ```
@@ -119,7 +122,7 @@ public interface UserService {
 
 * 通过jdbcTemplate实现Userservice中定义的操作。
 
-```
+```java
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -165,7 +168,7 @@ public class UserServiceImpl implements UserService {
 
 ### 编写单元测试用例
 创建对UserService的单元测试用例，通过创建、删除和查询来验证数据库操作的正确性。
-```
+```java
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class Chapter31ApplicationTests {

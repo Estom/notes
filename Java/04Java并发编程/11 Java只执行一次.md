@@ -52,6 +52,7 @@ AtomicBoolean 内部持有了一个 volatile变量修饰的value，
  
 即CAS的交换思想. 
 AtomicBoolean 内部可以保证，在高并发情况下，同一时刻只有一个线程对变量修改成功。
+```java
 /**
 * Atomically update Java variable to <tt>x</tt> if it is currently
 * holding <tt>expected</tt>.
@@ -61,6 +62,7 @@ public final native boolean compareAndSwapInt(Object o, long offset,
                                               int expected,
                                               int x);
 Unsafe.compareAndSwapInt()介绍
+```
 
 三、应用
 1、AtomicBoolean 示例
@@ -92,7 +94,7 @@ public class AtomicBooleanDemo1 {
     }
 }
 2、 使用volatile 替换
- 
+```java
 public class AtomicBooleanDemo2 {
  
     // 设置初始化值为false，通过volatile变量保证线程可见性
@@ -121,10 +123,11 @@ public class AtomicBooleanDemo2 {
  
     }
 }
-
+```
 针对这种boolean类型的并发操作，可以使用AtomicBoolean进行设置即可
 
 三、源码分析
+```java
 public class AtomicBoolean implements java.io.Serializable {
     private static final long serialVersionUID = 4654671469794556979L;
     // setup to use Unsafe.compareAndSwapInt for updates
@@ -155,8 +158,9 @@ public class AtomicBoolean implements java.io.Serializable {
     }
  
 }
+```
 将expect和AtomicBoolean的value进行比较，若一致则更新为update，否则返回false
-
+```java
     /**
      * Atomically sets the value to the given updated value
      * if the current value {@code ==} the expected value.
@@ -172,7 +176,7 @@ public class AtomicBoolean implements java.io.Serializable {
         // 通过unsafe的cas方法操作，比较并替换，底层通过lock前缀加锁实现原子性
         return unsafe.compareAndSwapInt(this, valueOffset, e, u);
     }
-
+```
 四、unsafe方法的实现原理
 1、unsafe的compareAndSet内部是如何保证原子性的？
 底层通过cmpxchg汇编命令处理，如果是多处理器会使用lock前缀，可以达到内存屏障的效果，来进行隔离。

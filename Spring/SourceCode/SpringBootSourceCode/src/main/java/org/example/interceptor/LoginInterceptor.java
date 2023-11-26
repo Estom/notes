@@ -1,10 +1,7 @@
 package org.example.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.bean.User;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
