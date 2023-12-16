@@ -7,3 +7,8 @@ test.log
 *.log
 test.log
 test.json
+.idea
+.git
+*.iml
+*.log
+

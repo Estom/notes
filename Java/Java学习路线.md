@@ -28,8 +28,8 @@
   - [ ] Java 架构模式。面向对象和设计模式
 - [ ] Java 网站开发（JavaWeb 相关的技术知识。）
   - [ ] MySQL
-  - [ ] JDBC
-  - [ ] lombak
+  - [x] JDBC
+  - [x] lombak
   - [ ] mybatis
 - [x] Java 工具教程（Java 使用的关键工具，白天学习一下）
   - [x] maven 教程
@@ -94,7 +94,7 @@
   - [ ] 仓库：代码仓库(Gitee/Git)、镜像仓库(DockerHub)、依赖仓库(Maven)等
 
 > 首先看完这些相关的课程，然后去看书重新学习一遍这些知识
-> * 下三个内容：jdk/jdbc -> javaweb -> springmvc -> mybatis -> ssm -> sprincloud
+> * 下三个内容：jdk -> jdbc -> javaweb -> springmvc -> mybatis -> ssm -> sprincloud
 > * -> spring(spring->springboot->springmvc->springcloud)
 > * -> java(jdk->javaweb->jvm) 
 > * -> 网站开发(mysql->jdbc->lomback->mybatis)

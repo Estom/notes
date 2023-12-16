@@ -6,7 +6,11 @@
 
   <groupId>org.example</groupId>
   <artifactId>JdkDemo</artifactId>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>DynamicProxy</module>
+  </modules>
 
   <name>JdkDemo</name>
   <!-- FIXME change it to the project's website -->
