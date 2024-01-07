@@ -2,11 +2,13 @@
 
 > 数据库与数据源不是同一个东西。。。
 > 三层关键概念需要理解
+>
 > 1. 数据库驱动mysql、hsqldb
 > 2. 数据源datasource和数据库连接池Harica、Druid
 > 3. 数据库操作工具JDBCTemplates、Mybatis
 
 ### 数据源配置
+
 pom.xml
 
 ```
@@ -17,7 +19,9 @@ pom.xml
 ```
 
 ### 嵌入式数据库驱动
+
 嵌入式数据库支持：H2、HSQL、Derby。不需要任何配置，被集成到springboot的jar包当中。
+
 ```
 <dependency>
     <groupId>org.hsqldb</groupId>
@@ -36,7 +40,9 @@ pom.xml
     <artifactId>mysql-connector-java</artifactId>
 </dependency>
 ```
+
 * 配置数据源信息
+
 ```
 spring.datasource.url=jdbc:mysql://localhost:3306/test
 spring.datasource.username=dbuser
@@ -44,11 +50,20 @@ spring.datasource.password=dbpass
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver//定义了数据引擎
 ```
 
+### 自动配置
+
+* DataSourceAutoConfiguration
+  * 底层自动配置了默认的数据源Hicari
+* DataSourceTransactionAutoConfiguration
+* JdbcTemplateAutoConfiguration
+* JndiAutoConfiguration
+
 ### 连接JNDI数据源
 
 JNDI，避免了程序与数据库之间的紧耦合，是指更容易配置和部署。
 
 JNDI不需要用户使用java代码与数据库建立连接，而是将连接交给应用服务器进行管理。java负责与应用服务器上的JNDI通信。
+
 ```
 spring.datasource.jndi-name=java:jboss/datasources/customers
 ```
@@ -56,6 +71,7 @@ spring.datasource.jndi-name=java:jboss/datasources/customers
 ## 2 JdbcTemplate操作数据库
 
 ### 准备数据库
+
 ```
 CREATE TABLE `User` (
   `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
@@ -64,6 +80,7 @@ CREATE TABLE `User` (
 ```
 
 ### 编写领域对象
+
 并不是MVC的一部分。数据层，实现数据访问
 
 ```
@@ -78,9 +95,11 @@ public class User {
 ```
 
 ### 编写数据访问对象
+
 并非MVC的一部分。服务层，实现业务逻辑
 
 * 定义包含插入、删除、查询的抽象接口UserService
+
 ```java
 public interface UserService {
 
@@ -167,7 +186,9 @@ public class UserServiceImpl implements UserService {
 ```
 
 ### 编写单元测试用例
+
 创建对UserService的单元测试用例，通过创建、删除和查询来验证数据库操作的正确性。
+
 ```java
 @RunWith(SpringRunner.class)
 @SpringBootTest

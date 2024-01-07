@@ -19,12 +19,12 @@ Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统�
 ### 配置原理
 
 自动配置：
-● RedisAutoConfiguration 自动配置类。RedisProperties 属性类 --> spring.redis.xxx是对redis的配置
-● 连接工厂是准备好的。LettuceConnectionConfiguration、JedisConnectionConfiguration
-● 自动注入了RedisTemplate<Object, Object> ： xxxTemplate；
-● 自动注入了StringRedisTemplate；k：v都是String
-● key：value
-● 底层只要我们使用 StringRedisTemplate、RedisTemplate就可以操作redis
+* RedisAutoConfiguration 自动配置类。RedisProperties 属性类 --> spring.redis.xxx是对redis的配置
+* 连接工厂是准备好的。LettuceConnectionConfiguration、JedisConnectionConfiguration
+* 自动注入了RedisTemplate<Object, Object> ： xxxTemplate；
+* 自动注入了StringRedisTemplate；k：v都是String
+* key：value
+* 底层只要我们使用 StringRedisTemplate、RedisTemplate就可以操作redis
 
 ### 操作
 
