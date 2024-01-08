@@ -11,7 +11,7 @@
 \maketitle
 
 \section{hello}
-hello world殷康龙
+hello world
 \end{document}
 ```
 
