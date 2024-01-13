@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>vue3的响应式数据的核心原理</title>
+  </head>
+
+  <body>
+    <script type="text/javascript">
+      // 目标对象
+      const user = {
+        name: '佐助',
+        age: 20,
+        wife: {
+          name: '小樱',
+          age: 19
+        }
+      }
+      // 把目标对象变成代理对象
+      // 参数1: user---->target目标对象
+      // 参数2: handler---->处理器对象,用来监视数据,及数据的操作
+      const proxyUser = new Proxy(user, {
+        // 获取目标对象的某个属性值
+        get(target, prop) {
+          console.log('get方法调用了')
+          return Reflect.get(target, prop)
+        },
+        // 修改目标对象的属性值/为目标对象添加新的属性
+        set(target, prop, val) {
+          console.log('set方法调用了')
+          return Reflect.set(target, prop, val)
+        },
+        // 删除目标对象上的某个属性
+        deleteProperty(target, prop) {
+          console.log('delete方法调用了')
+          return Reflect.deleteProperty(target, prop)
+        }
+      })
+
+      // 通过代理对象获取目标对象中的某个属性值
+      console.log(proxyUser.name)
+      // 通过代理对象更新目标对象上的某个属性值
+      proxyUser.name = '鸣人'
+      console.log(user)
+      // 通过代理对象向目标对象中添加一个新的属性
+      proxyUser.gender = '男'
+      console.log(user)
+      delete proxyUser.name
+      console.log(user)
+      // 更新目标对象中的某个属性对象中的属性值
+      proxyUser.wife.name = '雏田'
+      console.log(user)
+    </script>
+  </body>
+</html>

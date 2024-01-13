@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>20.手写组合API</title>
+  </head>
+  <body>
+    <script src="./index.js"></script>
+    <script type="text/javascript">
+      // ==========================
+      // !todo 测试shallowReactive和reactive
+      const proxyUser1 = shallowReactive({
+        name: '小明',
+        car: {
+          color: 'red'
+        }
+      })
+      // // 拦截到了读和写的数据
+      // proxyUser1.name += '=='
+      // // 拦截到了读取数据,但是拦截不到写的数据
+      // proxyUser1.car.color + '=='
+      // // 拦截到了删除数据
+      // delete proxyUser1.name
+      // // 只拦截到了读,但是拦截不到删除
+      // delete proxyUser1.car.color
+
+      const proxyUser2 = reactive({
+        name: '小明',
+        car: {
+          color: 'red'
+        }
+      })
+      // 拦截到了读和修改的数据
+      // proxyUser2.name += '=='
+      // // 拦截到了读和修改的数据
+      // proxyUser2.car.color = '=='
+      // // 拦截了删除
+      // delete proxyUser2.name
+      // // 拦截到了读和拦截到了删除
+      // delete proxyUser2.car.color
+
+      // ==========================
+      // !todo 测试shallowReadonly和readonly
+      const proxyUser3 = shallowReadonly({
+        name: '小明',
+        cars: ['奔驰', '宝马']
+      })
+      // // 可以读取
+      // console.log(proxyUser3.name)
+      // // 不能修改
+      // proxyUser3.name = '=='
+      // // 不能删除
+      // delete proxyUser3.name
+      // // 拦截到了读取,可以修改
+      // proxyUser3.cars[0] = '奥迪'
+      // // 拦截到了读取,可以删除
+      // delete proxyUser3.cars[0]
+      // console.log(proxyUser3)
+
+      const proxyUser4 = readonly({
+        name: '小明',
+        cars: ['奔驰', '宝马']
+      })
+      // // 可以读取
+      // console.log(proxyUser4.name)
+      // // 不能修改
+      // proxyUser4.name = '=='
+      // // 不能删除
+      // delete proxyUser4.name
+      // // 拦截到了读取,不可以修改
+      // proxyUser4.cars[0] = '奥迪'
+      // // 拦截到了读取,不可以删除
+      // delete proxyUser4.cars[0]
+      // console.log(proxyUser4)
+
+      // ==========================
+      // !todo 测试 shallowRef 和 ref
+      const proxyUser5 = shallowRef({
+        name: '小明',
+        cars: {
+          color: 'red'
+        }
+      })
+      // console.log(proxyUser5.value)
+      // // 劫持到
+      // proxyUser5.value = '=='
+      // // 劫持不到
+      // proxyUser5.value.car = '=='
+
+      const proxyUser6 = ref({
+        name: '小明',
+        cars: {
+          color: 'red'
+        }
+      })
+      // console.log(proxyUser6.value)
+      // // // 劫持到
+      // // proxyUser6.value = '=='
+      // // 劫持到
+      // proxyUser6.value.car = '=='
+
+      console.log(isRef(ref({})))
+      console.log(isReactive(reactive({})))
+      console.log(isReadonly(readonly({})))
+      console.log(isProxy(reactive({})))
+      console.log(isProxy(readonly({})))
+    </script>
+  </body>
+</html>
