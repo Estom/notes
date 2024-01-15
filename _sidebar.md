@@ -1,7 +1,5 @@
 <!-- _sidebar.md -->
 
-* Typora+Docsify使用指南
-  * [Docsify使用指南](/ProjectDocs/Docsify使用指南.md) <!--注意这里是相对路径-->
-  * [Typora+Docsify快速入门](/ProjectDocs/Typora+Docsify快速入门.md)
-* Docsify部署
-  * [Docsify部署教程](/ProjectDocs/Docsify部署教程.md)
+* 设计模式
+  * [设计模式之美](./设计模式/0%20设计模式之美.md)
+  * [设计模式原则](./设计模式/1.1%20单一职责原则.md)
