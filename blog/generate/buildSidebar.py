@@ -7,13 +7,14 @@ base_dir = None
 start_with = None
 show_file = None
 ignore_file_name = None
+include_start_with = None
 
 out_file_list = []
 create_depth = -1
 
 
 def read_config():
-    global base_dir, show_file, start_with, ignore_file_name, ReadmeFile, _sidebarFile, out_file_list, create_depth
+    global base_dir, show_file, start_with, ignore_file_name, ReadmeFile, _sidebarFile, out_file_list, create_depth,include_start_with
 
     cf = ConfigParser()
     cf.read("config.ini", encoding='utf-8')
@@ -21,6 +22,7 @@ def read_config():
     start_with = cf.get("config", "ignore_start_with").split("|")
     show_file = cf.get("config", "show_file").split('|')
     ignore_file_name = cf.get("config", "ignore_file_name").split("|")
+    include_start_with = cf.get("config", "include_start_with").split("|")
 
     out_file_list = cf.get("outFile", "eachFile").split("|")
     create_depth = int(cf.get("outFile", "create_depth"))
@@ -49,8 +51,31 @@ def check_file_name_satified(file_path):
     file_name = splitext(file_name_with_extension)[0]
     if file_name[0] in start_with or file_name in ignore_file_name:
         return False
+    if file_name[0] not in include_start_with:
+        return False
     return True
 
+
+def create_directory_node():
+    '''
+    创建目录树
+    标记当前目录节点下是否有.md文件
+    '''
+    pass
+
+def build_next_level():
+    '''
+    创建下一级节点的目录_sidebar.md
+    创建当前目录级别的README.md，如果没有则创建，如果有则不创建。
+    '''
+    pass
+
+def build_full_level():
+    '''
+    创建所有子节点的目录_sidebar.md
+    创建单签目录级别的README.md,如果没有则创建，如果有则不创建。
+    '''
+    pass
 
 def save_structure(root_dir, base_dir=base_dir, depth=0):
     """
@@ -74,12 +99,12 @@ def save_structure(root_dir, base_dir=base_dir, depth=0):
         if create_depth == 0:
             subdir_structure += "- " + subdir_name + '\n'
         else:
-            subdir_structure += "- [" + subdir_name + "](" + relpath(root, base_dir) + '\)\n'
+            subdir_structure += "- [" + subdir_name + "](" + relpath(root, base_dir) + ')\n'
     else:
         if create_depth == 0:
             subdir_structure += "- " + "首页" + '\n'
         else:
-            subdir_structure += "- [" + "首页" + "](" + relpath(root, base_dir) + '\)\n'
+            subdir_structure += "- [" + "首页" + "](" + relpath(root, base_dir) + ')\n'
 
     for file in files:
         if check_file_name_satified(join(root, file)):
@@ -97,11 +122,11 @@ def save_structure(root_dir, base_dir=base_dir, depth=0):
 
     back_struct = subdir_structure
     if depth == 1:
-        subdir_structure = "- [" + "返回首页" + "](" + "" + '\?id=main)\n' + subdir_structure
+        subdir_structure = "- [" + "返回首页" + "](" + "" + '?id=main)\n' + subdir_structure
     elif depth != 0:
         abs_pre_path = abspath(join(root, ".."))
         rel_pre_path = relpath(abs_pre_path, base_dir)
-        subdir_structure = "- [" + "返回上一级" + "](" + rel_pre_path + '\)\n' + subdir_structure
+        subdir_structure = "- [" + "返回上一级" + "](" + rel_pre_path + ')\n' + subdir_structure
 
     subdir_structure = subdir_structure.replace('\\', '/')
     print("%s : finished" % root_dir)
@@ -117,7 +142,18 @@ def save_structure(root_dir, base_dir=base_dir, depth=0):
     return back_struct
 
 
+class Node:
+    pass
+
+
 if __name__ == "__main__":
+    '''
+    如果默认n层目录
+    第n-1层会生成n层目录的_sidebar
+    第n层生成之后所有目录的_sidebar
+    '''
+    import os
     read_config()
+    os.chdir(base_dir)
+    print(os.getcwd())
     save_structure(base_dir, base_dir, 0)
-    input()
