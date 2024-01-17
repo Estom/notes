@@ -56,37 +56,129 @@ def check_file_name_satified(file_path):
     return True
 
 
-def create_directory_node():
-    '''
-    创建目录树
-    标记当前目录节点下是否有.md文件
-    '''
-    pass
 
-def build_next_level():
+def build_next_level(base_path):
     '''
     创建下一级节点的目录_sidebar.md
-    创建当前目录级别的README.md，如果没有则创建，如果有则不创建。
+    todo:排除子目录下没有md文件的子目录
     '''
-    pass
+    print("build next level:"+root_path)
+    items = os.listdir(base_path)
+    result = "\n"
+    for item in items:
+        abspath = os.path.join(base_path,item)
+        if isdir(abspath):
+            rel_path = relpath(root_dir, base_dir)
+            readme_path = os.path.join(rel_path,"README.md")
+            result += "- [" + item + "](" + readme_path + ')\n'
+  
+    basename = os.path.basename(base_path)
+    # 如果README.md文件不存在，则创建
+    sidebar_path = os.path.join(base_path,"_sidebar.md")
+    with open(sidebar_path, 'w') as f:
+        f.write('## '+ basename + '\n')
+        f.write(result)      
 
-def build_full_level():
+def build_full_level(base_path):
     '''
     创建所有子节点的目录_sidebar.md
-    创建单签目录级别的README.md,如果没有则创建，如果有则不创建。
     '''
-    pass
+    print("build full path"+root_path)
+    result = deep_traverse(base_dir,'')
+    if '' == result:
+        return 
+    basename = os.path.basename(base_path)
+    sidebar_path = os.path.join(base_path,"_sidebar.md")
+    with open(sidebar_path, 'w') as f:
+        f.write('## '+ basename + '\n')
+        f.write(result)    
+
+def deep_traverse(base_dir,prefix):
+    '''
+    深度递归遍历
+    '''
+    if os.path.isfile(base_dir) 
+        if base_dir.endwith('.md')
+            return build_md_item(prefix,base_dir)
+        else:
+            return ''
+    title = prefix + '- ' + os.path.basename(base_dir) + '\n'
+    result = ''
+    for items in os.listdir(base_dir):
+        result += deep_traverse(base_dir,prefix+'  ')
+    if '' == result:
+        return ''
+    return title + result
+
+def build_readme_now(base_path):
+    '''
+    创建当前节点的readme文件，指向当前目录下的md文件。
+    深度小于depth+1 就要生成readme文件
+    '''
+    print("build readme now:"+base_dir)
+    readme_path = os.path.join(base_path, 'README.md')
+    
+    basename = os.path.basename(base_path)
+    # 如果README.md文件不存在，则创建
+    if not os.path.exists(readme_path):
+        with open(readme_path, 'w') as f:
+            f.write('## '+ basename + '\n')
+            f.write(build_md_items('',base_path))
+            
+
+def build_md_items(prefix,base_path):
+    '''
+    todo:排除前缀不符合需求的文件
+    '''
+    items = os.listdir(base_path)
+    result = "\n"
+    for item in items:
+        abspath = join(root, item)
+        if abspath is not dir:
+            result += build_md_item(prefix,item)
+    return result
+
+def build_md_item(prefix,file_path):
+    base_name = os.path.basename(file_path)
+    title = os.path.splitext(base_name)[0]
+    return prefix + "- [" + title + "](" + relpath(root_dir, base_dir) + ')\n'
+    
+
+def layer_traverse(root,now,depth):
+    build_readme_now(root)
+    '''
+    now=depth创建递归目录，不再按层遍历
+    '''
+    if now >= depth:
+        build_full_level(root)
+        return 
+    
+    '''
+    now<depth创建下层目录，并继续递归
+    '''
+    build_next_level(root)
+    items = listdir(root)
+    for item in items:
+        node = join(root, item)
+        if isdir(node):
+            layer_traverse(node,now+1,depth)
+
+     
+
+
 
 def save_structure(root_dir, base_dir=base_dir, depth=0):
     """
     遍历指定目录及其所有子目录，生成并保存目录结构。
+    遍历方案：按层遍历当前目录，如果层数小于depth则只生成下一层的目录。如果等于depth则生成所有子节点的目录。
     :param root_dir: 要处理的根目录路径
     :param base_dir: 用来获得root_dir对base_dir的相对路径
-    :param depth: 递归深度，文件夹深度
+    :param depth: 递归深度，文件夹深度。0表示根目录只在最开始生辰_sidebar，1表示两级目录
     """
     root = root_dir
     dirs = []
     files = []
+    i = 0
     for item in listdir(root):
         if isdir(join(root, item)):
             dirs.append(item)
@@ -94,6 +186,9 @@ def save_structure(root_dir, base_dir=base_dir, depth=0):
             files.append(item)
     subdir_structure = ''
     subdir_name = basename(root)
+
+
+
 
     if depth != 0:
         if create_depth == 0:
@@ -155,5 +250,6 @@ if __name__ == "__main__":
     import os
     read_config()
     os.chdir(base_dir)
-    print(os.getcwd())
-    save_structure(base_dir, base_dir, 0)
+    print("cwd:"+os.getcwd())
+    layer_traverse(base_dir,0,create_depth)
+    # save_structure(base_dir, base_dir, 0)
