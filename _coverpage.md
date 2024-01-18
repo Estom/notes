@@ -12,5 +12,5 @@
 <!-- 背景色 -->
 <!-- ![color](#f0f0f0) -->
 <!-- 背景图 -->
-![](./blog/image/cover2.jpg)
+![](./blog/image/cover3.jpeg)
 
