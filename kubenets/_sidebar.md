@@ -1,0 +1,32 @@
+## kubenets
+- kubenets
+  - [01.简介](kubenets/01.简介.md)
+  - [02.安装](kubenets/02.安装.md)
+  - [03.入门](kubenets/03.入门.md)
+  - [04-1.POD](kubenets/04-1.POD.md)
+  - [04-10 Probe](kubenets/04-10%20Probe.md)
+  - [04-2.Service](kubenets/04-2.Service.md)
+  - [04-3.Deployment](kubenets/04-3.Deployment.md)
+  - [04-4.StatefulSet](kubenets/04-4.StatefulSet.md)
+  - [04-5.ReplicaSet](kubenets/04-5.ReplicaSet.md)
+  - [04-6.Ingress](kubenets/04-6.Ingress.md)
+  - [04-7.job](kubenets/04-7.job.md)
+  - [04-8.Configmap](kubenets/04-8.Configmap.md)
+  - [04-9 PersistVolume](kubenets/04-9%20PersistVolume.md)
+  - [06.容器设计模式](kubenets/06.容器设计模式.md)
+  - [07 有无状态服务](kubenets/07%20有无状态服务.md)
+  - [08 Pod网络](kubenets/08%20Pod网络.md)
+  - [09.kubectl命令行](kubenets/09.kubectl命令行.md)
+  - [11.优雅下线](kubenets/11.优雅下线.md)
+  - ambassador
+    - [01 简介](kubenets/ambassador/01%20简介.md)
+    - [02 mapping](kubenets/ambassador/02%20mapping.md)
+  - helm
+    - [简介](kubenets/helm/简介.md)
+  - operator
+    - [01 简介](kubenets/operator/01%20简介.md)
+    - [02 Operator-sdk](kubenets/operator/02%20Operator-sdk.md)
+    - [03 Kubebuilder](kubenets/operator/03%20Kubebuilder.md)
+    - [04 原理](kubenets/operator/04%20原理.md)
+    - [05 client-go](kubenets/operator/05%20client-go.md)
+    - [06 client-go创建资源](kubenets/operator/06%20client-go创建资源.md)
