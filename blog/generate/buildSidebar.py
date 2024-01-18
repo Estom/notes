@@ -1,9 +1,10 @@
 from configparser import ConfigParser
 from os.path import splitext, basename, join, isdir, relpath, abspath
 from os import listdir
+import os
 
 # docsify根目录
-root_dir=/root/gitee/notes/blog
+root_dir='/root/gitee/notes/blog'
 # 要处理的文件或文件夹
 exclude_start_with=['_','*','.']
 exclude_file = ['readme.md']
@@ -30,23 +31,23 @@ def good_file(base_path):
         return False
     
     for item in exclude_start_with:
-        if base_name.starts_with(item):
+        if base_name.startswith(item):
             return False
         
-    rel_path = relpath(root_dir, base_path)
+    rel_path = relpath(base_path,root_dir)
     for item in exclude_dir:
         if rel_path.startswith(item):
             return False
     return True
 
 def good_dir(base_path):
-    rel_path = relpath(root_dir, base_path)
+    rel_path = relpath(base_path,root_dir)
     for item in exclude_dir:
         if rel_path.startswith(item):
             return False
-    for dirpath, dirnames, filenames in os.walk(root_dir):
+    for dirpath, dirnames, filenames in os.walk(base_path):
         for filename in filenames:
-            abspath = os.path.join(dirpath):
+            abspath = os.path.join(dirpath,filename)
             if good_file(abspath):
                 return True
     
@@ -57,13 +58,13 @@ def build_next_level(base_path):
     创建下一级节点的目录_sidebar.md
     todo:排除子目录下没有md文件的子目录
     '''
-    print("build next level:"+base_path)
-    items = os.listdir(base_path).sort()
+    items = sorted(os.listdir(base_path))
     result = "\n"
+    print("build next level:"+base_path + ",items:",items)
     for item in items:
         abspath = os.path.join(base_path,item)
         if isdir(abspath) and good_dir(abspath):
-            rel_path = relpath(root_dir, abspath)
+            rel_path = relpath(abspath,root_dir)
             readme_path = os.path.join(rel_path,"README.md")
             result += "- [" + item + "](" + readme_path + ')\n'
   
@@ -93,10 +94,12 @@ def deep_traverse(base_path,prefix):
     深度递归遍历
     '''
     if os.path.isfile(base_path):
+        if not good_file(base_path):
+            return ''
         return build_md_item(prefix,base_path)
     title = prefix + '- ' + os.path.basename(base_path) + '\n'
     result = ''
-    for item in os.listdir(base_path).sort():
+    for item in sorted(os.listdir(base_path)):
         abspath = os.path.join(base_path,item)
         result += deep_traverse(abspath,prefix+'  ')
     if '' == result:
@@ -126,20 +129,20 @@ def build_md_items(prefix,base_path):
     '''
     todo:排除前缀不符合需求的文件
     '''
-    items = os.listdir(base_path)
     result = "\n"
-    for item in items:
+    for item in sorted(os.listdir(base_path)):
         abspath = join(base_path, item)
-        if os.path.isfile(abspath):
-            result += build_md_item(prefix,item)
+        if os.path.isfile(abspath) and good_file(abspath):
+            result += build_md_item(prefix,abspath)
     return result
 
 def build_md_item(prefix,file_path):
-    if not good_file(file_path):
-        return ''
+
     base_name = os.path.basename(file_path)
     title = os.path.splitext(base_name)[0]
-    return prefix + "- [" + title + "](" + relpath(root_dir, file_path) + ')\n'
+    rel_path = relpath(file_path,root_dir)
+    print(root_dir,file_path,rel_path)
+    return prefix + "- [" + title + "](" + rel_path + ')\n'
     
 
 def layer_traverse(base_path,now,depth):
