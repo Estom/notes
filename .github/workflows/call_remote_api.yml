@@ -23,7 +23,8 @@ jobs:
 
     - name: Generate files with Python script
       run: |
-        root_dir = $(pwd)
+        root_dir=$(pwd)
+        echo root_dir
         python ./blog/docsify/build_sidebar.py root_dir # 替换为你的Python脚本路径
 
     - name: Commit generated files
