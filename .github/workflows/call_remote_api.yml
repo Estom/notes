@@ -22,7 +22,9 @@ jobs:
     #     pip install -r requirements.txt  # 如果有依赖，请替换为实际的依赖安装命令
 
     - name: Generate files with Python script
-      run: python ./notes/blog/docsify/build_sidebar.py  # 替换为你的Python脚本路径
+      run: |
+        root_dir = $(pwd)
+        python ./blog/docsify/build_sidebar.py root_dir # 替换为你的Python脚本路径
 
     - name: Commit generated files
       run: |
@@ -36,7 +38,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
-        
+
     - name: Call Remote API
       run: |
         curl -X GET http://8.141.4.34/#/

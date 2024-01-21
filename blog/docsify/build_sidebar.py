@@ -2,8 +2,10 @@ from configparser import ConfigParser
 from os.path import splitext, basename, join, isdir, relpath, abspath
 from os import listdir
 import os
+import sys
 
 # docsify根目录
+# root_dir='/root/gitee/notes'
 root_dir='/root/gitee/notes'
 # 要处理的文件或文件夹
 exclude_start_with=['_','*','.']
@@ -172,4 +174,7 @@ if __name__ == "__main__":
     第n-1层会生成n层目录的_sidebar
     第n层生成之后所有目录的_sidebar
     '''
+    if len(sys.argv) > 1:
+        root_dir = sys.argv[1]
+        print("root_dir is：", root_dir)
     layer_traverse(root_dir,0,create_depth)
