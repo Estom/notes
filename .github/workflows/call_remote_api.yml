@@ -5,7 +5,7 @@ name: Call Remote API on Push
 on:
   push:
     branches:
-      - main  # 可以指定分支名称，这里以main分支为例，也可以使用'*'匹配所有分支
+      - '*'  # 可以指定分支名称，这里以main分支为例，也可以使用'*'匹配所有分支
 
 jobs:
   call-api:
