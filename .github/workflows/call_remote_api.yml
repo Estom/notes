@@ -1,0 +1,47 @@
+# .github/workflows/call_remote_api.yml
+
+name: Call Remote API on Push
+
+on:
+  push:
+    branches:
+      - '*'  # 可以指定分支名称，这里以main分支为例，也可以使用'*'匹配所有分支
+
+jobs:
+  call-api:
+    runs-on: ubuntu-latest  # 指定运行环境，这里是最新Ubuntu
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+
+    # - name: Install Python dependencies (if any)
+    #   run: |
+    #     pip install --upgrade pip
+    #     pip install -r requirements.txt  # 如果有依赖，请替换为实际的依赖安装命令
+
+    - name: Generate files with Python script
+      run: |
+        root_dir=$(pwd)
+        echo ${root_dir}
+        python ./blog/docsify/build_sidebar.py ${root_dir} # 替换为你的Python脚本路径
+
+    - name: Commit generated files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Automatically update generated files" || echo "No changes to commit"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
+
+    - name: Call Remote API
+      run: |
+        curl -X GET http://8.141.4.34/#/
+        # curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' https://your-api-url.com/endpoint
+        # 替换上述命令中的URL和数据为你的实际API信息
