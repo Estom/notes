@@ -1,0 +1,1450 @@
+apiVersion: sealer.cloud/v2
+kind: Cluster
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: my-cluster
+spec:
+  containerRuntime:
+    type: containerd
+  env:
+  - PodCIDR=172.24.0.0/16,5408:4003:10bb:6a01:83b9:6360:c66d:0000/112
+  - SvcCIDR=10.96.0.0/16,6408:4003:10bb:6a01:83b9:6360:c66d:0000/112
+  - Network=hybridnet
+  - Addons=cluster-operator,ack-node-problem-detector,etcd-backup,kube-prometheus-stack,multus-cni
+  - KubeletRunDiskSize=200
+  - DockerRunDiskSize=200
+  - StorageDevice=/dev/vdb
+  - YodaDevice=/dev/vdb3
+  - EtcdDevice=/dev/vdc
+  - RemoveMasterTaint=true
+  - RegistryDomain=registry-internal.adp.aliyuncs.com
+  - IPv6DualStack=true
+  - vxlanPort=8472
+  - CertSANs=
+  - gatewayExternalIP=
+  - ingressExternalIP=
+  - gatewayInternalIP=
+  - ingressInternalIP=
+  - gatewayPort=30383
+  - gatewayAPIServerPort=30384
+  - ingressHttpPort=80
+  - ingressHttpsPort=443
+  - gatewayDomain=cnstack.local
+  - hyVxlanInterfaces=
+  - hyVlanInterfaces=
+  hosts:
+  - env:
+    - StorageDevice=/dev/vdc1
+    - KubeletRunDiskSize=100
+    - DockerRunDiskSize=100
+    - YodaDevice=/dev/vdc1,/dev/vdb1
+    - EtcdDevice=/
+    ips:
+    - 10.124.42.180
+    - 10.124.42.181
+    - 10.124.42.182
+    roles:
+    - master
+    ssh:
+      passwd: Sjzx@2019
+      port: "22"
+      user: root
+  image: cloud-image-registry.cn-shanghai.cr.aliyuncs.com/applications/1248190786113098:alarm-1.0.6-c4fb1a2-f2dd0f
+  registry:
+    localRegistry:
+      cert: {}
+      domain: registry-internal.adp.aliyuncs.com
+      port: 5000
+  ssh: {}
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: cnstack-multicluster-2.2.1-app-model
+spec:
+  data: |
+    kind: Application
+    apiVersion: app-operator.aliyun.com/v1
+    metadata:
+      name: cnstack-multicluster
+      namespace: cnstack-multicluster
+      labels: {}
+      annotations:
+        adp.aliyuncs.com/app-display-name: 多集群服务
+        adp.aliyuncs.com/app-spec-name: poc
+        adp.aliyuncs.com/application-provider: "1955009827675648"
+        adp.aliyuncs.com/application-vendor: cnstack
+        adp.aliyuncs.com/supported-platforms: '["linux/amd64","linux/arm64"]'
+    spec:
+      name: cnstack-multicluster
+      version: 2.2.1
+      description: 多集群
+      versionDescription: ack-lite-22-15镜像更新，修复客用集群hybridnet镜像无法拉取，创建集群需要重启containerd问题
+      infrastructure:
+        foundationReference:
+          version: 2.3.0
+          clusterImage: cloud-image-registry.cn-shanghai.cr.aliyuncs.com/foundations/adp-base:cnstack-2.3.0-98afc5d-163339
+        platform:
+          code: trident
+          version: ""
+          kubeVersion: ""
+          pkgURL: ""
+        resources: []
+      components:
+      - name: ocm-addon-config
+        resourceVersion: 0.1.0
+        type: ocm-addon-config
+        version: 1.0.0
+        versionDescription: A Helm chart for OCM Addon Configuration
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-distribution/1955009827675648/ocm-addon-config/1cbfae2de228fb7f485cec3306256314/ocm-addon-config-0.1.0.tgz
+            values: Z2xvYmFsOgogICAgZW5hYmxlRHVhbFN0YWNrOiB0cnVlCiAgICBub2RlU2VsZWN0b3I6CiAgICAgICAgbm9kZS1yb2xlLmt1YmVybmV0ZXMuaW8vY25zdGFjay1pbmZyYTogIiIKICAgIHJlZ2lzdHJ5RG9tYWluOiBhY2stYWdpbGl0eS1yZWdpc3RyeS5jbi1zaGFuZ2hhaS5jci5hbGl5dW5jcy5jb20KICAgIHRvbGVyYXRpb25zOgogICAgICAgIC0gZWZmZWN0OiBOb1NjaGVkdWxlCiAgICAgICAgICBrZXk6IG5vZGUtcm9sZS5rdWJlcm5ldGVzLmlvL21hc3RlcgogICAgICAgICAgb3BlcmF0b3I6IEV4aXN0cwogICAgICAgIC0gZWZmZWN0OiBOb1NjaGVkdWxlCiAgICAgICAgICBrZXk6IG5vZGUtcm9sZS5rdWJlcm5ldGVzLmlvL2Nuc3RhY2staW5mcmEKICAgICAgICAgIG9wZXJhdG9yOiBFeGlzdHMK
+            timeout: 600
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64","linux/arm64"]'
+          namespace: cnstack-multicluster
+      - name: cnstack-multicluster
+        resourceVersion: 2.1.6-antbuild-hotfix
+        type: cnstack-multicluster
+        version: 2.1.6-antbuild-hotfix
+        versionDescription: A Helm chart for cnstack-multicluster
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-distribution/1955009827675648/cnstack-multicluster/5d589c549b62fa300fadcbd44ca50c9e/cnstack-multicluster-2.1.6-antbuild-hotfix.tgz
+            values: Y2x1c3Rlci1nYXRld2F5LWFkZG9uLW1hbmFnZXI6CiAgICBjbHVzdGVyR2F0ZXdheToKICAgICAgICBpbWFnZTogYW50Y25zdGFjay9jbHVzdGVyLWdhdGV3YXkKICAgICAgICBpbnN0YWxsTmFtZXNwYWNlOiB2ZWxhLXN5c3RlbQogICAgICAgIHJlcGxpY2FzOiAiMyIKICAgICAgICBzZWNyZXROYW1lc3BhY2U6IG9wZW4tY2x1c3Rlci1tYW5hZ2VtZW50LWNyZWRlbnRpYWxzCiAgICAgICAgdGFnOiB2MS42LjAtYWNrYS03MTg4MGJiYgogICAgZW5hYmxlQ2xpZW50SWRlbnRpdHlQZW5ldHJhdGlvbjogdHJ1ZQogICAgaW1hZ2U6IGFudGNuc3RhY2svY2x1c3Rlci1nYXRld2F5LWFkZG9uLW1hbmFnZXIKICAgIGtvbm5lY3Rpdml0eUVncmVzczogZmFsc2UKICAgIG1hbnVhbFNlY3JldE1hbmFnZW1lbnQ6IGZhbHNlCiAgICByZXBsaWNhczogMgogICAgcmVzb3VyY2VzOgogICAgICAgIGxpbWl0czoKICAgICAgICAgICAgY3B1OiAyMDBtCiAgICAgICAgICAgIG1lbW9yeTogNTEyTWkKICAgICAgICByZXF1ZXN0czoKICAgICAgICAgICAgY3B1OiAxMG0KICAgICAgICAgICAgbWVtb3J5OiA2NE1pCiAgICB0YWc6IHYxLjYuMC1hY2thLTcxODgwYmJiCmNsdXN0ZXItaW1wb3J0LWNvbnRyb2xsZXI6CiAgICBhZ2VudEluc3RhbGxOYW1lc3BhY2U6CiAgICAgICAgY2x1c3RlclByb3h5OiBvcGVuLWNsdXN0ZXItbWFuYWdlbWVudC1jbHVzdGVyLXByb3h5CiAgICBkaXNhYmxlTGljZW5zZTogZmFsc2UKICAgIGltYWdlOgogICAgICAgIGltcG9ydENvbnRyb2xsZXI6CiAgICAgICAgICAgIGltYWdlOiBhbnRjbnN0YWNrL2ltcG9ydC1jb250cm9sbGVyCiAgICAgICAgICAgIHRhZzogdjAuMS4xLXNwMDAxLWEzZWEwYjc3CiAgICAgICAgbWFuYWdlZEpvYjoKICAgICAgICAgICAgaW1hZ2U6IGFudGNuc3RhY2svbWFuYWdlZC1qb2IKICAgICAgICAgICAgdGFnOiB2MC4xLjAtM2ZkZTM0ZTgKICAgICAgICByZWdpc3RyYXRpb246CiAgICAgICAgICAgIGltYWdlOiBhbnRjbnN0YWNrL3JlZ2lzdHJhdGlvbgogICAgICAgICAgICB0YWc6IHYwLjkuMC1hY2thLTA2MDQ3YzYwCiAgICAgICAgcmVnaXN0cmF0aW9uT3BlcmF0b3I6CiAgICAgICAgICAgIGltYWdlOiBhbnRjbnN0YWNrL3JlZ2lzdHJhdGlvbi1vcGVyYXRvcgogICAgICAgICAgICB0YWc6IHYwLjkuMS1hY2thLTUyNGM1MjgyCiAgICAgICAgd29yazoKICAgICAgICAgICAgaW1hZ2U6IGFudGNuc3RhY2svd29yawogICAgICAgICAgICB0YWc6IHYwLjkuMC1hY2thLWQzY2YxMjNmCiAgICBrbHVzdGVybGV0TmFtZXNwYWNlOiBvcGVuLWNsdXN0ZXItbWFuYWdlbWVudC1hZ2VudAogICAgcmVwbGljYXM6IDIKICAgIHJlc291cmNlczoKICAgICAgICBsaW1pdHM6CiAgICAgICAgICAgIGNwdTogNTAwbQogICAgICAgICAgICBtZW1vcnk6IDUxMk1pCiAgICAgICAgcmVxdWVzdHM6CiAgICAgICAgICAgIGNwdTogMTAwbQogICAgICAgICAgICBtZW1vcnk6IDEyOE1pCmNsdXN0ZXItcHJveHk6CiAgICBpbWFnZToKICAgICAgICBwcm94eToKICAgICAgICAgICAgaW1hZ2U6IGFudGNuc3RhY2svY2x1c3Rlci1wcm94eQogICAgICAgICAgICB0YWc6IHYwLjIuMy1hY2thLWZjOGJmZDAyCiAgICAgICAgcHJveHlBZ2VudDoKICAgICAgICAgICAgaW1hZ2U6IGFudGNuc3RhY2svY2x1c3Rlci1wcm94eQogICAgICAgICAgICB0YWc6IHYwLjIuMy1hY2thLWZjOGJmZDAyCiAgICAgICAgcHJveHlTZXJ2ZXI6CiAgICAgICAgICAgIGltYWdlOiBhbnRjbnN0YWNrL2NsdXN0ZXItcHJveHkKICAgICAgICAgICAgdGFnOiB2MC4yLjMtYWNrYS1mYzhiZmQwMgogICAgcHJveHlTZXJ2ZXI6CiAgICAgICAgZW50cnlwb2ludEFkZHJlc3M6ICIiCiAgICAgICAgZW50cnlwb2ludExvYWRCYWxhbmNlcjogZmFsc2UKICAgICAgICBwb3J0OiA4MDkxCiAgICByZXBsaWNhczogMgogICAgcmVzb3VyY2VzOgogICAgICAgIGxpbWl0czoKICAgICAgICAgICAgY3B1OiAzMDBtCiAgICAgICAgICAgIG1lbW9yeTogNTEyTWkKICAgICAgICByZXF1ZXN0czoKICAgICAgICAgICAgY3B1OiAxMG0KICAgICAgICAgICAgbWVtb3J5OiA2NE1pCiAgICBzcG9rZUFkZG9uTmFtZXNwYWNlOiBvcGVuLWNsdXN0ZXItbWFuYWdlbWVudC1jbHVzdGVyLXByb3h5CmNyZFByZWhvb2tKb2I6CiAgICBpbWFnZTogYW50Y25zdGFjay9wcmVpbnN0YWxsLWpvYgogICAgdGFnOiB2Mi4xLjAtNGI4MDc0MzkKZ2xvYmFsOgogICAgY25zdGFja1Byb2R1Y3ROYW1lOiBjbnN0YWNrCiAgICBlbmFibGVEdWFsU3RhY2s6IHRydWUKICAgIGVuYWJsZU1hcHBpbmc6IHRydWUKICAgIG1pblN1cHBvcnRLOHNWZXJzaW9uOiAiMS4yMCIKICAgIG5vZGVTZWxlY3RvcjoKICAgICAgICBub2RlLXJvbGUua3ViZXJuZXRlcy5pby9jbnN0YWNrLWluZnJhOiAiIgogICAgcmVnaXN0cnlEb21haW46IGFudC1jbnN0YWNrLXJlZ2lzdHJ5LmNuLWhhbmd6aG91LmNyLmFsaXl1bmNzLmNvbQogICAgdG9sZXJhdGlvbnM6CiAgICAgICAgLSBlZmZlY3Q6IE5vU2NoZWR1bGUKICAgICAgICAgIGtleTogbm9kZS1yb2xlLmt1YmVybmV0ZXMuaW8vbWFzdGVyCiAgICAgICAgICBvcGVyYXRvcjogRXhpc3RzCiAgICAgICAgLSBlZmZlY3Q6IE5vU2NoZWR1bGUKICAgICAgICAgIGtleTogbm9kZS1yb2xlLmt1YmVybmV0ZXMuaW8vY25zdGFjay1pbmZyYQogICAgICAgICAgb3BlcmF0b3I6IEV4aXN0cwptYW5hZ2VkLXNlcnZpY2VhY2NvdW50OgogICAgYWdlbnRJbnN0YWxsQWxsOiB0cnVlCiAgICBmZWF0dXJlR2F0ZXM6CiAgICAgICAgZXBoZW1lcmFsSWRlbnRpdHk6IGZhbHNlCiAgICBpbWFnZTogYW50Y25zdGFjay9tYW5hZ2VkLXNlcnZpY2VhY2NvdW50CiAgICByZXBsaWNhczogMgogICAgcmVzb3VyY2VzOgogICAgICAgIGxpbWl0czoKICAgICAgICAgICAgY3B1OiAyMDBtCiAgICAgICAgICAgIG1lbW9yeTogMjU2TWkKICAgICAgICByZXF1ZXN0czoKICAgICAgICAgICAgY3B1OiAxMG0KICAgICAgICAgICAgbWVtb3J5OiA2NE1pCiAgICB0YWc6IHYwLjMuMC1hY2thLTc3NmY3Nzc3Cm1vbml0b3Jpbmc6CiAgICBhcHBOYW1lOiBjbnN0YWNrLW11bHRpY2x1c3RlcgogICAgYXBwTmFtZXNwYWNlOiBjbnN0YWNrLW11bHRpY2x1c3RlcgptdWx0aWNsdXN0ZXItYXBpc2VydmVyOgogICAgaW1hZ2U6IGFudGNuc3RhY2svbXVsdGljbHVzdGVyLWFwaXNlcnZlcgogICAgcmVwbGljYXM6IDIKICAgIHJlc291cmNlczoKICAgICAgICBsaW1pdHM6CiAgICAgICAgICAgIGNwdTogNDAwbQogICAgICAgICAgICBtZW1vcnk6IDUxMk1pCiAgICAgICAgcmVxdWVzdHM6CiAgICAgICAgICAgIGNwdTogMjAwbQogICAgICAgICAgICBtZW1vcnk6IDI1Nk1pCiAgICB0YWc6IHYyLjEuMC1zcDAwMS0wNGFhYzljZQpwcmUtZGVsZXRlLWpvYjoKICAgIGltYWdlOiBhbnRjbnN0YWNrL3ByZWRlbGV0ZS1qb2IKICAgIHRhZzogdjIuMS4wLTVlZWFlNjVmCnJlZ2lzdHJhdGlvbi1vcGVyYXRvci1odWI6CiAgICBpbWFnZToKICAgICAgICBwbGFjZW1lbnQ6CiAgICAgICAgICAgIGltYWdlOiBhbnRjbnN0YWNrL3BsYWNlbWVudAogICAgICAgICAgICB0YWc6IHYwLjkuMC1hY2thLTZkMGFlOGNkCiAgICAgICAgcmVnaXN0cmF0aW9uOgogICAgICAgICAgICBpbWFnZTogYW50Y25zdGFjay9yZWdpc3RyYXRpb24KICAgICAgICAgICAgdGFnOiB2MC45LjAtYWNrYS0wNjA0N2M2MAogICAgICAgIHJlZ2lzdHJhdGlvbk9wZXJhdG9yOgogICAgICAgICAgICBpbWFnZTogYW50Y25zdGFjay9yZWdpc3RyYXRpb24tb3BlcmF0b3IKICAgICAgICAgICAgdGFnOiB2MC45LjEtYWNrYS01MjRjNTI4MgogICAgICAgIHdvcms6CiAgICAgICAgICAgIGltYWdlOiBhbnRjbnN0YWNrL3dvcmsKICAgICAgICAgICAgdGFnOiB2MC45LjAtYWNrYS1kM2NmMTIzZgogICAgaW1hZ2VQdWxsUG9saWN5OiBJZk5vdFByZXNlbnQKICAgIHJlcGxpY2FzOiAyCiAgICByZXNvdXJjZXM6CiAgICAgICAgbGltaXRzOgogICAgICAgICAgICBjcHU6IDUwMG0KICAgICAgICAgICAgbWVtb3J5OiA1MTJNaQogICAgICAgIHJlcXVlc3RzOgogICAgICAgICAgICBjcHU6IDEwMG0KICAgICAgICAgICAgbWVtb3J5OiAxMjhNaQo=
+            timeout: 600
+            disableOpenapiValidation: true
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64","linux/arm64"]'
+  path: applications/cnstack-multicluster-2.2.1.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: cnstack-multicluster-2.2.1-namespace
+spec:
+  data: |
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/managed-namespace: "true"
+      name: cnstack-multicluster
+    spec: {}
+    status: {}
+  path: applications/cnstack-multicluster-2.2.1-namespace.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: sofams-console-1.1.0-rc1-app-model
+spec:
+  data: |
+    kind: Application
+    apiVersion: app-operator.aliyun.com/v1
+    metadata:
+      name: sofams-console
+      namespace: sofams-console
+      labels: {}
+      annotations:
+        adp.aliyuncs.com/app-display-name: sofams-console
+        adp.aliyuncs.com/app-spec-name: default
+        adp.aliyuncs.com/application-provider: "1955009827675648"
+        adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+    spec:
+      name: sofams-console
+      version: 1.1.0-rc1
+      description: 微服务控制面
+      versionDescription: 一汽环境console通过adp出包底座部署
+      infrastructure:
+        foundationReference:
+          version: 2.3.0
+          clusterImage: cloud-image-registry.cn-shanghai.cr.aliyuncs.com/foundations/adp-base:cnstack-2.3.0-98afc5d-163339
+        platform:
+          code: trident
+          version: ""
+          kubeVersion: ""
+          pkgURL: ""
+        resources: []
+      components:
+      - name: sofams-console
+        resourceVersion: 1.1.0-34
+        type: sofams-console
+        version: 1.0.0
+        versionDescription: micro service enterprise product
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-distribution/1955009827675648/sofams-console/761757173fef6ed8023e143395b91fe4/sofams-console-1.1.0-34.tgz
+            values: YXV0aDoKICAgIGVuYWJsZWQ6IHRydWUKY29uZmlnbWFwOgogICAgREJfVFlQRTogJ3t7IC5WYWx1ZXMuY29uc29sZS5kYXRhYmFzZS50eXBlIH19JwogICAgYXBwX25hbWU6IGRzcmNvbnNvbGUKICAgIGF1ZGl0LmNlbnRlci5lbmFibGU6ICJmYWxzZSIKICAgIGF1dGgubmVlZC5jaGVjazogImZhbHNlIgogICAgY2xlYW4uc2VydmljZS5zd2l0Y2g6ICJmYWxzZSIKICAgIGNvbS5hbGlwYXkuZW52OiBzaGFyZWQKICAgIGNvbS5hbGlwYXkuaW5zdGFuY2VpZDogIjEiCiAgICBjb20uYW50Y2xvdWQuYW50dmlwLmVuZHBvaW50OiAxMjcuMC4wLjEKICAgIGNvbV9hbGlwYXlfaW5zdGFuY2VpZDogIjEiCiAgICBjb21fYWxpcGF5X21vZGU6IHB1YmxpYwogICAgY29tX2FsaXBheV90ZW5hbnQ6IHN1cGVyQWRtaW4KICAgIGNvbnN1bWVyX2FkZHJlc3Nfd2FpdDogIjAiCiAgICBjc3JmLm5lZWQuY2hlY2s6ICJmYWxzZSIKICAgIGRlcGxveV9vYnByb3h5OiAiZmFsc2UiCiAgICBkcm1fZW5hYmxlZDogImZhbHNlIgogICAgZHNyY29uc29sZS5saXRlLnN3aXRjaDogInRydWUiCiAgICBkc3Jjb25zb2xlLm1lbnVzOiAneyJoYXNDaGlsZHJlbiI6InRydWUiLCJkaXNwbGF5TmFtZUNOIjoiXHU1RkFFXHU2NzBEXHU1MkExIiwibWVudXMiOlt7ImNoaWxkcmVuIjpbeyJkaXNwbGF5TmFtZUNOIjoiXHU2NzBEXHU1MkExXHU3QkExXHU2M0E3IiwibGluayI6IiMvbXMvY2xhc3NpYy9uYWNvc1NlcnZpY2VEaXIifSx7ImRpc3BsYXlOYW1lQ04iOiJcdTUyQThcdTYwMDFcdTkxNERcdTdGNkUiLCJsaW5rIjoiIy9tcy9jbGFzc2ljL25hY29zQ29uZmlnIn0seyJkaXNwbGF5TmFtZUNOIjoiXHU2NzBEXHU1MkExXHU2Q0JCXHU3NDA2IiwibGluayI6IiMvbXMvY2xhc3NpYy9zZW50aW5lbFNlcnZpY2VEaXIifSx7ImRpc3BsYXlOYW1lQ04iOiJcdTVCQTFcdThCQTFcdTc2RUVcdTVGNTUiLCJsaW5rIjoiIy9tcy9jbGFzc2ljL29wZXJhaW9uQXVkaXQifV0sImFwcE5hbWUiOiJkc3Jjb25zb2xlIiwiaGFzQ2hpbGRyZW4iOiJ0cnVlIiwiZGlzcGxheU5hbWVDTiI6Ilx1N0VDRlx1NTE3OFx1NUZBRVx1NjcwRFx1NTJBMSJ9XSwidHlwZSI6InNpbmd1bGFyIiwiaXNDaGlsZHJlblNhbWVBcHAiOiJ0cnVlIiwiYXBwcyI6W3sicm91dGVyUHJlZml4IjoiIy9tcyIsIm5hbWUiOiJtcyIsImVudHJ5SFRNTCI6Ii9pbmRleC5sb2NhbC5odG1sIn1dfScKICAgIGRzcmNvbnNvbGUub3NwLmF1dGg6ICJmYWxzZSIKICAgIGVudi5hbGl5dW46ICJmYWxzZSIKICAgIGVudi5uYW1lOiBkZWZhdWx0CiAgICBlbnYucmVnaW9uOiBkZWZhdWx0CiAgICBpbnN0YW5jZUlkLmNoZWNrOiAidHJ1ZSIKICAgIGlzQ25TdGFja0xvZ2luOiAidHJ1ZSIKICAgIGlzTXNBdXRoOiAiZmFsc2UiCiAgICBpc01zTG9naW46ICJmYWxzZSIKICAgIGlzVXNlck1vY2s6ICJmYWxzZSIKICAgIGxkYy5zd2l0Y2g6ICJmYWxzZSIKICAgIGxpY2VuY2UuZW5hYmxlOiAiZmFsc2UiCiAgICBsb2NhbC5zZXJ2ZXIubW9jay5kb21haW46IGxvY2FsaG9zdAogICAgbG9jYWwuc2VydmVyLm1vY2suc3dpdGNoOiAidHJ1ZSIKICAgIGxvZ29JbmZvOiAne30nCiAgICBtb2NrVXNlcjogJ3sicm9sZXMiOlsibWlkZGxld2FyZV9tYXN0ZXIiLCJtaWRkbGV3YXJlX3Jvb3QiXSwidGVuYW50SW5mbyI6eyJpbnN0YW5jZUlkcyI6WyIwMDAwMDEiLCIzMkRWUkRXT04xMFciLCI4RlVNSENUVlRYQ1ciLCJCMkhPUEhEMFdZMkYiLCJESkVaRlFMTllCWVoiLCJHQURXUUNJMDY1REUiLCJJTTZZTkxORjc1OVUiLCJPSFpHTUVFUFQ3UDQiLCJQT0RJVTJLVzFYS1IiLCJRVFZQRzUwRFFUUE4iLCJSV1RYTFlSUU1JMFEiLCJTT0pYWFJQOEtSMkYiLCJUUVFVRkxITEZQTFAiLCJVS0VLWFRRSUY1S0wiLCJzb2ZhLXJwYyJdLCJ3b3Jrc3BhY2VJZHMiOlsiQVRFQ0RlbW9EZXYiLCJERUZBVUxUIiwiX3pzZWFyY2giLCJjeHkyIiwiZGVhIiwiZGVpIiwiZGV2IiwiZXQxNXNpdCIsImV0MTV0c3QiLCJpbnRsIiwibWlkZGxld2FyZSIsInNpbmdsZSIsInNpdCIsInRlc3QiXSwidGVuYW50SWQiOiJDUEpWVEJDTiJ9LCJ0ZW5hbnRJbmZvcyI6W3siaW5zdGFuY2VJZHMiOlsiMDAwMDAxIiwiMzJEVlJEV09OMTBXIiwiOEZVTUhDVFZUWENXIiwiQjJIT1BIRDBXWTJGIiwiREpFWkZRTE5ZQllaIiwiR0FEV1FDSTA2NURFIiwiSU02WU5MTkY3NTlVIiwiT0haR01FRVBUN1A0IiwiUE9ESVUyS1cxWEtSIiwiUVRWUEc1MERRVFBOIiwiUldUWExZUlFNSTBRIiwiU09KWFhSUDhLUjJGIiwiVFFRVUZMSExGUExQIiwiVUtFS1hUUUlGNUtMIiwic29mYS1ycGMiXSwid29ya3NwYWNlSWRzIjpbIkFURUNEZW1vRGV2IiwiREVGQVVMVCIsIl96c2VhcmNoIiwiY3h5MiIsImRlYSIsImRlaSIsImRldiIsImV0MTVzaXQiLCJldDE1dHN0IiwiaW50bCIsIm1pZGRsZXdhcmUiLCJzaW5nbGUiLCJzaXQiLCJ0ZXN0Il0sInRlbmFudElkIjoiQ1BKVlRCQ04ifV0sInVzZUp1ZGdlIjpmYWxzZSwidXNlciI6eyJyZWFsTmFtZSI6Im1vY2tVc2VyIiwibmlja05hbWUiOiJtb2NrVXNlciIsImxvZ2luTmFtZSI6Im1vY2tVc2VyQGFudGdyb3VwLmNvbSIsImlkIjoiMDAwNDMxNTA3MiIsImVtYWlsIjoibW9ja1VzZXJAYW50Z3JvdXAuY29tIn19JwogICAgbW9uaXRvclR5cGU6IHByb21ldGhldXMKICAgIG1zLmFjY2Vzc3NlY3JldDogTWlkZGxlV2FyZVByb3ZpZGVyU0sKICAgIG5hY29zLmVuYWJsZTogInRydWUiCiAgICBvcC5hZG1pbi5hY2Nlc3NLZXk6IGFrCiAgICBvcC5hZG1pbi5hY2Nlc3NTZWNyZXQ6IHNrCiAgICBvcC5nYXRld2F5LmJhc2VVcmw6IGh0dHA6Ly8KICAgIG9zcC5hdXRoLmZpbmUuZ3JhaW46ICJmYWxzZSIKICAgIG9zcC5hdXRoLnN0cmljdC5tb2RlOiAiZmFsc2UiCiAgICBvc3AuY2FuVXNlSnVkZ2U6ICJmYWxzZSIKICAgIHByb2Nlc3MuYWxpdmUuZGV0ZWN0ZWQuY3JvbjogMyAwLzUgKiAqICogPwogICAgcHJvY2Vzcy5hbGl2ZS5kZXRlY3RlZC5mcmVxdWVuY3k6ICIzMDAwMCIKICAgIHByb2Nlc3MuYWxpdmUuZGV0ZWN0ZWQuc3dpdGNoOiAidHJ1ZSIKICAgIHByb2Nlc3MuYWxpdmUudGltZW91dC5zZWNvbmRzOiAiMTIwIgogICAgcHJvY2Vzcy5jbGVhbi5jcm9uOiAwIDAvMyAqICogKiA/CiAgICBwcm9jZXNzLmluZm8uY2xlYW4uam9iLmNyb246IDUgMC8xMCAqICogKiA/CiAgICBwcm9jZXNzLmtlZXAubWludXRlczogIjUiCiAgICBxdWFydHouZW5hYmxlZDogInRydWUiCiAgICByZWdpc3RyeS5jbGllbnRvZmYuZmlsdGVyLWlwOiAiZmFsc2UiCiAgICByZWdpc3RyeS5kYXRhLmNlbnRlcjogIiIKICAgIHJlZ2lzdHJ5LnNlcnZlci5lbmRwb2ludDogc29mYW1zLW5hY29zLWhlYWRsZXNzLnNvZmEtbXMuc3ZjLmNsdXN0ZXIubG9jYWw6ODg0OAogICAgcmVnaXN0cnkuc2VydmVyLnBhc3N3b3JkOiBuYWNvcwogICAgcmVnaXN0cnkuc2VydmVyLnJlZnJlc2hhYmxlOiAidHJ1ZSIKICAgIHJlZ2lzdHJ5LnNlcnZlci51c2VybmFtZTogbmFjb3MKICAgIHJlZ2lzdHJ5LnNlc3Npb24uaHR0cC5wb3J0OiAiODg0OCIKICAgIHJlZ2lzdHJ5LnNlc3Npb24uc2VydmVyOiBzb2ZhbXMtbmFjb3MtMC5zb2ZhbXMtbmFjb3MtaGVhZGxlc3Muc29mYS1tcy5zdmMuY2x1c3Rlci5sb2NhbCwKICAgIHJ1bl9tb2RlOiB4eHgKICAgIHNlbnNvci5zZXJ2aWNlLmlkOiBtcwogICAgc2Vzc2lvbi5oZWFsdGhjaGVjay5lbmFibGVkOiAiZmFsc2UiCiAgICBzZXNzaW9uLnNlcnZlcjogMTI3LjAuMC4xCiAgICBzZXNzaW9uLnN1cHBvcnQucXVlcnkuaXBzLnN3aXRjaDogImZhbHNlIgogICAgc2l0ZTogTUFJTl9TSVRFCiAgICBzeW5jLmNoZWNrc3VtLmVuYWJsZTogInRydWUiCiAgICB0aW1lem9uZTogQXNpYS9TaGFuZ2hhaQogICAgdW5jaGVjay5pbnN0YW5jZUlkOiAwMDAwMDEsc29mYS1wcm9qZWN0CiAgICB3ZWIuc291cmNlLnZlcnNpb246IHN0YXRpYwogICAgd2Vic2hlbGwuYWRkcmVzczogMTI3LjAuMC4xCmRhdGFiYXNlOgogICAgZnJvbVNlY3JldDogIiIKICAgIG15c3FsRGF0YWJhc2U6IGRzcmNvbnNvbGUKICAgIG15c3FsSG9zdDogbXlzcWwtbmFjb3MtbXlzcWwuc29mYS1tcy5zdmMKICAgIG15c3FsUGFzc3dvcmQ6IEhjQENsb3VkMDEKICAgIG15c3FsUG9ydDogIjMzMDYiCiAgICBteXNxbFJvb3RQYXNzd29yZDogSGNAQ2xvdWQwMQogICAgbXlzcWxVc2VyOiBkc3Jjb25zb2xlCiAgICB0eXBlOiBteXNxbApmdWxsbmFtZU92ZXJyaWRlOiAiIgpob3N0OiBzb2ZhLW1zLmNuc3RhY2subG9jYWwKaW1hZ2U6CiAgICBjb25zb2xlOiByZWcuZG9ja2VyLmFsaWJhYmEtaW5jLmNvbS9hbnRjbnN0YWNrL2RzcmNvbnNvbGU6MjAyNDAyMjcyMzEwMjNfYzNkN2MxNmYKICAgIG15c3FsOiByZWcuZG9ja2VyLmFsaWJhYmEtaW5jLmNvbS9hbnRjbnN0YWNrL3NvZmEtbXMtZGJpbml0OjIwMjQwMTI5MTcwMzEyXzRiODk2NzA0CmltYWdlUHVsbFBvbGljeTogSWZOb3RQcmVzZW50Cm1vbml0b3I6CiAgICBlbmFibGVkOiB0cnVlCm5hbWVPdmVycmlkZTogIiIKcmVhZGluZXNzUHJvYmU6CiAgICBmYWlsdXJlVGhyZXNob2xkOiAzCiAgICBodHRwR2V0OgogICAgICAgIHBhdGg6IC9oZWFsdGgKICAgICAgICBwb3J0OiA4MDgwCiAgICAgICAgc2NoZW1lOiBIVFRQCiAgICBpbml0aWFsRGVsYXlTZWNvbmRzOiA2MAogICAgcGVyaW9kU2Vjb25kczogMTAKICAgIHRpbWVvdXRTZWNvbmRzOiAzMDAKcmVwbGljYXM6IDIKcmVzb3VyY2VzOgogICAgbGltaXRzOgogICAgICAgIGNwdTogIjIiCiAgICAgICAgbWVtb3J5OiA0R2kKICAgIHJlcXVlc3RzOgogICAgICAgIGNwdTogIjIiCiAgICAgICAgbWVtb3J5OiA0R2kK
+            timeout: 600
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+  path: applications/sofams-console-1.1.0-rc1.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: sofams-console-1.1.0-rc1-namespace
+spec:
+  data: |
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/managed-namespace: "true"
+      name: sofams-console
+    spec: {}
+    status: {}
+  path: applications/sofams-console-1.1.0-rc1-namespace.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:47Z"
+  name: alarm-1.0.6-app-model
+spec:
+  data: |
+    kind: Application
+    apiVersion: app-operator.aliyun.com/v1
+    metadata:
+      name: alarm
+      namespace: alarm
+      labels: {}
+      annotations:
+        adp.aliyuncs.com/app-display-name: 告警云服务
+        adp.aliyuncs.com/app-spec-name: poc
+        adp.aliyuncs.com/application-provider: "1955009827675648"
+        adp.aliyuncs.com/supported-platforms: '["linux/amd64","linux/arm64"]'
+    spec:
+      name: alarm
+      version: 1.0.6
+      description: 告警云服务
+      versionDescription: 告警平台 - 一汽poc
+      infrastructure:
+        foundationReference:
+          version: 2.3.0
+          clusterImage: cloud-image-registry.cn-shanghai.cr.aliyuncs.com/foundations/adp-base:cnstack-2.3.0-98afc5d-163339
+        platform:
+          code: trident
+          version: ""
+          kubeVersion: ""
+          pkgURL: ""
+          components:
+          - name: mysql-operator
+            resourceVersion: 1.8.32
+            type: mysql.mysql-operator
+            version: 1.8.31
+            groupReference:
+              instanceName: ""
+              name: mysql
+              version: 1.8.32
+              type: OFFICIAL
+            provider: harmonycloud.cn
+            workload:
+              helm:
+                createNamespace: true
+                chartFile: ""
+                url: oss://cn-shanghai-cnx-middleware/stable/harmonycloud.cn/mysql/1.8.32/charts/mysql-operator
+                values: cmVwbGljYUNvdW50OiAyCgpyZXNvdXJjZXM6CiAgbGltaXRzOgogICAgY3B1OiAyMDBtCiAgICBtZW1vcnk6IDUxMk1pCiAgcmVxdWVzdHM6CiAgICBjcHU6IDEwMG0KICAgIG1lbW9yeTogMjU2TWk=
+                timeout: 600
+            annotations:
+              adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+            labels:
+              adp.aliyuncs.com/controller-manager: "true"
+        resources: []
+      components:
+      - name: mysql-mysql
+        resourceVersion: 1.8.32
+        type: mysql.mysql
+        version: "5.7"
+        groupReference:
+          instanceName: ""
+          name: mysql
+          version: 1.8.32
+          type: OFFICIAL
+        provider: harmonycloud.cn
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-middleware/stable/harmonycloud.cn/mysql/1.8.32/charts/mysql
+            values: cmVzb3VyY2VzOgogIGxpbWl0czoKICAgIGNwdTogMjAwMG0KICAgIG1lbW9yeTogNDA5Nk1pCiAgcmVxdWVzdHM6CiAgICBjcHU6IDIwMDBtCiAgICBtZW1vcnk6IDQwOTZNaQogICAgCmluaXRfYXRfc2V0dXA6CiAgZW5hYmxlZDogdHJ1ZSAgICAgI+iuvue9rmVuYWJsZT10cnVlCiAgaW5pdF9zcWw6IHwtCiAgICBjcmVhdGUgZGF0YWJhc2UgYWxhcm1kYjsKICAgIGNyZWF0ZSBkYXRhYmFzZSBhY2dvdG9uZWNvcmU7CiAgICAKc3RvcmFnZVNpemU6IDEwRwp2ZXJzaW9uOiAiNS43LjM5Ig==
+            timeout: 600
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+      - name: alarm
+        resourceVersion: 1.0.6
+        type: alarm
+        version: 3.31.0
+        versionDescription: alarm chart for Kubernetes
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-distribution/1955009827675648/alarm/ac0cdec7e62efdc74fcb77fd4281d532/alarm-1.0.6.tgz
+            values: YWZmaW5pdHk6CiAgICBub2RlQWZmaW5pdHk6CiAgICAgICAgcmVxdWlyZWREdXJpbmdTY2hlZHVsaW5nSWdub3JlZER1cmluZ0V4ZWN1dGlvbjoKICAgICAgICAgICAgbm9kZVNlbGVjdG9yVGVybXM6CiAgICAgICAgICAgICAgICAtIG1hdGNoRXhwcmVzc2lvbnM6CiAgICAgICAgICAgICAgICAgICAgLSBrZXk6IG9wZW55dXJ0LmlvL2lzLWVkZ2Utd29ya2VyCiAgICAgICAgICAgICAgICAgICAgICBvcGVyYXRvcjogTm90SW4KICAgICAgICAgICAgICAgICAgICAgIHZhbHVlczoKICAgICAgICAgICAgICAgICAgICAgICAgLSAidHJ1ZSIKICAgICAgICAgICAgICAgIC0gbWF0Y2hFeHByZXNzaW9uczoKICAgICAgICAgICAgICAgICAgICAtIGtleTogb3Blbnl1cnQuaW8vaXMtZWRnZS13b3JrZXIKICAgICAgICAgICAgICAgICAgICAgIG9wZXJhdG9yOiBEb2VzTm90RXhpc3QKYWxhcm06CiAgICBkZXBsb3k6CiAgICAgICAgZW52OiBDTl9TVEFDSwogICAgaW1hZ2U6CiAgICAgICAgcmVwb3NpdG9yeTogcm1zYWxhcm0KICAgICAgICB0YWc6IEVJNjMyNjU0MjlfMjAyNDAxMTlfMjAyNDAxMTkyMzAwMzFfNzJiNzJmNjAKICAgIG1hdGNoTGFiZWxzOgogICAgICAgIGFwcC5rdWJlcm5ldGVzLmlvL2NvbXBvbmVudDogbW9uaXRvcmluZwogICAgICAgIGFwcC5rdWJlcm5ldGVzLmlvL2luc3RhbmNlOiBhbGFybQogICAgICAgIGFwcC5rdWJlcm5ldGVzLmlvL25hbWU6IGFsYXJtCiAgICBuYW1lOiBhbGFybQogICAgcmVwbGljYUNvdW50OiAyCiAgICByZXNvdXJjZXM6CiAgICAgICAgbGltaXRzOgogICAgICAgICAgICBjcHU6IDQwMDBtCiAgICAgICAgICAgIG1lbW9yeTogOEdpCiAgICAgICAgcmVxdWVzdHM6CiAgICAgICAgICAgIGNwdTogNDAwMG0KICAgICAgICAgICAgbWVtb3J5OiA4R2kKZGF0YWJhc2U6CiAgICBjbGllbnRDZXJ0aWZpY2F0ZUtleVN0b3JlUHdkOiBBYWJiMTIzCiAgICBjbGllbnRDZXJ0aWZpY2F0ZUtleVN0b3JlVXJsOiBmaWxlOi9ob21lL2FkbWluL2Ric3NsL2RiY2xpLmprcwogICAgaG9zdDogbnVsbAogICAgbmFtZTogYWxhcm1kYgogICAgcGFzc3dvcmQ6IEhjQENsb3VkMDEKICAgIHBvcnQ6IDMzMDYKICAgIHJlcXVpcmVTU0w6IGZhbHNlCiAgICBzZXJ2aWNlTmFtZTogbXlzcWwtbXlzcWwKICAgIHNzbE1vZGU6IERJU0FCTEVECiAgICB0bHNQcm90b2NvbHM6IFRMU3YxLjIKICAgIHRydXN0Q2VydGlmaWNhdGVLZXlTdG9yZVB3ZDogQWFiYjEyMwogICAgdHJ1c3RDZXJ0aWZpY2F0ZUtleVN0b3JlVXJsOiBmaWxlOi9ob21lL2FkbWluL2Ric3NsL2RiLmprcwogICAgdHlwZTogbXlzcWwKICAgIHVzZXI6IHJvb3QKICAgIHZlcmlmeVNlcnZlckNlcnRpZmljYXRlOiBmYWxzZQpkYXRhYmFzZU1vbml0b3I6CiAgICBob3N0OiBteXNxbC1teXNxbC5hcmdvcwogICAgbmFtZTogbW9uaXRvcmNvbmZpZwogICAgcGFzc3dvcmQ6IGFyZ29zMTIzCiAgICBwb3J0OiAzMzA2CiAgICBzZXJ2aWNlTmFtZTogbXlzcWwtbXlzcWwKICAgIHVzZXI6IHJvb3QKZGVwbG95bWVudFR5cGU6IGs4cwpnb3RvbmU6CiAgICBlbmRwb2ludDogaHR0cDovL2FjZ290b25lY29yZS5hbGFybS5zdmMKICAgIHBvcnQ6IDgzNDEKaWFtOgogICAgZW5hYmxlOiB0cnVlCmltYWdlOgogICAgcHVsbFBvbGljeTogSWZOb3RQcmVzZW50CiAgICBwdWxsU2VjcmV0czogW10KICAgIHJlZ2lzdHJ5OiBhbnQtY25zdGFjay1yZWdpc3RyeS5jbi1oYW5nemhvdS5jci5hbGl5dW5jcy5jb20vYW50Y25zdGFjawpsaWNlbnNlOgogICAgZW5hYmxlZDogdHJ1ZQogICAgc2VydmljZU5hbWU6IGFsYXJtCm1pZ3JhdGU6CiAgICBpbWFnZToKICAgICAgICByZXBvc2l0b3J5OiBhbGFybS1zcWwtbWlncmF0ZQogICAgICAgIHRhZzogRUk2MzA4NTc5Nl8yMDIzMTEwNl8yMDIzMTEzMDE3NTIxNV9hYjVlY2EzNgogICAgbmFtZTogbWlncmF0ZQpub2RlU2VsZWN0b3I6IHt9Cm5vdGlmeToKICAgIGJhc2VVcmw6IGh0dHA6Ly8xMjcuMC4wLjEKcHJvbWV0aGV1czoKICAgIHVybDogcHJvbWV0aGV1cy5leGFtcGxlLmNvbTo5MDkwCnJtczoKICAgIG1vY2s6CiAgICAgICAgZW5hYmxlZDogZmFsc2UKICAgIG1vbml0b3Jwcm9kSW50ZWdyYXRpb246IHRydWUKICAgIHVsYUNsb3NlOiBmYWxzZQogICAgdWxhVHlwZTogQ05TVEFDSwpybXNNaWdyYXRlOgogICAgaW1hZ2U6CiAgICAgICAgcmVwb3NpdG9yeTogYW50Y25zdGFjay1zcWwtbWlncmF0ZQogICAgbWlncmF0ZToKICAgICAgICBpbWFnZToKICAgICAgICAgICAgdGFnOiBtb25pdG9ycHJvZC1FSTYzMDg1Nzk2XzIwMjMxMDI1XzIwMjMxMjA1MjE1NzM5XzExODY5Y2QyCiAgICBuYW1lOiBybXMtbWlncmF0ZQogICAgcmVnaXN0cnk6IGFudC1jbnN0YWNrLXJlZ2lzdHJ5LmNuLWhhbmd6aG91LmNyLmFsaXl1bmNzLmNvbS9hbnRjbnN0YWNrCnNlcnZlcjoKICAgIHN1cHBvcnRlZFByb3RvY29sOiBodHRwCnRvbGVyYXRpb25zOgogICAgLSBlZmZlY3Q6IE5vU2NoZWR1bGUKICAgICAga2V5OiBub2RlLXJvbGUua3ViZXJuZXRlcy5pby9tYXN0ZXIKICAgICAgb3BlcmF0b3I6IEV4aXN0cwogICAgLSBlZmZlY3Q6IE5vU2NoZWR1bGUKICAgICAga2V5OiBub2RlLXJvbGUua3ViZXJuZXRlcy5pby9jbnN0YWNrLWluZnJhCiAgICAgIG9wZXJhdG9yOiBFeGlzdHMKdmVyYm9zaXR5OiA4CnZtczoKICAgIHNlbGVjdDoKICAgICAgICBuYW1lOiB2bXNlbGVjdC1hcmdvcwogICAgICAgIHBvcnQ6IDg0ODEKICAgICAgICB1cmw6IG51bGwK
+            timeout: 600
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64","linux/arm64"]'
+      - name: acgotonecore
+        resourceVersion: 1.0.2
+        type: acgotonecore
+        version: 1.23.0
+        versionDescription: A Helm chart for Kubernetes
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-distribution/1955009827675648/acgotonecore/09f877ebf85e11708a1844624b3858fe/acgotonecore-1.0.2.tgz
+            values: YWNnb3RvbmVjb3JlOgogICAgZW52OgogICAgICAgIFpDTEVBTl9NQVhfTE9HX0RJUl9TSVpFOiAxMDAKICAgICAgICBaQ0xFQU5fUkVTRVJWRV9EQVlTOiAxNAogICAgICAgIGNvbmZpZ19zb3VyY2U6IGRiCiAgICAgICAgZGJfY2xpZW50X2NlcnRpZmljYXRlX2tleV9zdG9yZV9wYXNzd29yZDogbm90X25lZWQKICAgICAgICBkYl9jbGllbnRfY2VydGlmaWNhdGVfa2V5X3N0b3JlX3VybDogZmlsZTovaG9tZS9hZG1pbi9kYnNzbC9kYmNsaS5qa3MKICAgICAgICBkYl9jb25uZWN0X3RpbWVvdXQ6IDUwMAogICAgICAgIGRiX2VuYWJsZWRfdGxzX3Byb3RvY29sczogVExTdjEuMgogICAgICAgIGRiX21heF9hY3RpdmU6IDgKICAgICAgICBkYl9tYXhfd2FpdDogMTAwMDAKICAgICAgICBkYl9taW5faWRsZTogOAogICAgICAgIGRiX3Bhc3N3b3JkOiBIY0BDbG91ZDAxCiAgICAgICAgZGJfcG9ydDogMzMwNgogICAgICAgIGRiX3JlcXVpcmVfc3NsOiBmYWxzZQogICAgICAgIGRiX3NjaGVtYTogYWNnb3RvbmVjb3JlCiAgICAgICAgZGJfc2VydmljZV9uYW1lOiBteXNxbC1teXNxbAogICAgICAgIGRiX3NvY2tldF90aW1lb3V0OiA1MDAwCiAgICAgICAgZGJfc3NsX21vZGU6IERJU0FCTEVECiAgICAgICAgZGJfdHJ1c3RfY2VydGlmaWNhdGVfa2V5X3N0b3JlX3Bhc3N3b3JkOiBub3RfbmVlZAogICAgICAgIGRiX3RydXN0X2NlcnRpZmljYXRlX2tleV9zdG9yZV91cmw6IGZpbGU6L2hvbWUvYWRtaW4vZGJzc2wvZGIuamtzCiAgICAgICAgZGJfdHlwZTogbXlzcWwKICAgICAgICBkYl91c2VybmFtZTogcm9vdAogICAgICAgIGRiX3ZlcmlmeV9zZXJ2ZXJfY2VydGlmaWNhdGU6IGZhbHNlCiAgICAgICAgbGlxdWliYXNlX2VuYWJsZWQ6IHRydWUKICAgICAgICBtaW5fZXZpY3RhYmxlX2lkbGVfdGltZV9taWxsaXM6IDMwMDAwCiAgICAgICAgbXNnX3JlY29yZF9jbGVhbl9jcm9uOiAwIDAgMiAqICogPwogICAgICAgIHNlcnZpY2VfdHlwZTogc29mYXJlc3QKICAgICAgICB0aW1lX2JldHdlZW5fZXZpY3Rpb25fcnVuc19taWxsaXM6IDYwMDAwCiAgICAgICAgemNsZWFuX2NvbmY6IGZyb209ODA7dG89NzA7ZGVidWc9MTtmb3JjZT0xCiAgICAgICAgemRhbF9wYXNzd29yZF9lbmNyeXB0OiBmYWxzZQogICAgICAgIHpkYWxfdXNlX2xvY2FsX2NvbmZpZ19vbmx5OiB0cnVlCmFmZmluaXR5OgogICAgbm9kZUFmZmluaXR5OgogICAgICAgIHJlcXVpcmVkRHVyaW5nU2NoZWR1bGluZ0lnbm9yZWREdXJpbmdFeGVjdXRpb246CiAgICAgICAgICAgIG5vZGVTZWxlY3RvclRlcm1zOgogICAgICAgICAgICAgICAgLSBtYXRjaEV4cHJlc3Npb25zOgogICAgICAgICAgICAgICAgICAgIC0ga2V5OiBvcGVueXVydC5pby9pcy1lZGdlLXdvcmtlcgogICAgICAgICAgICAgICAgICAgICAgb3BlcmF0b3I6IE5vdEluCiAgICAgICAgICAgICAgICAgICAgICB2YWx1ZXM6CiAgICAgICAgICAgICAgICAgICAgICAgIC0gInRydWUiCiAgICAgICAgICAgICAgICAtIG1hdGNoRXhwcmVzc2lvbnM6CiAgICAgICAgICAgICAgICAgICAgLSBrZXk6IG9wZW55dXJ0LmlvL2lzLWVkZ2Utd29ya2VyCiAgICAgICAgICAgICAgICAgICAgICBvcGVyYXRvcjogRG9lc05vdEV4aXN0CmRlcGxveToKICAgIHNlcnZpY2VOYW1lOiBhY2dvdG9uZWNvcmUtc2VydmljZQplbnY6CiAgICBpbmZvOgogICAgICAgIGNlbGw6IGRlZmF1bHQKICAgICAgICBjb21fYWxpcGF5X2VudjogdW5zaGFyZWQKICAgICAgICBjb21fYWxpcGF5X2luc3RhbmNlaWQ6ICIwMDAwMDEiCiAgICAgICAgY29tX2FudGNsb3VkX2FudHZpcF9lbmRwb2ludDogdW5rbm93bgogICAgICAgIGRhdGFjZW50ZXI6IGRlZmF1bHQKICAgICAgICBkZXBsb3lfb2Jwcm94eTogZmFsc2UKICAgICAgICBkZXBsb3lfdHlwZTogcHJpdmF0ZQogICAgICAgIGxvZ19sZXZlbDogaW5mbwogICAgICAgIG9icHJveHlfY29uZmlnX3NlcnZlcl91cmw6IHVua25vd24KZnVsbG5hbWVPdmVycmlkZTogYWNnb3RvbmVjb3JlCmlhbV9hY2lhbWNvcmU6CiAgICBuYW1lc3BhY2U6IGlhbQogICAgc2VydmljZU5hbWU6IGlhbS1hY2lhbWNvcmUKaW1hZ2U6CiAgICBhY2dvdG9uZWNvcmU6CiAgICAgICAgcHVsbFBvbGljeTogSWZOb3RQcmVzZW50CiAgICAgICAgcmVwb3NpdG9yeTogYW50LWNuc3RhY2stcmVnaXN0cnkuY24taGFuZ3pob3UuY3IuYWxpeXVuY3MuY29tL2FudGNuc3RhY2svYWNnb3RvbmVjb3JlCiAgICAgICAgdGFnOiBtYXN0ZXJfMjAyMzExMjkxMzM2MDNfNzc4MjEyNjMKaW1hZ2VQdWxsU2VjcmV0czogW10KbmFtZU92ZXJyaWRlOiBhY2dvdG9uZWNvcmUKbm9kZVNlbGVjdG9yOiB7fQpwb2RBbm5vdGF0aW9uczoge30KcG9kU2VjdXJpdHlDb250ZXh0OiB7fQpyZXBsaWNhQ291bnQ6IDEKcmVzb3VyY2VzOgogICAgbGltaXRzOgogICAgICAgIGNwdTogMjAwMG0KICAgICAgICBtZW1vcnk6IDRHaQogICAgcmVxdWVzdHM6CiAgICAgICAgY3B1OiAyMDAwbQogICAgICAgIG1lbW9yeTogNEdpCnNlY3VyaXR5Q29udGV4dDoge30Kc2VydmljZUFjY291bnQ6CiAgICBhbm5vdGF0aW9uczoge30KICAgIGNyZWF0ZTogdHJ1ZQogICAgbmFtZTogIiIKdG9sZXJhdGlvbnM6CiAgICAtIGVmZmVjdDogTm9TY2hlZHVsZQogICAgICBrZXk6IG5vZGUtcm9sZS5rdWJlcm5ldGVzLmlvL21hc3RlcgogICAgICBvcGVyYXRvcjogRXhpc3RzCiAgICAtIGVmZmVjdDogTm9TY2hlZHVsZQogICAgICBrZXk6IG5vZGUtcm9sZS5rdWJlcm5ldGVzLmlvL2Nuc3RhY2staW5mcmEKICAgICAgb3BlcmF0b3I6IEV4aXN0cwo=
+            timeout: 600
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64","linux/arm64"]'
+  path: applications/alarm-1.0.6.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:47Z"
+  name: alarm-1.0.6-namespace
+spec:
+  data: |
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/managed-namespace: "true"
+      name: alarm
+    spec: {}
+    status: {}
+  path: applications/alarm-1.0.6-namespace.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:47Z"
+  name: cloud-component-mananger-0.2.0-app-model
+spec:
+  data: |
+    kind: Application
+    apiVersion: app-operator.aliyun.com/v1
+    metadata:
+      name: cloud-component-mananger
+      namespace: cloud-component-mananger
+      labels: {}
+      annotations:
+        adp.aliyuncs.com/app-display-name: 组件管理平台
+        adp.aliyuncs.com/app-spec-name: dev
+        adp.aliyuncs.com/application-provider: "1955009827675648"
+        adp.aliyuncs.com/application-vendor: antgroup
+        adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+    spec:
+      name: cloud-component-mananger
+      version: 0.2.0
+      description: '中间件管理-运维; owner : 超阳，拙月'
+      infrastructure:
+        foundationReference:
+          version: 2.3.0
+          clusterImage: cloud-image-registry.cn-shanghai.cr.aliyuncs.com/foundations/adp-base:cnstack-2.3.0-98afc5d-163339
+        platform:
+          code: trident
+          version: ""
+          kubeVersion: ""
+          pkgURL: ""
+          components:
+          - name: mysql-operator
+            resourceVersion: 1.8.32
+            type: mysql.mysql-operator
+            version: 1.8.31
+            groupReference:
+              instanceName: ""
+              name: mysql
+              version: 1.8.32
+              type: OFFICIAL
+            provider: harmonycloud.cn
+            workload:
+              helm:
+                createNamespace: true
+                chartFile: ""
+                url: oss://cn-shanghai-cnx-middleware/stable/harmonycloud.cn/mysql/1.8.32/charts/mysql-operator
+                values: cmVwbGljYUNvdW50OiAyCgpyZXNvdXJjZXM6CiAgbGltaXRzOgogICAgY3B1OiAyMDBtCiAgICBtZW1vcnk6IDUxMk1pCiAgcmVxdWVzdHM6CiAgICBjcHU6IDEwMG0KICAgIG1lbW9yeTogMjU2TWk=
+                timeout: 600
+            annotations:
+              adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+            labels:
+              adp.aliyuncs.com/controller-manager: "true"
+        resources: []
+      components:
+      - name: mysql-cmm
+        resourceVersion: 1.8.32
+        type: mysql.mysql
+        version: "5.7"
+        groupReference:
+          instanceName: ""
+          name: mysql
+          version: 1.8.32
+          type: OFFICIAL
+        provider: harmonycloud.cn
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-middleware/stable/harmonycloud.cn/mysql/1.8.32/charts/mysql
+            values: cmVzb3VyY2VzOgogIGxpbWl0czoKICAgIGNwdTogMTAwMG0KICAgIG1lbW9yeTogMjA0OE1pCiAgcmVxdWVzdHM6CiAgICBjcHU6IDEwMDBtCiAgICBtZW1vcnk6IDIwNDhNaQoKc3RvcmFnZVNpemU6IDEwRwp2ZXJzaW9uOiAiNS43LjM5Ig==
+            timeout: 600
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+      - name: cloud-middleware-manager
+        resourceVersion: 0.1.4-dev23
+        type: cloud-middleware-manager
+        version: 1.16.2
+        versionDescription: A Helm chart for Kubernetes to manage middleware
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-distribution/1955009827675648/cloud-middleware-manager/d61ab6fcd6fa3668fa6e4e3f5c5b237e/cloud-middleware-manager-0.1.4-dev23.tgz
+            values: SGVsbVBsYWluSFRUUDogZmFsc2UKYWZmaW5pdHk6IHt9CmFnZW50SW1hZ2U6CiAgICByZXBvc2l0b3J5OiByZWdpc3RyeS1pbnRlcm5hbC5hZHAuYWxpeXVuY3MuY29tOjUwMDAKY29yZUltYWdlOgogICAgcHVsbFBvbGljeTogSWZOb3RQcmVzZW50CiAgICByZXBvc2l0b3J5OiByZWcuZG9ja2VyLmFsaWJhYmEtaW5jLmNvbQogICAgdGFnOiAiIgpmdWxsbmFtZU92ZXJyaWRlOiAiIgppbWFnZToKICAgIG1hbmFnZXI6CiAgICAgICAgcHVsbFBvbGljeTogSWZOb3RQcmVzZW50CiAgICAgICAgcmVwb3NpdG9yeTogYWNzLXJlZy5hbGlwYXkuY29tL2FjbG91ZC9jbG91ZC1taWRkbGV3YXJlLW1hbmFnZXIKICAgICAgICB0YWc6IDIwMjQwMjAyMTEyMzA2X2FkNTE5ZmZhCmltYWdlUHVsbFNlY3JldHM6IFtdCm1hbmFnZXJJbml0Sm9iOgogICAgY3JlYXRlRGF0YWJhc2U6IHRydWUKICAgIGRiQWNjZXNzS2V5OiByb290CiAgICBkYkhvc3Q6IG15c3FsLWNtbQogICAgZGJOYW1lOiBjbW0KICAgIGRiUGFzc3dvcmQ6IEhjQENsb3VkMDEKICAgIGRiUG9ydDogMzMwNgogICAgZGJUeXBlOiBteXNxbAogICAgcmVzb3VyY2VzOgogICAgICAgIGxpbWl0czoKICAgICAgICAgICAgY3B1OiA2MDBtCiAgICAgICAgICAgIG1lbW9yeTogNTEyTWkKICAgICAgICByZXF1ZXN0czoKICAgICAgICAgICAgY3B1OiA2MDBtCiAgICAgICAgICAgIG1lbW9yeTogNTEyTWkKbmFtZTogY2xvdWQtbWlkZGxld2FyZS1tYW5hZ2VyCm5hbWVPdmVycmlkZTogIiIKbm9kZVNlbGVjdG9yOiB7fQpwb2RBbm5vdGF0aW9uczoge30KcG9kU2VjdXJpdHlDb250ZXh0OiB7fQpyZXBsaWNhQ291bnQ6IDEKcmVzb3VyY2VzOiB7fQpzZWN1cml0eUNvbnRleHQ6IHt9CnNlcnZpY2U6CiAgICBwb3J0OiAxODA5MAogICAgdHlwZTogQ2x1c3RlcklQCnNlcnZpY2VBY2NvdW50OgogICAgYW5ub3RhdGlvbnM6IHt9CiAgICBjcmVhdGU6IHRydWUKICAgIG5hbWU6IGNsb3VkLW1pZGRsZXdhcmUtbWFuYWdlcgp0b2xlcmF0aW9uczogW10K
+            timeout: 600
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+      - name: middleware-ops-operator
+        resourceVersion: 0.0.6-dev4
+        type: middleware-ops-operator
+        version: 0.0.5-dev6
+        versionDescription: A Helm chart for Kubernetes
+        workload:
+          helm:
+            createNamespace: true
+            chartFile: ""
+            url: oss://cn-shanghai-cnx-distribution/1955009827675648/middleware-ops-operator/de70b9bcdd982e2fbea8b0637e5393fe/middleware-ops-operator-0.0.6-dev4.tgz
+            values: SGVsbVBsYWluSFRUUDogZmFsc2UKYWZmaW5pdHk6IHt9CmZ1bGxuYW1lT3ZlcnJpZGU6ICIiCmltYWdlOgogICAgcHVsbFBvbGljeTogSWZOb3RQcmVzZW50CiAgICByZXBvc2l0b3J5OiBhY3MtcmVnLmFsaXBheS5jb20vYWNsb3VkL21pZGRsZXdhcmUtb3BzLW9wZXJhdG9yCiAgICB0YWc6IDIwMjQwMTMwMTcyNzA3X2Q1MDJkYjM0CmltYWdlUHVsbFNlY3JldHM6IFtdCmluZ3Jlc3M6CiAgICBhbm5vdGF0aW9uczoge30KICAgIGNsYXNzTmFtZTogIiIKICAgIGVuYWJsZWQ6IGZhbHNlCiAgICBob3N0czoKICAgICAgICAtIGhvc3Q6IGNoYXJ0LWV4YW1wbGUubG9jYWwKICAgICAgICAgIHBhdGhzOgogICAgICAgICAgICAtIHBhdGg6IC8KICAgICAgICAgICAgICBwYXRoVHlwZTogSW1wbGVtZW50YXRpb25TcGVjaWZpYwogICAgdGxzOiBbXQpuYW1lT3ZlcnJpZGU6ICIiCm5vZGVTZWxlY3Rvcjoge30KcG9kQW5ub3RhdGlvbnM6CiAgICBrdWJlY3RsLmt1YmVybmV0ZXMuaW8vZGVmYXVsdC1jb250YWluZXI6IG9wZXJhdG9yCnBvZFNlY3VyaXR5Q29udGV4dDoge30KcmJhY3Byb3h5OgogICAgaW1hZ2U6CiAgICAgICAgcHVsbFBvbGljeTogSWZOb3RQcmVzZW50CiAgICAgICAgcmVwb3NpdG9yeTogYWNzLXJlZy5hbGlwYXkuY29tL2FjbG91ZC9rdWJlLXJiYWMtcHJveHkKICAgICAgICB0YWc6IHYwLjEzLjAKICAgIGltYWdlUHVsbFNlY3JldHM6IFtdCiAgICByZXNvdXJjZXM6IHt9CiAgICBzZWN1cml0eUNvbnRleHQ6CiAgICAgICAgYWxsb3dQcml2aWxlZ2VFc2NhbGF0aW9uOiBmYWxzZQogICAgICAgIGNhcGFiaWxpdGllczoKICAgICAgICAgICAgZHJvcDoKICAgICAgICAgICAgICAgIC0gQUxMCnJlcGxpY2FDb3VudDogMQpyZXNvdXJjZXM6IHt9CnNlY3VyaXR5Q29udGV4dDoge30Kc2VydmljZToKICAgIHBvcnQ6IDgwODEKICAgIHR5cGU6IENsdXN0ZXJJUApzZXJ2aWNlQWNjb3VudDoKICAgIGFubm90YXRpb25zOiB7fQogICAgY3JlYXRlOiB0cnVlCiAgICBuYW1lOiAiIgp0b2xlcmF0aW9uczogW10K
+            timeout: 600
+        annotations:
+          adp.aliyuncs.com/supported-platforms: '["linux/amd64"]'
+  path: applications/cloud-component-mananger-0.2.0.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:47Z"
+  name: cloud-component-mananger-0.2.0-namespace
+spec:
+  data: |
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/managed-namespace: "true"
+      name: cloud-component-mananger
+    spec: {}
+    status: {}
+  path: applications/cloud-component-mananger-0.2.0-namespace.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: cluster-credential
+spec:
+  data: |
+    cert.key: |
+      -----BEGIN PUBLIC KEY-----
+      MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDN5RVh+xyw2m2U4ro2FIA7mHsh
+      vERl8EqCorprc17t1e7roJ2oO35z4/nvSWgvn2Cx1cFk6IUh6kaETmdNMERw4UQs
+      dC8Ab0Hu/Vq6kI4/oQEjVDu/ZiuCh/SehquAbxZvkVGw0Wdocq+chrb3+TyA5FAh
+      G889ufnIS6fl0rI8vwIDAQAB
+      -----END PUBLIC KEY-----
+  path: system-components/cluster-credential.yaml
+  process: value|toSecret
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: cloud-component-mananger-0.2.0-configuration
+spec:
+  data: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/application-configuration: "true"
+        adp.aliyuncs.com/application-name: cloud-component-mananger
+      name: cloud-component-mananger-configuration
+      namespace: cloud-component-mananger
+    stringData:
+      components: |
+        cloud-middleware-manager:
+          managerInitJob:
+            dbAccessKey: root
+            dbHost: mysql-cmm
+            dbPassword: Hc@Cloud01
+            dbType: mysql
+            skipInitDb: false
+    type: Opaque
+  path: applications/cloud-component-mananger-0.2.0-configuration.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: sofams-console-1.1.0-rc1-configuration
+spec:
+  data: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/application-configuration: "true"
+        adp.aliyuncs.com/application-name: sofams-console
+      name: sofams-console-configuration
+      namespace: sofams-console
+    stringData:
+      components: |
+        sofams-console:
+          database:
+            mysqlHost: mysql-nacos-mysql.sofa-ms.svc
+            mysqlPassword: Hc@Cloud01
+            mysqlPort: "3306"
+            mysqlRootPassword: Hc@Cloud01
+            mysqlUser: dsrconsole
+            type: mysql
+          replicas: 2
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+            requests:
+              cpu: "2"
+              memory: 4Gi
+    type: Opaque
+  path: applications/sofams-console-1.1.0-rc1-configuration.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: alarm-1.0.6-configuration
+spec:
+  data: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/application-configuration: "true"
+        adp.aliyuncs.com/application-name: alarm
+      name: alarm-configuration
+      namespace: alarm
+    stringData:
+      components: |
+        acgotonecore:
+          acgotonecore:
+            env:
+              db_password: Hc@Cloud01
+              db_username: root
+          replicaCount: 1
+          resources:
+            limits:
+              cpu: 0
+              memory: 2Gi
+            requests:
+              cpu: 0
+              memory: 2Gi
+        alarm:
+          alarm:
+            deploy:
+              env: STANDALONE
+            replicaCount: 1
+            resources:
+              limits:
+                cpu: 2000m
+                memory: 4Gi
+              requests:
+                cpu: 2000m
+                memory: 4Gi
+          databaseMonitor:
+            host: mysql-mysql.alarm
+            name: alarmdb
+            password: Hc@Cloud01
+            user: root
+          deploymentType: cnstack
+          iam:
+            enable: true
+          license:
+            enabled: false
+          notify:
+            baseUrl: https://10.124.42.180:30383
+          prometheus:
+            url: https://uat-apps-fc-prometheus.faw.cn
+          rms:
+            mock:
+              enabled: false
+        mysql-mysql:
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 1000m
+              memory: 2Gi
+          storageSize: 10G
+    type: Opaque
+  path: applications/alarm-1.0.6-configuration.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: cnstack-multicluster-2.2.1-configuration
+spec:
+  data: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/application-configuration: "true"
+        adp.aliyuncs.com/application-name: cnstack-multicluster
+      name: cnstack-multicluster-configuration
+      namespace: cnstack-multicluster
+    stringData:
+      components: |
+        cnstack-multicluster:
+          cluster-gateway-addon-manager:
+            clusterGateway:
+              replicas: "3"
+            replicas: 2
+            resources:
+              limits:
+                cpu: 200m
+                memory: 512Mi
+              requests:
+                cpu: 10m
+                memory: 64Mi
+          cluster-import-controller:
+            replicas: 1
+            resources:
+              limits:
+                cpu: 300m
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+          cluster-proxy:
+            replicas: 1
+            resources:
+              limits:
+                cpu: 200m
+                memory: 256Mi
+              requests:
+                cpu: 10m
+                memory: 64Mi
+          global:
+            enableMapping: true
+          managed-serviceaccount:
+            replicas: 1
+            resources:
+              limits:
+                cpu: 200m
+                memory: 256Mi
+              requests:
+                cpu: 10m
+                memory: 64Mi
+          multicluster-apiserver:
+            replicas: 1
+            resources:
+              limits:
+                cpu: 400m
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+          registration-operator-hub:
+            replicas: 1
+            resources:
+              limits:
+                cpu: 300m
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+        ocm-addon-config:
+          global:
+            enableDualStack: true
+    type: Opaque
+  path: applications/cnstack-multicluster-2.2.1-configuration.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: cnstack-2.3.0-configuration
+spec:
+  data: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      creationTimestamp: null
+      labels:
+        adp.aliyuncs.com/application-configuration: "true"
+        adp.aliyuncs.com/application-name: cnstack
+      name: cnstack-configuration
+      namespace: acs-system
+    stringData:
+      components: |
+        chart-editor:
+          helmAgent:
+            resources:
+              limits:
+                cpu: 300m
+                memory: 300Mi
+              requests:
+                cpu: 50m
+                memory: 50Mi
+          main:
+            jvm:
+              maxMeta: 96m
+              xmn: 128m
+              xms: 256m
+              xmx: 256m
+              xss: 512k
+            resources:
+              limits:
+                cpu: 500m
+                memory: 600Mi
+              requests:
+                cpu: 300m
+                memory: 450Mi
+          nodeSelector:
+            node-role.kubernetes.io/cnstack-infra: ""
+          replicaCount: 2
+        cnstack-controller-manager:
+          crds-install:
+            enabled: true
+          global:
+            versionMode: standard
+          nodeSelector:
+            node-role.kubernetes.io/cnstack-infra: ""
+          replicas: 2
+          resources:
+            limits:
+              cpu: 2
+              memory: 4Gi
+            requests:
+              cpu: 300m
+              memory: 300Mi
+          versionMode: standard
+        cnstack-ui:
+          audit-server:
+            replicas: 2
+            resources:
+              requests:
+                cpu: 300m
+                memory: 300Mi
+          cn-console:
+            replicas: 2
+            resources:
+              requests:
+                cpu: 300m
+                memory: 500Mi
+          cn-doc-center:
+            replicas: 2
+            resources:
+              requests:
+                cpu: 100m
+                memory: 300Mi
+          cnstack-portal:
+            replicas: 2
+            resources:
+              requests:
+                cpu: 300m
+                memory: 300Mi
+          global:
+            nodeSelector:
+              node-role.kubernetes.io/cnstack-infra: ""
+            versionMode: standard
+        cnstacklet:
+          agent:
+            replicas: 2
+            resources:
+              limits:
+                cpu: 2
+                memory: 4Gi
+              requests:
+                cpu: 300m
+                memory: 300Mi
+          cnstack-resource:
+            enabled: true
+          crds-install:
+            enabled: true
+          global:
+            nodeSelector:
+              node-role.kubernetes.io/cnstack-infra: ""
+            versionMode: standard
+          hnc:
+            enabled: true
+            manager:
+              replicas: 2
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                requests:
+                  cpu: 100m
+                  memory: 150Mi
+        cost-manager:
+          collector:
+            resources:
+              limits:
+                cpu: 1
+                memory: 2Gi
+              requests:
+                cpu: 100m
+                memory: 300Mi
+          manager:
+            resources:
+              limits:
+                cpu: 3
+                memory: 6Gi
+              requests:
+                cpu: 200m
+                memory: 100Mi
+          nodeSelector:
+            node-role.kubernetes.io/cnstack-infra: ""
+          opencost:
+            resources:
+              limits:
+                cpu: 3
+                memory: 6Gi
+              requests:
+                cpu: 300m
+                memory: 200Mi
+          replicas: 2
+        disaster-recovery:
+          cn_opcc:
+            enabled: true
+        harbor:
+          chartmuseum:
+            replicas: 1
+            resources:
+              limits:
+                cpu: 500m
+                memory: 1024Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+          core:
+            replicas: 2
+            resources:
+              limits:
+                cpu: 1
+                memory: 2Gi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+          jobservice:
+            replicas: 2
+            resources:
+              limits:
+                cpu: 1
+                memory: 1Gi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+          notary:
+            server:
+              replicas: 1
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+                requests:
+                  cpu: 200m
+                  memory: 256Mi
+            signer:
+              replicas: 1
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+          portal:
+            replicas: 2
+            resources:
+              limits:
+                cpu: 1
+                memory: 1Gi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+          postgresql:
+            instances: 3
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 2Gi
+              requests:
+                cpu: 200m
+                memory: 512Mi
+            storageSize: 20Gi
+          registry:
+            controller:
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+            registry:
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 2Gi
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+            replicas: 2
+          trivy:
+            replicas: 1
+            resources:
+              limits:
+                cpu: 1
+                memory: 1Gi
+              requests:
+                cpu: 200m
+                memory: 512Mi
+        iam:
+          emissary-ingress:
+            controllerResources:
+              requests:
+                cpu: 200m
+                memory: 512Mi
+            replicas: 2
+            resources:
+              requests:
+                cpu: 300m
+                memory: 512Mi
+          global:
+            nodeSelector:
+              node-role.kubernetes.io/cnstack-infra: ""
+            postgresql:
+              enabled: true
+          iam-server:
+            replicas: 2
+            resources:
+              requests:
+                cpu: 300m
+                memory: 64Mi
+          initalize:
+            firstPasswordForceChange: false
+          keycloak:
+            replicas: 2
+            resources:
+              requests:
+                cpu: 1
+                memory: 512Mi
+          postgresql:
+            dataVolumeSize: 5Gi
+            instances: 3
+            resources:
+              requests:
+                cpu: 250m
+                memory: 256Mi
+        ingress-controller:
+          resources:
+            requests:
+              cpu: 0
+              memory: 512Mi
+        logging:
+          loki:
+            audit:
+              enabled: true
+              highAvailability: true
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 256Mi
+              retention_period: 30d
+              sizeRetention:
+                enable: false
+              storage: localPV
+              storageSize: 5Gi
+            controllerPanel:
+              enabled: true
+              highAvailability: true
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 1Gi
+              retention_period: 7d
+              sizeRetention:
+                enable: true
+              storage: localPV
+              storageSize: 40Gi
+            projects:
+              enabled: true
+              highAvailability: false
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 1Gi
+              retention_period: 7d
+              sizeRetention:
+                enable: true
+              storage: localPV
+              storageSize: 40Gi
+          vector:
+            resources:
+              requests:
+                cpu: 0
+                memory: 64Mi
+        minio-minio:
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          storageSize: 50Gi
+        monitor:
+          controller:
+            replicaCount: 2
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          edge-agent:
+            resources:
+              requests:
+                cpu: "0"
+                memory: 384Mi
+          global:
+            kubeRbacProxy:
+              daemonSetResources:
+                requests:
+                  cpu: "0"
+                  memory: 16Mi
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 16Mi
+            kubectl:
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 64Mi
+            notification:
+              transParamsWithContent: false
+          gpu-exporter:
+            resources:
+              requests:
+                cpu: "0"
+                memory: 64Mi
+          grafana:
+            replicaCount: 2
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+          kube-state-metrics:
+            replicaCount: 1
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+          monitor-rules:
+            switches:
+              ackd:
+                lZero:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                npd:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                registry:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                yoda:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+              kube:
+                apiserver:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                controllerManager:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                coredns:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                etcd:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                kubeProxy:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                kubelet:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                scheduler:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+              monitor:
+                alertmanager:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                gpuExporter:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                grafana:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                kubeStateMetrics:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                nodeExporter:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+                victoria:
+                  dashboards: true
+                  exporter: true
+                  rules:
+                    alert: true
+                    record: true
+              objects:
+                cluster:
+                  rules:
+                    alert: true
+                namespace:
+                  rules:
+                    alert: true
+                node:
+                  rules:
+                    alert: true
+                pod:
+                  rules:
+                    alert: true
+                pvc:
+                  rules:
+                    alert: true
+                workload:
+                  rules:
+                    alert: true
+          node-exporter:
+            resources:
+              requests:
+                cpu: "0"
+                memory: 128Mi
+          victoria:
+            replicaCount: 1
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+            storageRetention: 2w
+            vmagent:
+              replicaCount: 1
+              resources:
+                requests:
+                  cpu: 250m
+                  memory: 384Mi
+            vmalert:
+              replicaCount: 1
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 256Mi
+            vmalertmanager:
+              repeatInterval: 5m
+              replicaCount: 2
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+            vminsert:
+              replicaCount: 2
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 256Mi
+            vmselect:
+              capacity: 2Gi
+              replicaCount: 2
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 256Mi
+            vmstorage:
+              capacity: 50Gi
+              replicaCount: 2
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 1Gi
+        operation:
+          function:
+            resources:
+              limits:
+                cpu: 100m
+                memory: 200Mi
+              requests:
+                cpu: 20m
+                memory: 10Mi
+          nodeSelector:
+            node-role.kubernetes.io/cnstack-infra: ""
+          nuclio:
+            resources:
+              limits:
+                cpu: 800m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 64Mi
+          operator:
+            replicaCount: 1
+            resources:
+              limits:
+                cpu: 800m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 64Mi
+        operation-console:
+          nodeSelector:
+            node-role.kubernetes.io/cnstack-infra: ""
+          replicas: 2
+          resources:
+            console:
+              limits:
+                cpu: 1
+                memory: 1024Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+            consoleUI:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+        operator-lifecycle-manager:
+          catalog:
+            nodeSelector:
+              node-role.kubernetes.io/cnstack-infra: ""
+            tolerations:
+            - effect: NoSchedule
+              key: node-role.kubernetes.io/master
+              operator: Exists
+            - effect: NoSchedule
+              key: node-role.kubernetes.io/cnstack-infra
+              operator: Exists
+          olm:
+            nodeSelector:
+              node-role.kubernetes.io/cnstack-infra: ""
+            tolerations:
+            - effect: NoSchedule
+              key: node-role.kubernetes.io/master
+              operator: Exists
+            - effect: NoSchedule
+              key: node-role.kubernetes.io/cnstack-infra
+              operator: Exists
+          package:
+            nodeSelector:
+              node-role.kubernetes.io/cnstack-infra: ""
+            replicaCount: 2
+            tolerations:
+            - effect: NoSchedule
+              key: node-role.kubernetes.io/master
+              operator: Exists
+            - effect: NoSchedule
+              key: node-role.kubernetes.io/cnstack-infra
+              operator: Exists
+        postgresql-operator:
+          kubectl:
+            tolerations:
+            - effect: NoSchedule
+              key: node-role.kubernetes.io/master
+              operator: Exists
+            - effect: NoSchedule
+              key: node-role.kubernetes.io/cnstack-infra
+              operator: Exists
+          nodeSelector:
+            node-role.kubernetes.io/cnstack-infra: ""
+          tolerations:
+          - effect: NoSchedule
+            key: node-role.kubernetes.io/master
+            operator: Exists
+          - effect: NoSchedule
+            key: node-role.kubernetes.io/cnstack-infra
+            operator: Exists
+        postgresql-postgresql:
+          instances: 0
+    type: Opaque
+  path: applications/cnstack-2.3.0-configuration.yaml
+  process: value
+  strategy: overwrite
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: alarm-1.0.6-image-mapping
+spec:
+  data: |
+    metadata:
+      creationTimestamp: null
+      namespace: alarm
+  path: applications/alarm-1.0.6-image-mapping.yaml
+  process: value
+  strategy: merge
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: cloud-component-mananger-0.2.0-image-mapping
+spec:
+  data: |
+    metadata:
+      creationTimestamp: null
+      namespace: cloud-component-mananger
+  path: applications/cloud-component-mananger-0.2.0-image-mapping.yaml
+  process: value
+  strategy: merge
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: cnstack-multicluster-2.2.1-image-mapping
+spec:
+  data: |
+    metadata:
+      creationTimestamp: null
+      namespace: cnstack-multicluster
+  path: applications/cnstack-multicluster-2.2.1-image-mapping.yaml
+  process: value
+  strategy: merge
+status: {}
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  creationTimestamp: "2024-02-28T07:37:46Z"
+  name: sofams-console-1.1.0-rc1-image-mapping
+spec:
+  data: |
+    metadata:
+      creationTimestamp: null
+      namespace: sofams-console
+  path: applications/sofams-console-1.1.0-rc1-image-mapping.yaml
+  process: value
+  strategy: merge
+status: {}
