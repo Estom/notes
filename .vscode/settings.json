@@ -199,4 +199,8 @@
     ],
     "java.configuration.updateBuildConfiguration": "disabled",
     "java.compile.nullAnalysis.mode": "automatic",
+    "markdown.editor.filePaste.enabled": "always",
+    "markdown.copyFiles.destination": {
+        "**/*": "image/"
+    },
 }
