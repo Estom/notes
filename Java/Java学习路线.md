@@ -142,3 +142,9 @@
 >
 > 入门小站。https://rumenz.com/
 > BestJavaer。https://github.com/crisxuan/bestJavaer
+
+> 2024年12月23日
+> 计划中的项目
+> * BestJavaer java-basic java-concurrency jvm https://github.com/crisxuan/bestJavaer/tree/master
+> * 书籍 《Java编程思想》 《Java核心技术卷》《Java并发编程实践》
+> * 源码 https://github.com/coderbruis/JavaSourceCodeLearning/blob/master/note/JDK   https://github.com/seaswalker/jdk-sourcecode-analysis/blob/master/README.md
