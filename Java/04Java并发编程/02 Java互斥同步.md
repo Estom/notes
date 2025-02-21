@@ -1,5 +1,5 @@
 
-## 1 互斥同步
+## 1 互斥访问
 
 Java 提供了两种锁机制来控制多个线程对共享资源的互斥访问，第一个是 JVM 实现的 synchronized，而另一个是 JDK 实现的 ReentrantLock。
 
@@ -217,76 +217,61 @@ public class DemoClass
 * 不要使用String文字，因为它们可能在应用程序中的其他地方被引用，并且可能导致死锁。 使用new关键字创建的字符串对象可以安全使用。 但作为最佳实践，请在我们要保护的共享变量本身上创建一个新的private作用域Object实例OR锁。
 
 
-### ReentrantLock
 
-ReentrantLock 是 java.util.concurrent（J.U.C）包中的锁。
+
+## 2 线程之间的协作
+
+当多个线程可以一起工作去解决某个问题时，如果某些部分必须在其它部分之前完成，那么就需要对线程进行协调。
+
+
+### Object:wait、notify、notifyAll
+
+调用 wait() 使得线程等待某个条件满足，线程在等待时会被挂起，当其他线程的运行使得这个条件满足时，其它线程会调用 notify() 或者 notifyAll() 来唤醒挂起的线程。
+
+它们都属于 Object 的一部分，而不属于 Thread。
+
+只能用在同步方法或者同步控制块中使用，否则会在运行时抛出 IllegalMonitorStateException。
+
+使用 wait() 挂起期间，线程会释放锁。这是因为，如果没有释放锁，那么其它线程就无法进入对象的同步方法或者同步控制块中，那么就无法执行 notify() 或者 notifyAll() 来唤醒挂起的线程，造成死锁。
 
 ```java
-public class LockExample {
+public class WaitNotifyExample {
 
-    private Lock lock = new ReentrantLock();
+    public synchronized void before() {
+        System.out.println("before");
+        notifyAll();
+    }
 
-    public void func() {
-        lock.lock();
+    public synchronized void after() {
         try {
-            for (int i = 0; i < 10; i++) {
-                System.out.print(i + " ");
-            }
-        } finally {
-            lock.unlock(); // 确保释放锁，从而避免发生死锁。
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        System.out.println("after");
     }
 }
 ```
 
 ```java
 public static void main(String[] args) {
-    LockExample lockExample = new LockExample();
     ExecutorService executorService = Executors.newCachedThreadPool();
-    executorService.execute(() -> lockExample.func());
-    executorService.execute(() -> lockExample.func());
+    WaitNotifyExample example = new WaitNotifyExample();
+    executorService.execute(() -> example.after());
+    executorService.execute(() -> example.before());
 }
 ```
 
 ```html
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
+before
+after
 ```
 
+**wait() 和 sleep() 的区别**  
 
-### 比较
-除非需要使用 ReentrantLock 的高级功能，否则优先使用 synchronized。这是因为 synchronized 是 JVM 实现的一种锁机制，JVM 原生地支持它，而 ReentrantLock 不是所有的 JDK 版本都支持。并且使用 synchronized 不用担心没有释放锁而导致死锁问题，因为 JVM 会确保锁的释放。
+- wait() 是 Object 的方法，而 sleep() 是 Thread 的静态方法；
+- wait() 会释放锁，sleep() 不会。
 
-
-**1. 锁的实现**  
-
-synchronized 是 JVM 实现的，而 ReentrantLock 是 JDK 实现的。
-
-**2. 性能**  
-
-新版本 Java 对 synchronized 进行了很多优化，例如自旋锁等，synchronized 与 ReentrantLock 大致相同。
-
-**3. 等待可中断**  
-
-当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情。
-
-ReentrantLock 可中断，而 synchronized 不行。
-
-**4. 公平锁**  
-
-公平锁是指多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。
-
-synchronized 中的锁是非公平的，ReentrantLock 默认情况下也是非公平的，但是也可以是公平的。
-
-**5. 锁绑定多个条件**  
-
-一个 ReentrantLock 可以同时绑定多个 Condition 对象。
-
-
-
-
-## 2 线程之间的协作
-
-当多个线程可以一起工作去解决某个问题时，如果某些部分必须在其它部分之前完成，那么就需要对线程进行协调。
 
 ### Thread:join
 
@@ -342,104 +327,4 @@ public static void main(String[] args) {
 ```
 A
 B
-```
-
-### Object:wait、notify、notifyAll
-
-调用 wait() 使得线程等待某个条件满足，线程在等待时会被挂起，当其他线程的运行使得这个条件满足时，其它线程会调用 notify() 或者 notifyAll() 来唤醒挂起的线程。
-
-它们都属于 Object 的一部分，而不属于 Thread。
-
-只能用在同步方法或者同步控制块中使用，否则会在运行时抛出 IllegalMonitorStateException。
-
-使用 wait() 挂起期间，线程会释放锁。这是因为，如果没有释放锁，那么其它线程就无法进入对象的同步方法或者同步控制块中，那么就无法执行 notify() 或者 notifyAll() 来唤醒挂起的线程，造成死锁。
-
-```java
-public class WaitNotifyExample {
-
-    public synchronized void before() {
-        System.out.println("before");
-        notifyAll();
-    }
-
-    public synchronized void after() {
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("after");
-    }
-}
-```
-
-```java
-public static void main(String[] args) {
-    ExecutorService executorService = Executors.newCachedThreadPool();
-    WaitNotifyExample example = new WaitNotifyExample();
-    executorService.execute(() -> example.after());
-    executorService.execute(() -> example.before());
-}
-```
-
-```html
-before
-after
-```
-
-**wait() 和 sleep() 的区别**  
-
-- wait() 是 Object 的方法，而 sleep() 是 Thread 的静态方法；
-- wait() 会释放锁，sleep() 不会。
-
-### Condition:await、signal、signalAll
-
-java.util.concurrent 类库中提供了 Condition 类来实现线程之间的协调，可以在 Condition 上调用 await() 方法使线程等待，其它线程调用 signal() 或 signalAll() 方法唤醒等待的线程。
-
-相比于 wait() 这种等待方式，await() 可以指定等待的条件，因此更加灵活。
-
-使用 Lock 来获取一个 Condition 对象。
-
-```java
-public class AwaitSignalExample {
-
-    private Lock lock = new ReentrantLock();
-    private Condition condition = lock.newCondition();
-
-    public void before() {
-        lock.lock();
-        try {
-            System.out.println("before");
-            condition.signalAll();
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void after() {
-        lock.lock();
-        try {
-            condition.await();
-            System.out.println("after");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            lock.unlock();
-        }
-    }
-}
-```
-
-```java
-public static void main(String[] args) {
-    ExecutorService executorService = Executors.newCachedThreadPool();
-    AwaitSignalExample example = new AwaitSignalExample();
-    executorService.execute(() -> example.after());
-    executorService.execute(() -> example.before());
-}
-```
-
-```html
-before
-after
 ```

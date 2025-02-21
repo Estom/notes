@@ -2,6 +2,119 @@
 
 java.util.concurrent（J.U.C）大大提高了并发性能，AQS 被认为是 J.U.C 的核心。
 
+
+### ReentrantLock:lock/unlock
+
+ReentrantLock 是 java.util.concurrent（J.U.C）包中的锁。
+
+```java
+public class LockExample {
+
+    private Lock lock = new ReentrantLock();
+
+    public void func() {
+        lock.lock();
+        try {
+            for (int i = 0; i < 10; i++) {
+                System.out.print(i + " ");
+            }
+        } finally {
+            lock.unlock(); // 确保释放锁，从而避免发生死锁。
+        }
+    }
+}
+```
+
+```java
+public static void main(String[] args) {
+    LockExample lockExample = new LockExample();
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    executorService.execute(() -> lockExample.func());
+    executorService.execute(() -> lockExample.func());
+}
+```
+
+```html
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
+```
+
+
+#### 比较
+除非需要使用 ReentrantLock 的高级功能，否则优先使用 synchronized。这是因为 synchronized 是 JVM 实现的一种锁机制，JVM 原生地支持它，而 ReentrantLock 不是所有的 JDK 版本都支持。并且使用 synchronized 不用担心没有释放锁而导致死锁问题，因为 JVM 会确保锁的释放。
+
+
+**1. 锁的实现**  
+
+synchronized 是 JVM 实现的，而 ReentrantLock 是 JDK 实现的。
+
+**2. 性能**  
+
+新版本 Java 对 synchronized 进行了很多优化，例如自旋锁等，synchronized 与 ReentrantLock 大致相同。
+
+**3. 等待可中断**  
+
+当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情。
+
+ReentrantLock 可中断，而 synchronized 不行。
+
+**4. 公平锁**  
+
+公平锁是指多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。
+
+synchronized 中的锁是非公平的，ReentrantLock 默认情况下也是非公平的，但是也可以是公平的。
+
+**5. 锁绑定多个条件**  
+
+一个 ReentrantLock 可以同时绑定多个 Condition 对象。
+
+
+### Condition:await、signal、signalAll
+
+java.util.concurrent 类库中提供了 Condition 类来实现线程之间的协调，可以在 Condition 上调用 await() 方法使线程等待，其它线程调用 signal() 或 signalAll() 方法唤醒等待的线程。
+
+相比于 wait() 这种等待方式，await() 可以指定等待的条件，因此更加灵活。
+
+使用 Lock 来获取一个 Condition 对象。
+
+```java
+public class AwaitSignalExample {
+
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
+
+    public void before() {
+        lock.lock();
+        try {
+            System.out.println("before");
+            condition.signalAll();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void after() {
+        lock.lock();
+        try {
+            condition.await();
+            System.out.println("after");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+```
+
+```java
+public static void main(String[] args) {
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    AwaitSignalExample example = new AwaitSignalExample();
+    executorService.execute(() -> example.after());
+    executorService.execute(() -> example.before());
+}
+```
+
 ### CountDownLatch
 
 用来控制一个或者多个线程等待多个线程。
