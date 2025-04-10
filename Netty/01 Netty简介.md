@@ -8,6 +8,7 @@ Netty 是一个利用 Java 的高级网络的能力，隐藏其背后的复杂�
 Netty和Tomcat最大的区别就在于通信协议，Tomcat是基于Http协议的Servlet容器，他的实质是一个基于http协议的web容器，但是Netty不一样，他能通过编程自定义各种协议，因为netty能够通过codec自己来编码/解码字节流，完成类似redis访问的功能，这就是netty和tomcat最大的不同。
 
 ![](image/2022-11-27-13-49-01.png)
+![netty reactor原理图](image/image.png)
 ### 对比
 
 Netty vs NIO，工作量大，bug 多
@@ -19,7 +20,7 @@ Netty vs NIO，工作量大，bug 多
 * epoll 空轮询导致 CPU 100%
 
 * 对 API 进行增强，使之更易用，如 FastThreadLocal => ThreadLocal，ByteBuf => ByteBufferNetty更友好更强大：1、JDK中NIO的一些API功能薄弱且复杂，Netty隔离了JDK中NIO的实现变化及实现细节譬如：ByteBuffer -> ByteBuf主要负责从底层的IO中读取数据到ByteBuf，然后传递给应用程序，应用程序处理完之后封装为ByteBuf，写回给IO。
-*         Netty自身线程安全：使用JDK原生API需要对多线程要很熟悉， 因为N I O 涉及到Reactor设计模式，得对里面的原理要相当的熟悉。
+* Netty自身线程安全：使用JDK原生API需要对多线程要很熟悉， 因为N I O 涉及到Reactor设计模式，得对里面的原理要相当的熟悉。
 
 
 
