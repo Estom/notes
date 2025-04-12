@@ -58,6 +58,8 @@
     - [07 Java内存模型](Java/04Java并发编程/07%20Java内存模型.md)
     - [08 Java锁优化](Java/04Java并发编程/08%20Java锁优化.md)
     - [11 Java只执行一次](Java/04Java并发编程/11%20Java只执行一次.md)
+    - [12 生产者消费者](Java/04Java并发编程/12%20生产者消费者.md)
+    - [13 读写锁问题](Java/04Java并发编程/13%20读写锁问题.md)
   - 05JavaIO与网络编程
     - [01 Java 标准IO](Java/05JavaIO与网络编程/01%20Java%20标准IO.md)
     - [02 Java NIO](Java/05JavaIO与网络编程/02%20Java%20NIO.md)
@@ -72,6 +74,7 @@
     - [02 Java类加载机制](Java/JVM原理/02%20Java类加载机制.md)
     - [03 Java垃圾回收机制](Java/JVM原理/03%20Java垃圾回收机制.md)
     - [Java 虚拟机](Java/JVM原理/Java%20虚拟机.md)
+    - [jvm gc机制说明](Java/JVM原理/jvm%20gc机制说明.md)
   - Java三方库
     - [Junit](Java/Java三方库/Junit.md)
     - [Lombok](Java/Java三方库/Lombok.md)
@@ -103,10 +106,6 @@
     - [05 静态方法和单例模式](Java/Java实用技巧/05%20静态方法和单例模式.md)
     - [06 协变返回类型](Java/Java实用技巧/06%20协变返回类型.md)
     - [07 内省](Java/Java实用技巧/07%20内省.md)
-  - Java性能优化
-    - [Jstat性能优化工具](Java/Java性能优化/Jstat性能优化工具.md)
-    - [jvm gc机制说明](Java/Java性能优化/jvm%20gc机制说明.md)
-    - [性能优化简介](Java/Java性能优化/性能优化简介.md)
   - [Java核心思想](Java/Java核心思想.md)
   - Java网站开发
     - [41 Rest接口](Java/Java网站开发/41%20Rest接口.md)
@@ -123,6 +122,15 @@
     - [移动自动测试工具appium](Java/Java网站开发/移动自动测试工具appium.md)
     - [简单的实验](Java/Java网站开发/简单的实验.md)
     - [软件测试中的总结](Java/Java网站开发/软件测试中的总结.md)
+  - Java问题排查和性能优化
+    - [01 问题排查和性能优化简介](Java/Java问题排查和性能优化/01%20问题排查和性能优化简介.md)
+    - [02 Jstat性能优化工具](Java/Java问题排查和性能优化/02%20Jstat性能优化工具.md)
+    - [03 Mat与OOM](Java/Java问题排查和性能优化/03%20Mat与OOM.md)
+    - [04 1.Jmeter压测工具](Java/Java问题排查和性能优化/04%201.Jmeter压测工具.md)
+    - [04 2.Jmeter常用变量](Java/Java问题排查和性能优化/04%202.Jmeter常用变量.md)
+    - [04 3.自定义请求和搭建集群](Java/Java问题排查和性能优化/04%203.自定义请求和搭建集群.md)
+    - [05 Arthas问题排查工具](Java/Java问题排查和性能优化/05%20Arthas问题排查工具.md)
+    - [06 JVM参数调优](Java/Java问题排查和性能优化/06%20JVM参数调优.md)
   - Java面试原理
     - [01 类型转换](Java/Java面试原理/01%20类型转换.md)
     - [01.String 是如何实现的？它有哪些重要的方法？](Java/Java面试原理/01.String%20是如何实现的？它有哪些重要的方法？.md)
@@ -152,13 +160,10 @@
     - [23.JVM 的内存布局和运行原理](Java/Java面试原理/23.JVM%20的内存布局和运行原理.md)
     - [24.垃圾回收算法有哪些？](Java/Java面试原理/24.垃圾回收算法有哪些？.md)
     - [25.你用过哪些垃圾回收器？它们有什么区别？](Java/Java面试原理/25.你用过哪些垃圾回收器？它们有什么区别？.md)
-    - [26.生产环境如何排除和优化JVM？](Java/Java面试原理/26.生产环境如何排除和优化JVM？.md)
     - [27.单例的实现方式有几种？它们有什么优缺点？](Java/Java面试原理/27.单例的实现方式有几种？它们有什么优缺点？.md)
     - [28.你知道哪些设计模式？分别对应的应用场景有哪些？](Java/Java面试原理/28.你知道哪些设计模式？分别对应的应用场景有哪些？.md)
     - [29.红黑树和平衡二叉树有什么区别](Java/Java面试原理/29.红黑树和平衡二叉树有什么区别.md)
     - [30.如何保证接口的幂等性常见的实现方案有哪些](Java/Java面试原理/30.如何保证接口的幂等性常见的实现方案有哪些.md)
     - [31.TCP 为什么需要三次握手](Java/Java面试原理/31.TCP%20为什么需要三次握手.md)
     - [java开发人员最常犯的10中错误](Java/Java面试原理/java开发人员最常犯的10中错误.md)
-    - [什么是OOM,怎么解决OOM](Java/Java面试原理/什么是OOM,怎么解决OOM.md)
     - [总结文档](Java/Java面试原理/总结文档.md)
-    - [模块化历程](Java/Java面试原理/模块化历程.md)

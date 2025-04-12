@@ -627,4 +627,5 @@
   - [学习说明](Linux/学习说明.md)
   - 开发篇
     - [gcc路径检索](Linux/开发篇/gcc路径检索.md)
+    - [ssh隧道代理](Linux/开发篇/ssh隧道代理.md)
     - [搭建php环境](Linux/开发篇/搭建php环境.md)

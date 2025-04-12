@@ -10,3 +10,5 @@
     - [07 ConsoleTemplate](微服务/prometheus/07%20ConsoleTemplate.md)
     - [08 grafana](微服务/prometheus/08%20grafana.md)
     - [10 最佳实践_springboot](微服务/prometheus/10%20最佳实践_springboot.md)
+  - 微服务设计模式
+    - [01 逃离单体地狱](微服务/微服务设计模式/01%20逃离单体地狱.md)
