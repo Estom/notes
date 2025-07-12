@@ -1,0 +1,21 @@
+[Unit]
+Description=Robust SSH Reverse Tunnel and Port Forward
+After=network.target
+
+[Service]
+User=estom
+# 使用绝对路径指定密钥（如果使用密钥认证）
+Environment="AUTOSSH_GATETIME=0"
+ExecStart=/usr/bin/autossh -M 0 -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -N -T  -i /home/estom/.ssh/id_rsa -R 8000:localhost:22 root@8.141.4.34
+
+# 关键修复参数
+Restart=always
+RestartSec=10
+KillMode=process  # 确保终止所有子进程
+
+# 启动频率限制调整
+StartLimitIntervalSec=60
+StartLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target

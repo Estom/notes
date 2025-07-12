@@ -1,0 +1,13 @@
+[Unit]
+Description=Frp Client Service
+After=network.target
+
+[Service]
+User=estom
+Type=simple
+ExecStart=/usr/local/bin/frpc -c /home/estom/.config/frp/frpc.toml
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
