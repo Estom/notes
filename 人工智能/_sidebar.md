@@ -1,0 +1,23 @@
+## 人工智能
+- 人工智能
+  - Agent工程
+    - [问题总结](人工智能/Agent工程/问题总结.md)
+  - Prompt工程
+    - [01 简介](人工智能/Prompt工程/01%20简介.md)
+    - [02 技巧原则](人工智能/Prompt工程/02%20技巧原则.md)
+    - [03 模板](人工智能/Prompt工程/03%20模板.md)
+    - [04 最佳实践](人工智能/Prompt工程/04%20最佳实践.md)
+  - Transformer
+    - [PEFT教程](人工智能/Transformer/PEFT教程.md)
+    - [evaluate教程](人工智能/Transformer/evaluate教程.md)
+    - [入门教程](人工智能/Transformer/入门教程.md)
+  - kubeflow
+    - [01 kubeflow](人工智能/kubeflow/01%20kubeflow.md)
+    - [02 Notebook](人工智能/kubeflow/02%20Notebook.md)
+    - [03 Pipelines原理](人工智能/kubeflow/03%20Pipelines原理.md)
+    - [04 pipelines快速开始](人工智能/kubeflow/04%20pipelines快速开始.md)
+  - langchain
+    - [01简介](人工智能/langchain/01简介.md)
+  - langflow
+    - [简介](人工智能/langflow/简介.md)
+  - [入门工具](人工智能/入门工具.md)

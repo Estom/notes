@@ -5,6 +5,8 @@
   - [03.入门](kubenets/03.入门.md)
   - [04-1.POD](kubenets/04-1.POD.md)
   - [04-10 Probe](kubenets/04-10%20Probe.md)
+  - [04-11 Secret](kubenets/04-11%20Secret.md)
+  - [04-12port-forward](kubenets/04-12port-forward.md)
   - [04-2.Service](kubenets/04-2.Service.md)
   - [04-3.Deployment](kubenets/04-3.Deployment.md)
   - [04-4.StatefulSet](kubenets/04-4.StatefulSet.md)
@@ -18,11 +20,23 @@
   - [08 Pod网络](kubenets/08%20Pod网络.md)
   - [09.kubectl命令行](kubenets/09.kubectl命令行.md)
   - [11.优雅下线](kubenets/11.优雅下线.md)
+  - [12 RBAC鉴权](kubenets/12%20RBAC鉴权.md)
   - ambassador
     - [01 简介](kubenets/ambassador/01%20简介.md)
     - [02 mapping](kubenets/ambassador/02%20mapping.md)
   - helm
-    - [简介](kubenets/helm/简介.md)
+    - [01 简介](kubenets/helm/01%20简介.md)
+    - [02 模板语法GoTemplate](kubenets/helm/02%20模板语法GoTemplate.md)
+    - [03 Helm命令](kubenets/helm/03%20Helm命令.md)
+    - [04 Chart构建](kubenets/helm/04%20Chart构建.md)
+    - [05 Hook顺序](kubenets/helm/05%20Hook顺序.md)
+    - [06 Test测试](kubenets/helm/06%20Test测试.md)
+    - [07 Common模板](kubenets/helm/07%20Common模板.md)
+    - [08 Template模板](kubenets/helm/08%20Template模板.md)
+  - istio
+    - [01 Istio快速开始](kubenets/istio/01%20Istio快速开始.md)
+    - [02 Sidecar](kubenets/istio/02%20Sidecar.md)
+    - [03 Istio注入原理](kubenets/istio/03%20Istio注入原理.md)
   - operator
     - [01 简介](kubenets/operator/01%20简介.md)
     - [02 Operator-sdk](kubenets/operator/02%20Operator-sdk.md)
