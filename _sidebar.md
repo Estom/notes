@@ -53,7 +53,6 @@
 - [单片机](单片机/README.md)
 - [基金股票](基金股票/README.md)
 - [多活两年](多活两年/README.md)
-- [婚](婚/README.md)
 - [微服务](微服务/README.md)
 - [微积分](微积分/README.md)
 - [操作系统](操作系统/README.md)
@@ -73,4 +72,3 @@
 - [设计模式](设计模式/README.md)
 - [读书思考](读书思考/README.md)
 - [软件文档写作](软件文档写作/README.md)
-- [酒](酒/README.md)
