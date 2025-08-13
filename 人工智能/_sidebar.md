@@ -7,6 +7,7 @@
     - [02 技巧原则](人工智能/Prompt工程/02%20技巧原则.md)
     - [03 模板](人工智能/Prompt工程/03%20模板.md)
     - [04 最佳实践](人工智能/Prompt工程/04%20最佳实践.md)
+    - [05 提示词安全](人工智能/Prompt工程/05%20提示词安全.md)
   - Transformer
     - [PEFT教程](人工智能/Transformer/PEFT教程.md)
     - [evaluate教程](人工智能/Transformer/evaluate教程.md)
