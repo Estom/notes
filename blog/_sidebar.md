@@ -1,8 +1,6 @@
 ## blog
 - blog
   - hexo
-    - [创建博客](blog/hexo/创建博客.md)
-    - [部署博客](blog/hexo/部署博客.md)
     - [配置博客](blog/hexo/配置博客.md)
   - 博客
     - [01 博客系统需求文档](blog/博客/01%20博客系统需求文档.md)

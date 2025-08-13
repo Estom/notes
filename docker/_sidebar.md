@@ -3,6 +3,8 @@
   - [1 简介安装](docker/1%20简介安装.md)
   - [10 Swarm](docker/10%20Swarm.md)
   - [11 CICD](docker/11%20CICD.md)
+  - [12 分阶段构建](docker/12%20分阶段构建.md)
+  - [13 覆盖原始命令](docker/13%20覆盖原始命令.md)
   - [2 概念构成](docker/2%20概念构成.md)
   - [3 常用命令](docker/3%20常用命令.md)
   - [4 分层文件](docker/4%20分层文件.md)
