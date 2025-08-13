@@ -40,8 +40,8 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: master
 
-    - name: Call Remote API
-      run: |
-        curl -X GET http://8.141.4.34/#/
+    # - name: Call Remote API
+    #   run: |
+    #     curl -X GET http://8.141.4.34/#/
         # curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' https://your-api-url.com/endpoint
         # 替换上述命令中的URL和数据为你的实际API信息
